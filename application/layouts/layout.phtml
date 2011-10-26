@@ -1,0 +1,21 @@
+<?php echo $this->doctype() ?>
+<html>
+    <head>
+<?php
+    $this->headMeta()
+		->setCharset('utf-8');
+
+    echo $this->headMeta() . "\n\n";
+    echo $this->headLink() . "\n\n";
+    echo $this->headScript() . "\n\n";
+
+?>
+
+    </head>
+    <body>
+<?php echo $this->layout()->content; ?>
+
+    </body>
+</html>
+
+        
