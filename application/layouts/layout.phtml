@@ -4,11 +4,22 @@
 <?php
     $this->headMeta()
 		->setCharset('utf-8');
+    
+    // TODO
+    /*$this->headLink()
+        ->appendStylesheet($this->baseUrl() . '/styles/styles.css', 'all');
+     * 
+     */
+    
+    $this->headScript()
+        ->prependFile('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js')
+        ->prependFile('http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js');
+
 
     echo $this->headMeta() . "\n\n";
     echo $this->headLink() . "\n\n";
     echo $this->headScript() . "\n\n";
-
+    
 ?>
 
     </head>
