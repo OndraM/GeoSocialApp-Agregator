@@ -3,3 +3,4 @@ application/cache/*
 library/Nette
 library/Zend
 library/ZFDebug
+/nbproject/private/
