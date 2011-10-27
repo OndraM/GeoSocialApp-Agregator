@@ -2,7 +2,7 @@
 <projectProfile type="default" version="1.11.6">
   <projectDirectory>
     <projectProfileFile filesystemName=".zfproject.xml"/>
-    <applicationDirectory classNamePrefix="Application_">
+    <applicationDirectory classNamePrefix="GSAA_">
       <apisDirectory enabled="false"/>
       <configsDirectory>
         <applicationConfigFile type="ini"/>
@@ -15,7 +15,6 @@
       </controllersDirectory>
       <formsDirectory enabled="false"/>
       <layoutsDirectory enabled="false"/>
-      <modelsDirectory/>
       <modulesDirectory enabled="false"/>
       <viewsDirectory>
         <viewScriptsDirectory>
