@@ -1,5 +1,34 @@
+<form id="searchform">
+    <label>Latitude: <input type="text" name="lat" value="50.076738" /></label><br />
+    <label>Longitude: <input type="text" name="long" value="50.076738" /></label><br />
+    <label>Filter name: <input type="text" name="long" value="" /></label><br />
+    <input type="submit" value="Submit" />
+</form>
+
+<div id="result">
+
+</div>
+
 <?php
-// TODO
+$url = $this->url(array('controller' => 'poi', 'action' => 'get-nearby'), 'default', true);
+$script = "$('#searchform').submit(function() {
+    $('#result').html('<ul><li><img src=\"" . $this->baseUrl() . "/images/spinner.gif\" alt=\"\" /> Loading...</li></ul>');
+    $.getJSON('$url', function(data) {
+        var items = [];
+        $.each(data.venues, function(key, val) {
+            items.push('<li id=\"' + val.id + '\">' + val.name + '</li>');
+        });
+
+        $('#result').html(
+            $('<ul/>', {
+                html: items.join('')
+            })
+        );
+        
+    });
+    return false;
+});
+";
+$this->script($script);
 ?>
 
-TODO content here :-).

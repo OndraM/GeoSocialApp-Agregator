@@ -33,8 +33,8 @@ class PoiController extends Zend_Controller_Action
         $this->view->venues = $venues['venues'];
         
         // overwrite context setting for testing purposes // TODO
-        $response = $this->getResponse();
-        $response->setHeader('Content-Type', 'text/html');
+        //$response = $this->getResponse();
+        //$response->setHeader('Content-Type', 'text/html');
     }
 
 
