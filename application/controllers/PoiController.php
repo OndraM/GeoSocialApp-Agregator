@@ -21,16 +21,20 @@ class PoiController extends Zend_Controller_Action
 
     public function getNearbyAction()
     {
-        // TODO: load params (getParam);
-        $lat = 50.076738;
-        $long = 14.41803;
+        $lat = $this->_getParam('lat');
+        $long = $this->_getParam('long');
+        $term = $this->_getParam('term');
         
-        //echo "<pre>";
-        //echo Zend_Json::prettyPrint($this->_foursquareModel->getNearbyVenues($lat, $long));
-        //echo Zend_Json::encode($this->_foursquareModel->getNearbyVenues($lat, $long));
-        //echo "</pre>";
-        $venues = $this->_foursquareModel->getNearbyVenues($lat, $long);
-        $this->view->venues = $venues['venues'];
+        // lat and long params are mandatory
+        if (empty($lat) || empty($long) || !is_numeric($lat) || !is_numeric($long)) {
+            return;
+        }
+        
+        $venues = $this->_foursquareModel->getNearbyVenues($lat, $long, $term);
+        
+        if (count($venues) > 0) {
+            $this->view->venues = $venues['venues'];
+        }
         
         // overwrite context setting for testing purposes // TODO
         //$response = $this->getResponse();
