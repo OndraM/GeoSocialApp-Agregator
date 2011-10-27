@@ -21,7 +21,7 @@
     echo $this->headScript() . "\n\n";
     
 ?>
-
+    <title><?php echo Zend_Registry::isRegistered('var') ? Zend_Registry::get('var')->sitename : "";?></title>
     </head>
     <body>
 <?php echo $this->layout()->content; ?>

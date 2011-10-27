@@ -16,6 +16,16 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $view = $this->getResource('view');
         $view->doctype('HTML5');
     }
+    
+    /**
+     * Init global variables from config file
+     */
+    
+    public function _initVar()
+    {
+        Zend_Registry::set('var', (object) $this->getOption('var'));
+    }
+
 
 
 }
