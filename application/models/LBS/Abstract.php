@@ -4,17 +4,13 @@ abstract class GSAA_Model_LBS_Abstract
 {
     const SERVICE_URL = null;
     
-    protected $_client = null;
-    
     /**
      * Constructor.
      * 
      * @return void
      */
 
-    public function __construct() {
-        $this->_client = new Zend_Http_Client();
-        
+    public function __construct() {        
         $this->init();
     }
     
@@ -34,15 +30,5 @@ abstract class GSAA_Model_LBS_Abstract
      */
     abstract public function getNearbyVenues($x, $y, $term = null, $category = null);
     
-    /**
-     * Get empty JSON object
-     * 
-     * @return string JSON 
-     */
-    
-    protected function _getEmpty() {
-        return Zend_Json::encode(array());
-    }
-
 }
 

@@ -17,38 +17,40 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
     /**
      * Abstract funtion to get nearby venues.
      * 
-     * @param double $x Latitude
-     * @param double $y Longitude
+     * @param double $lat Latitude
+     * @param double $long Longitude
      * @param string $term Search term
      * @param string $category Category id (TODO)
-     * @return string JSON
+     * @return array Array with venues
      */
-    public function getNearbyVenues($x, $y, $term = null, $category = null) {
+    public function getNearbyVenues($lat, $long, $term = null, $category = null) {
         $endpoint = 'venues/search';
         
-        $client = $this->_constructClient($endpoint, array('ll' => "$x,$y"));
+        $client = $this->_constructClient($endpoint,
+                                        array(  'll'            => "$lat,$long",
+                                                'query'         => $term,
+                                                // 'categoryId'    => $category // TODO category mapping
+                                            ));
 
         $response = $client->request();
         
         // error in response
         if ($response->isError()) {
-            return $this->_getEmpty();
+            return array();
         }
         $result = Zend_Json::decode($response->getBody());
         
         // foursquare returned an error
         if ($result['meta']['code'] != 200) {
             // TODO: log $result['meta']['errorType'] and $result['meta']['errorDetail']
-            return $this->_getEmpty();
+            return array();
         };
         
         // if code was 200 some non fatal error occured
         if (!empty($result['meta']['errorType'])) {
             // TODO: log $result['meta']['errorType'] and $result['meta']['errorDetail']
         }
-        //echo Zend_Json::prettyPrint(Zend_Json::encode($result['response']));
-        
-        return Zend_Json::encode($result['response']);
+        return $result['response'];
     }
     
     /**
@@ -63,7 +65,7 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
     protected function _constructClient($endpoint, $queryParams = array(), $clientConfig = array()) {
         $client = new Zend_Http_Client();
         
-        // set predefined params
+        // add predefined params
         $queryParams['client_id'] = self::CLIENT_ID;
         $queryParams['client_secret'] = self::CLIENT_SECRET;
         $queryParams['v'] = self::DATEVERIFIED;
