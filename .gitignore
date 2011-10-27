@@ -1,4 +1,5 @@
 application/cache/*
+.zfproject.xml
 
 library/Nette
 library/Zend
