@@ -5,12 +5,9 @@
     $this->headMeta()
 		->setCharset('utf-8');
     
-    // TODO
-    /*$this->headLink()
+    $this->headLink()
         ->appendStylesheet($this->baseUrl() . '/styles/styles.css', 'all');
-     * 
-     */
-    
+
     $this->headScript()
         ->prependFile('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js')
         ->prependFile('http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js');
@@ -24,8 +21,18 @@
     <title><?php echo Zend_Registry::isRegistered('var') ? Zend_Registry::get('var')->sitename : "";?></title>
     </head>
     <body>
-<?php echo $this->layout()->content; ?>
+<div id="document">
+    <div id="header">
+        <h1>GeoSocialApp aggregator</h1>
+    </div>
+    
+    <div id="content">
 
+    <?php echo $this->layout()->content; ?>
+
+    </div>
+</div>
+        
     </body>
 </html>
 

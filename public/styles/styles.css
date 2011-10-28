@@ -1,0 +1,96 @@
+body {
+	margin: 0;
+	padding: 0;
+	background-color: #fff;
+	color: #000;
+	font: normal .75em/150% verdana, sans-serif;
+	text-align: center;
+}
+
+
+/* Links */
+a:link, a:visited {
+	text-decoration: underline;
+	color: #00f;
+}
+a:hover {
+	color: #00a;
+}
+a:active {
+	color: #008;
+}
+
+/* Images */
+a img {
+	display: inline-block;
+	border-style: none;
+}
+
+/* Text */
+p {
+	margin: 0 0 1em;
+}
+abbr, acronym {
+	border-bottom: 1px dotted #ccc;
+	cursor: help;
+}
+
+/* Generic classes */
+.right {
+	text-align: right;
+}
+.left {
+	text-align: left;
+}
+.center {
+	text-align: center;
+}
+div.clearer {
+	line-height: 0;
+	clear: both;
+}
+img.right {
+	float: right;
+	margin: .25em 0 1em 1.5em;
+}
+img.left {
+	float: left;
+	margin: .25em 1.5em 1em 0;
+}
+.hidden {
+	display: none;
+}
+
+
+/* Layout */
+#document {
+    width: 1000px;
+    position: relative;
+    margin: 0 auto;
+    text-align: left;
+}
+#header {
+    width: 100%;
+    padding: 0 1em;
+}
+#header h1 {
+    
+}
+
+#content {
+    padding: 1em;
+}
+
+#venues-wrapper {
+    margin-top: 1em;
+}
+#venues-map {
+    border: 1px solid black;
+    width: 500px;
+    height: 500px;
+    margin-right: 2em;
+    float: left;
+}
+
+#venues-list {
+}

@@ -1,18 +1,22 @@
-<form id="searchform">
-    <label>Latitude: <input type="text" name="lat" value="50.076738" /></label><br />
-    <label>Longitude: <input type="text" name="long" value="14.41803" /></label><br />
-    <label>Filter name: <input type="text" name="term" value="" /></label><br />
-    <input type="submit" value="Submit" />
-</form>
+    <form id="searchform">
+        <label>Latitude: <input type="text" name="lat" value="50.076738" /></label><br />
+        <label>Longitude: <input type="text" name="long" value="14.41803" /></label><br />
+        <label>Filter name: <input type="text" name="term" value="" /></label><br />
+        <input type="submit" value="Submit" />
+    </form>
 
-<div id="result">
-
-</div>
+    <div id="venues-wrapper">
+        <div id="venues-map">
+            TODO map here
+        </div>
+        <div id="venues-list">
+        </div>
+    </div>
 
 <?php
 $url = $this->url(array('controller' => 'poi', 'action' => 'get-nearby'), 'default', true);
 $script = "$('#searchform').submit(function() {
-    $('#result').html('<ul><li><img src=\"" . $this->baseUrl() . "/images/spinner.gif\" alt=\"\" /> Loading...</li></ul>');
+    $('#venues-list').html('<ul><li><img src=\"" . $this->baseUrl() . "/images/spinner.gif\" alt=\"\" /> Loading...</li></ul>');
     $.getJSON('$url?' + $('#searchform input[type=text]').serialize(), function(data) { 
         if (typeof(data) == 'object'
                 && typeof(data.venues) != 'undefined'
@@ -22,13 +26,13 @@ $script = "$('#searchform').submit(function() {
                 items.push('<li id=\"' + val.id + '\">' + val.name + '</li>');
             });
 
-            $('#result').html(
+            $('#venues-list').html(
                 $('<ul/>', {
                     html: items.join('')
                 })
             );
         } else {
-            $('#result').html('<p>Sorry, no matching places nearby.</p>');
+            $('#venues-list').html('<p>Sorry, no matching places nearby.</p>');
         }
         
     });
