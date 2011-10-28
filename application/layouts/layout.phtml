@@ -10,7 +10,8 @@
 
     $this->headScript()
         ->prependFile('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js')
-        ->prependFile('http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js');
+        ->prependFile('http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js')
+        ->appendFile($this->baseUrl() . '/js/init.js');
 
 
     echo $this->headMeta() . "\n\n";

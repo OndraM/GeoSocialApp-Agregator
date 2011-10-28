@@ -87,10 +87,10 @@ img.left {
 #venues-map {
     border: 1px solid black;
     width: 500px;
-    height: 500px;
-    margin-right: 2em;
+    height: 400px;
     float: left;
 }
 
 #venues-list {
+    margin-left: 500px;
 }

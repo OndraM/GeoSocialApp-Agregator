@@ -38,8 +38,10 @@ $script = "$('#searchform').submit(function() {
     });
     return false;
 });
-        
-// TODO: automatic submit on load (with default location)
+
+doGeolocate();
+$('#searchform').submit();
+
 ";
 $this->script($script);
 ?>
