@@ -30,6 +30,7 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
                                         array(  'll'            => "$lat,$long",
                                                 'query'         => $term,
                                                 // 'categoryId'    => $category // TODO category mapping
+                                                'limit'         => 30
                                             ));
 
         $response = $client->request();
