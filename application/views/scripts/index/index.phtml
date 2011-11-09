@@ -1,5 +1,9 @@
+    <form id="addressform">
+        <label>Address: <input type="text" name="address" value="" /></label>
+        <input type="submit" value="Submit" />
+    </form>
     <form id="searchform">
-        <label>Latitude: <input type="text" name="lat" value="50.076738" /></label><br />
+        <label>Latitude: <input type="text" name="lat" value="50.076738" /></label>
         <label>Longitude: <input type="text" name="long" value="14.41803" /></label><br />
         <label>Filter name: <input type="text" name="term" value="" /></label><br />
         <input type="submit" value="Submit" />
@@ -40,8 +44,9 @@ $('#searchform').submit(function() {
     setMapCenter( $('#searchform input[name=lat]').val(), $('#searchform input[name=long]').val());
     return false;
 });
+        
 
-doGeolocate();
+//doGeolocate(); // commented just for testing purposes
 $('#searchform').submit();
 
 ");

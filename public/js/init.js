@@ -24,6 +24,8 @@ function doGeolocate() {
 }
 
 var map;
+var geocoder = new google.maps.Geocoder();
+
 function mapInit() {
     var latlng;
     if ( $('#searchform input[name=lat]').val() != ''
@@ -65,3 +67,19 @@ function setMapCenter(lat, lng) {
     
 }
 
+$(document).ready(function() {
+    $('#addressform').submit(function() {
+        geocoder.geocode({"address": $('#addressform input[name=address]').val()}, function(results, status) {
+			if (status == google.maps.GeocoderStatus.OK) {
+				var latlng = results[0].geometry.location;
+				map.panTo(latlng);
+                $('#searchform input[name=lat]').val(latlng.lat().toFixed(6));
+                $('#searchform input[name=long]').val(latlng.lng().toFixed(6));
+			} else {
+				// console.error("Geolocation error: " + status);
+            }
+		});
+        return false;
+    });
+
+})
