@@ -93,4 +93,10 @@ img.left {
 
 #venues-list {
     margin-left: 500px;
+    height: 400px;
+    overflow: auto;
+}
+
+#venues-list ul {
+    margin-top: 0;
 }
