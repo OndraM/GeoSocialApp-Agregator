@@ -7,15 +7,16 @@
 
     <div id="venues-wrapper">
         <div id="venues-map">
-            TODO map here
         </div>
+        
         <div id="venues-list">
         </div>
     </div>
 
 <?php
 $url = $this->url(array('controller' => 'poi', 'action' => 'get-nearby'), 'default', true);
-$script = "$('#searchform').submit(function() {
+$this->script("
+$('#searchform').submit(function() {
     $('#venues-list').html('<ul><li><img src=\"" . $this->baseUrl() . "/images/spinner.gif\" alt=\"\" /> Loading...</li></ul>');
     $.getJSON('$url?' + $('#searchform input[type=text]').serialize(), function(data) { 
         if (typeof(data) == 'object'
@@ -36,13 +37,20 @@ $script = "$('#searchform').submit(function() {
         }
         
     });
+    setMapCenter( $('#searchform input[name=lat]').val(), $('#searchform input[name=long]').val());
     return false;
 });
 
 doGeolocate();
 $('#searchform').submit();
 
-";
-$this->script($script);
+");
+
+
+$this->script("
+
+mapInit();
+
+")
 ?>
 
