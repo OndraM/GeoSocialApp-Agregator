@@ -75,6 +75,7 @@ $(document).ready(function() {
 				map.panTo(latlng);
                 $('#searchform input[name=lat]').val(latlng.lat().toFixed(6));
                 $('#searchform input[name=long]').val(latlng.lng().toFixed(6));
+                $('#searchform').submit();
 			} else {
 				// console.error("Geolocation error: " + status);
             }
