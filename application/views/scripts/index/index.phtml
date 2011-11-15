@@ -26,14 +26,18 @@ $('#searchform').submit(function() {
         if (typeof(data) == 'object'
                 && typeof(data.venues) != 'undefined'
                 && data.venues.length > 0) {
-            var items = [];
+            var listItems = [];
+            var mapItems = [];
             $.each(data.venues, function(key, val) {
-                items.push('<li id=\"' + val.id + '\">' + val.name + '</li>');
+                listItems.push('<li id=\"' + val.id + '\">' + val.name + '</li>');
+                mapItems.push(val);
             });
+        
+            addPoisOnMap(mapItems);
 
             $('#venues-list').html(
                 $('<ul/>', {
-                    html: items.join('')
+                    html: listItems.join('')
                 })
             );
         } else {

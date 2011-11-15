@@ -25,6 +25,7 @@ function doGeolocate() {
 
 var map;
 var geocoder = new google.maps.Geocoder();
+var poiMarkers = [];
 
 function mapInit() {
     var latlng;
@@ -63,8 +64,29 @@ function setMapCenter(lat, lng) {
             map.panTo(newMapCenter);
         }
     }
+}
+
+function clearMap() {
+    // $.each wont work on associative array, see jQuery issue #4319
+    for (var marker in poiMarkers) {
+		poiMarkers[marker].setMap(null);
+	}
+    poiMarkers = [];
+
+}
+
+function addPoisOnMap(pois) {
+    // clear current markers first
+    clearMap();
     
-    
+    // put pois on map
+    $.each(pois, function(i, poi) {
+        poiMarkers[poi.id] = new google.maps.Marker({
+                position: new google.maps.LatLng(poi.location.lat, poi.location.lng),
+                map: map,
+                title: poi.name
+            });
+    })
 }
 
 $(document).ready(function() {
