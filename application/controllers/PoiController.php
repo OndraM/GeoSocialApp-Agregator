@@ -7,11 +7,13 @@
 class PoiController extends Zend_Controller_Action
 {
 
-    protected $_foursquareModel = null;
+    protected $_foursquareModel;
+    protected $_gowallaModel;
 
     public function init()
     {
         $this->_foursquareModel = new GSAA_Model_LBS_Foursquare();
+        $this->_gowallaModel = new GSAA_Model_LBS_Gowalla();
         
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
         
@@ -30,8 +32,10 @@ class PoiController extends Zend_Controller_Action
             return;
         }
         
-        $pois = $this->_foursquareModel->getNearbyVenues($lat, $long, $term);
+        $poisFoursquare = $this->_foursquareModel->getNearbyVenues($lat, $long, $term);
+        $poisGowalla    = $this->_gowallaModel->getNearbyVenues($lat, $long, $term);
         
+        $pois = array_merge($poisFoursquare, $poisGowalla);
         if (count($pois) > 0) {
             $this->view->pois = $pois;
         }
@@ -52,12 +56,6 @@ class PoiController extends Zend_Controller_Action
         $gowallaModel = new GSAA_Model_LBS_Gowalla();
         
         print_r($gowallaModel->getNearbyVenues($lat, $long));
-        
-        
-        
-                
-        
-        
     }
 
 
