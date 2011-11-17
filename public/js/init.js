@@ -17,6 +17,7 @@ var poiMarkers = [];
 var mapCenterPoiner;
 var mapCenterImage = './images/pointer-small.png';
 var getNearbyUrl = '/poi/get-nearby';
+var infoWindow;
 
 
 /*
@@ -27,8 +28,10 @@ var getNearbyUrl = '/poi/get-nearby';
  */
 function init() {
     $('#searchform').submit(function() {
-        $('#venues-list').html('<ul><li><img src="/images/spinner.gif" alt="" /> Loading...</li></ul>');
-        $.getJSON(getNearbyUrl + '?' + $('#searchform input[type=text]').serialize(), function(data) { 
+        
+        toggleVenuesLoading();
+        $.getJSON(getNearbyUrl + '?' + $('#searchform input[type=text]').serialize(), function(data) {
+            toggleVenuesLoading();
             if (typeof(data) == 'object'
                     && typeof(data.venues) != 'undefined'
                     && data.venues.length > 0) {
@@ -71,8 +74,8 @@ function init() {
     });
     
     $('#searchform').submit();
-    mapInit();
-    doGeolocate(); // commented just for testing purposes
+    initMap();
+    //doGeolocate(); // commented just for testing purposes
 }
 
 /*
@@ -96,7 +99,7 @@ function doGeolocate() {
  * Initialize google map
  */
 
-function mapInit() {
+function initMap() {
     var latlng;
     if ( $('#searchform input[name=lat]').val() != ''
         && $('#searchform input[name=long]').val() != '' ) { // if set, get location from form values
@@ -114,15 +117,13 @@ function mapInit() {
     map = new google.maps.Map(
         document.getElementById('venues-map'),
         mapOptions
-    );
-        
+    );        
     mapCenterPoiner = new google.maps.Marker({
         position: latlng,
         map: map,
         icon: mapCenterImage,
         zIndex: -1
     });
-
         
     google.maps.event.addListener(map, 'dragend', function() {
 		var latlng = map.getCenter();
@@ -131,6 +132,10 @@ function mapInit() {
         $('#searchform input[name=long]').val(latlng.lng().toFixed(6));
         $('#searchform').submit();
 	});
+    
+    infoWindow = new google.maps.InfoWindow({
+        maxWidth: 350
+    });
 }
 
 /*
@@ -173,6 +178,7 @@ function clearMap() {
  */
 
 function addPoisOnMap(pois) {
+    var content;
     // clear current markers first
     clearMap();
     
@@ -183,7 +189,32 @@ function addPoisOnMap(pois) {
                 map: map,
                 title: poi.name
             });
+            
+        google.maps.event.addListener(poiMarkers[poi.id], 'click', function() {
+            content = '<div id="infoWindow">'
+                + '<div><b>' + poi.name + ' </b></div>'
+                + '<div>' + poi.location.address + '</div>'
+                + '<div>' + poi.location.postalCode + '  ' + poi.location.city + '</div>'
+                + ''
+                + ''
+                + '</div>';
+            infoWindow.setContent(content);
+            infoWindow.open(map, poiMarkers[poi.id]);
+        });
     })
 }
 
+/*
+ * Toggle venues loading spinner & wait cursor
+ */
+function toggleVenuesLoading() {
+    if ($('#venues-list').hasClass('loading')) {
+        $('#venues-list').removeClass('loading');
+        $('#venues-wrapper').css('cursor', 'default')
+    } else {
+        $('#venues-list').html('<ul><li><img src="/images/spinner.gif" alt="" /> Loading...</li></ul>');
+        $('#venues-list').addClass('loading');
+        $('#venues-wrapper').css('cursor', 'progress')
+    }        
+}
 
