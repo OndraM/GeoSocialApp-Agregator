@@ -1,14 +1,83 @@
+/*
+ * Global document.ready initialization
+ */
 $(document).ready(function() {
 	// Open external Links in new window
 	$('a[href^="http://"]').click(function() {
 		this.target = '_blank';
 	});
-
-    
-
-
 });
 
+/*
+ * Global variables
+ */
+var map;
+var geocoder = new google.maps.Geocoder();
+var poiMarkers = [];
+var mapCenterPoiner;
+var mapCenterImage = './images/pointer-small.png';
+var getNearbyUrl = '/poi/get-nearby';
+
+
+/*
+ * Init main page:
+ *  Bind events to forms
+ *  Init map
+ *  Do geolocate
+ */
+function init() {
+    $('#searchform').submit(function() {
+        $('#venues-list').html('<ul><li><img src="/images/spinner.gif" alt="" /> Loading...</li></ul>');
+        $.getJSON(getNearbyUrl + '?' + $('#searchform input[type=text]').serialize(), function(data) { 
+            if (typeof(data) == 'object'
+                    && typeof(data.venues) != 'undefined'
+                    && data.venues.length > 0) {
+                var listItems = [];
+                var mapItems = [];
+                $.each(data.venues, function(key, val) {
+                    listItems.push('<li id="' + val.id + '">' + val.name + '</li>');
+                    mapItems.push(val);
+                });
+
+                addPoisOnMap(mapItems);
+
+                $('#venues-list').html(
+                    $('<ul/>', {
+                        html: listItems.join('')
+                    })
+                );
+            } else {
+                $('#venues-list').html('<p>Sorry, no matching places nearby.</p>');
+            }
+
+        });
+        setMapCenter( $('#searchform input[name=lat]').val(), $('#searchform input[name=long]').val());
+        return false;
+    });
+    
+    $('#addressform').submit(function() {
+        geocoder.geocode({"address": $('#addressform input[name=address]').val()}, function(results, status) {
+			if (status == google.maps.GeocoderStatus.OK) {
+				var latlng = results[0].geometry.location;
+				map.panTo(latlng);
+                $('#searchform input[name=lat]').val(latlng.lat().toFixed(6));
+                $('#searchform input[name=long]').val(latlng.lng().toFixed(6));
+                $('#searchform').submit();
+			} else {
+				// console.error("Geolocation error: " + status);
+            }
+		});
+        return false;
+    });
+    
+    $('#searchform').submit();
+    mapInit();
+    doGeolocate(); // commented just for testing purposes
+}
+
+/*
+ * Do geolocation (if available)
+ */
 
 function doGeolocate() {
     if (navigator.geolocation) {
@@ -23,11 +92,9 @@ function doGeolocate() {
     }
 }
 
-var map;
-var geocoder = new google.maps.Geocoder();
-var poiMarkers = [];
-var mapCenterPoiner;
-var mapCenterImage = './images/pointer-small.png';
+/*
+ * Initialize google map
+ */
 
 function mapInit() {
     var latlng;
@@ -66,6 +133,10 @@ function mapInit() {
 	});
 }
 
+/*
+ * Set map center to lat, lng
+ */
+
 function setMapCenter(lat, lng) {
     if (map != undefined) {
         var newMapCenter = new google.maps.LatLng(lat, lng);
@@ -84,6 +155,10 @@ function setMapCenter(lat, lng) {
     }
 }
 
+/*
+ * Clear pointer from map
+ */
+
 function clearMap() {
     // $.each wont work on associative array, see jQuery issue #4319
     for (var marker in poiMarkers) {
@@ -92,6 +167,10 @@ function clearMap() {
     poiMarkers = [];
 
 }
+
+/*
+ * Add pois object to map
+ */
 
 function addPoisOnMap(pois) {
     // clear current markers first
@@ -107,20 +186,4 @@ function addPoisOnMap(pois) {
     })
 }
 
-$(document).ready(function() {
-    $('#addressform').submit(function() {
-        geocoder.geocode({"address": $('#addressform input[name=address]').val()}, function(results, status) {
-			if (status == google.maps.GeocoderStatus.OK) {
-				var latlng = results[0].geometry.location;
-				map.panTo(latlng);
-                $('#searchform input[name=lat]').val(latlng.lat().toFixed(6));
-                $('#searchform input[name=long]').val(latlng.lng().toFixed(6));
-                $('#searchform').submit();
-			} else {
-				// console.error("Geolocation error: " + status);
-            }
-		});
-        return false;
-    });
 
-})

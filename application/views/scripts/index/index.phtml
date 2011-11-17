@@ -18,48 +18,6 @@
     </div>
 
 <?php
-$url = $this->url(array('controller' => 'poi', 'action' => 'get-nearby'), 'default', true);
-$this->script("
-$('#searchform').submit(function() {
-    $('#venues-list').html('<ul><li><img src=\"" . $this->baseUrl() . "/images/spinner.gif\" alt=\"\" /> Loading...</li></ul>');
-    $.getJSON('$url?' + $('#searchform input[type=text]').serialize(), function(data) { 
-        if (typeof(data) == 'object'
-                && typeof(data.venues) != 'undefined'
-                && data.venues.length > 0) {
-            var listItems = [];
-            var mapItems = [];
-            $.each(data.venues, function(key, val) {
-                listItems.push('<li id=\"' + val.id + '\">' + val.name + '</li>');
-                mapItems.push(val);
-            });
-        
-            addPoisOnMap(mapItems);
-
-            $('#venues-list').html(
-                $('<ul/>', {
-                    html: listItems.join('')
-                })
-            );
-        } else {
-            $('#venues-list').html('<p>Sorry, no matching places nearby.</p>');
-        }
-        
-    });
-    setMapCenter( $('#searchform input[name=lat]').val(), $('#searchform input[name=long]').val());
-    return false;
-});
-        
-
-//doGeolocate(); // commented just for testing purposes
-$('#searchform').submit();
-
-");
-
-
-$this->script("
-
-mapInit();
-
-")
+$this->script("init();")
 ?>
 
