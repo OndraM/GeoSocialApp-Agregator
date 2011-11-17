@@ -119,6 +119,11 @@ img.left {
     color: #aaa;
 }
 
+#venues-list ul li a {
+    color: #00f;
+    cursor: pointer;
+}
+
 /* Forms */
 
 form fieldset {

@@ -38,7 +38,7 @@ function init() {
                 var listItems = [];
                 var mapItems = [];
                 $.each(data.pois, function(key, val) {
-                    var itemContent = '<li id="' + val.id + '">' + val.name;
+                    var itemContent = '<li id="' + val.id + '"><a>' + val.name + '</a>';
                     if (typeof val.location.distance !== "undefined" && val.location.distance)
                         itemContent  += ' <span>('  + val.location.distance + ' m)</span>'
                     itemContent  += '<img src="/images/icon-'
@@ -51,13 +51,12 @@ function init() {
                     mapItems.push(val);
                 });
 
-                addPoisOnMap(mapItems);
-
                 $('#venues-list').html(
                     $('<ul/>', {
                         html: listItems.join('')
                     })
                 );
+                addPoisOnMap(mapItems);
             } else {
                 $('#venues-list').html('<p>Sorry, no matching places nearby.</p>');
             }
@@ -133,7 +132,7 @@ function initMap() {
         icon: mapCenterImage,
         zIndex: -1
     });
-    mapCenterTimeout = setTimeout("mapCenterPoiner.setMap(null)", 3000);
+    mapCenterTimeout = setTimeout("mapCenterPoiner.setMap(null)", 5000);
         
     google.maps.event.addListener(map, 'dragend', function() {
 		var latlng = map.getCenter();
@@ -144,7 +143,7 @@ function initMap() {
 	});
     
     infoWindow = new google.maps.InfoWindow({
-        maxWidth: 350
+        maxWidth: 400
     });
 }
 
@@ -166,7 +165,7 @@ function setMapCenter(lat, lng) {
                 zIndex: -1
             });            
             clearTimeout(mapCenterTimeout);
-            mapCenterTimeout = setTimeout("mapCenterPoiner.setMap(null)", 2000);
+            mapCenterTimeout = setTimeout("mapCenterPoiner.setMap(null)", 3000);
         }
         
     }
@@ -190,48 +189,60 @@ function clearMap() {
  */
 
 function addPoisOnMap(pois) {
-    var content;
     // clear current markers first
     clearMap();
     
     // put pois on map
     $.each(pois, function(i, poi) {
+        var content;
         poiMarkers[poi.id] = new google.maps.Marker({
                 position: new google.maps.LatLng(poi.location.lat, poi.location.lng),
                 map: map,
                 title: poi.name
             });
-            
-        google.maps.event.addListener(poiMarkers[poi.id], 'click', function() {
-            content = '<div id="infoWindow">'
-                + '<div><b>' + poi.name + ' </b>'
-                + '<img src="/images/icon-'
-                + poi.type
-                + '.png" alt="'
-                + poi.type
-                + '" class="icon" />'
-                + '</div>';
-            if (typeof poi.location.address !== "undefined" && poi.location.address)
-                content += '<div>' + poi.location.address + '</div>';
+        content = '<div id="infoWindow">'
+            + '<div><b>' + poi.name + ' </b>'
+            + '<img src="/images/icon-'
+            + poi.type
+            + '.png" alt="'
+            + poi.type
+            + '" class="icon" />'
+            + '</div>';
+        if (typeof poi.location.address !== "undefined" && poi.location.address)
+            content += '<div>' + poi.location.address + '</div>';            
+        if ((typeof poi.location.postalCode !== "undefined" && poi.location.postalCode)
+            || (typeof poi.location.city !== "undefined" && poi.location.city)) {
+            content += '<div>';
+            if (typeof poi.location.postalCode !== "undefined" && poi.location.postalCode)
+                content += poi.location.postalCode + '  ';
+            if (typeof poi.location.city !== "undefined" && poi.location.city)
+                content += poi.location.city;
+            content += '</div>';
+        }                
+        content += ''
+            + ''
+            + '</div>';
 
-            
-            if ((typeof poi.location.postalCode !== "undefined" && poi.location.postalCode)
-                || (typeof poi.location.city !== "undefined" && poi.location.city)) {
-                content += '<div>';
-                if (typeof poi.location.postalCode !== "undefined" && poi.location.postalCode)
-                    content += poi.location.postalCode + '  ';
-                if (typeof poi.location.city !== "undefined" && poi.location.city)
-                    content += poi.location.city;
-                content += '</div>';
-            }
-            
-                
-            content += ''
-                + ''
-                + '</div>';
+        google.maps.event.addListener(poiMarkers[poi.id], 'click', function() {
             infoWindow.setContent(content);
             infoWindow.open(map, poiMarkers[poi.id]);
         });
+        
+        $('li#' + poi.id).click(function() {
+            infoWindow.setContent(content);
+            infoWindow.open(map, poiMarkers[$(this).attr('id')]);
+        });
+        
+        /*$('li#' + poi.id).mouseover(function() {
+            if (poiMarkers[$(this).attr('id')].getAnimation() == null) {
+                    poiMarkers[$(this).attr('id')].setAnimation(google.maps.Animation.BOUNCE);
+                    var markerId = $(this).attr('id');
+                    setTimeout(function() {poiMarkers[markerId].setAnimation(null);},750);
+                    
+                }
+        });*/
+        
+        
     })
 }
 
