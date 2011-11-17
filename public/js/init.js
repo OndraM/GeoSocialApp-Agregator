@@ -41,6 +41,11 @@ function init() {
                     var itemContent = '<li id="' + val.id + '">' + val.name;
                     if (typeof val.location.distance !== "undefined" && val.location.distance)
                         itemContent  += ' <span>('  + val.location.distance + ' m)</span>'
+                    itemContent  += '<img src="/images/icon-'
+                                 + val.type
+                                 + '.png" alt="'
+                                 + val.type
+                                 + '" class="icon" />';
                     itemContent  += '</li>'
                     listItems.push(itemContent);
                     mapItems.push(val);
@@ -199,7 +204,13 @@ function addPoisOnMap(pois) {
             
         google.maps.event.addListener(poiMarkers[poi.id], 'click', function() {
             content = '<div id="infoWindow">'
-                + '<div><b>' + poi.name + ' </b></div>';
+                + '<div><b>' + poi.name + ' </b>'
+                + '<img src="/images/icon-'
+                + poi.type
+                + '.png" alt="'
+                + poi.type
+                + '" class="icon" />'
+                + '</div>';
             if (typeof poi.location.address !== "undefined" && poi.location.address)
                 content += '<div>' + poi.location.address + '</div>';
 

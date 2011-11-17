@@ -26,6 +26,12 @@ a img {
 	border-style: none;
 }
 
+img.icon {
+	margin-left: 1ex;
+	vertical-align: middle;
+	border-style: none;    
+}
+
 /* Text */
 p {
 	margin: 0 0 1em;
@@ -139,4 +145,3 @@ form#searchform input[name=lat], form#searchform input[name=long] {
 form input {
     margin: .5ex 0;
 }
-
