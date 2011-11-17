@@ -1,14 +1,14 @@
 <?php
 
-class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract 
+class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract 
 {
-    const SERVICE_URL = 'https://api.foursquare.com/v2/';
-    const CLIENT_ID = 'QJ52TX1UJUBCPJ3DMOWS52I5MK5WJTDD3ZGCDFFWHWISUQ3K';
-    const CLIENT_SECRET = 'XFCVWF3HNGWVQWZJQC32ZMYBUHTGNKFR4IKJUHMYJNE2ZFDW';
-    
-    // Date of 4SQ API is verified to be up-to-date.
-    const DATEVERIFIED = '20111027';
-    
+    const SERVICE_URL = 'http://api.gowalla.com';
+    const PUBLIC_URL = 'https://gowalla.com';
+    const CLIENT_ID = '6f695b01d109467b9515c1d7457377bc';
+    const CLIENT_SECRET = 'b31113a8961d41b19040a2d4b4fc01a1';
+    const LIMIT = 30;
+    const TYPE = 'gw';
+        
     public function init() {
         // TODO: set client properties?
         ;
@@ -24,34 +24,48 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
      * @return array Array with venues
      */
     public function getNearbyVenues($lat, $long, $term = null, $category = null) {
-        $endpoint = 'venues/search';
+        $endpoint = '/spots';
         
         $client = $this->_constructClient($endpoint,
-                                        array(  'll'            => "$lat,$long",
-                                                'query'         => $term,
+                                        array(  'lat'            => $lat,
+                                                'lng'           => $long,
+                                                'q'              => $term,
                                                 // 'categoryId'    => $category // TODO category mapping
-                                                'limit'         => 30
+                                                //'limit'         => 30
                                             ));
-
         $response = $client->request();
         
         // error in response
         if ($response->isError()) {
             return array();
         }
-        $result = Zend_Json::decode($response->getBody());
+        $result = Zend_Json::decode($response->getBody());       
         
-        // foursquare returned an error
-        if ($result['meta']['code'] != 200) {
-            // TODO: log $result['meta']['errorType'] and $result['meta']['errorDetail']
+        if ($result['total_results'] == 0) {
             return array();
-        };
-        
-        // if code was 200 some non fatal error occured
-        if (!empty($result['meta']['errorType'])) {
-            // TODO: log $result['meta']['errorType'] and $result['meta']['errorDetail']
         }
-        return $result['response'];
+        
+        if ($result['total_results'] > self::LIMIT) {
+            array_splice($result['spots'], self::LIMIT);
+        }
+        
+        
+        // Load venues into array of GSAA_Model_POI        
+        $pois = array();
+        foreach ($result['spots'] as $entry) {
+            $poi = new GSAA_Model_POI();
+            $poi->type      = self::TYPE;
+            $poi->name      = $entry['name'];
+            $urlExploded    = explode('/',  $entry['url']);
+            $poi->id        = $urlExploded[2];
+            $poi->url       = self::PUBLIC_URL . $entry['url'];
+            $poi->location->lat     = $entry['lat'];
+            $poi->location->lng     = $entry['lng'];
+            if (isset($entry['location']['city']))
+                $poi->location->city    = $entry['address']['locality'];
+            $pois[] = $poi;
+        }
+        return $pois;
     }
     
     /**
@@ -65,16 +79,15 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
     
     protected function _constructClient($endpoint, $queryParams = array(), $clientConfig = array()) {
         $client = new Zend_Http_Client();
-        
-        // add predefined params
-        $queryParams['client_id'] = self::CLIENT_ID;
-        $queryParams['client_secret'] = self::CLIENT_SECRET;
-        $queryParams['v'] = self::DATEVERIFIED;
-        
+                
         // set client options
         $client->setUri(self::SERVICE_URL . $endpoint);
         $client->setParameterGet($queryParams);
         $client->setConfig($clientConfig);
+        $client->setHeaders(array(
+                    'X-Gowalla-API-Key' => self::CLIENT_ID,
+                    'Accept'            => 'application/json'
+                ));
         
         
         return $client;

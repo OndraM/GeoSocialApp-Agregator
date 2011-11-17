@@ -2,8 +2,8 @@
 
 class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract 
 {
-    const SERVICE_URL = 'https://api.foursquare.com/v2/';
-    const PUBLIC_URL = 'https://foursquare.com/';
+    const SERVICE_URL = 'https://api.foursquare.com/v2';
+    const PUBLIC_URL = 'https://foursquare.com';
     const CLIENT_ID = 'QJ52TX1UJUBCPJ3DMOWS52I5MK5WJTDD3ZGCDFFWHWISUQ3K';
     const CLIENT_SECRET = 'XFCVWF3HNGWVQWZJQC32ZMYBUHTGNKFR4IKJUHMYJNE2ZFDW';
     const LIMIT = 30;
@@ -27,7 +27,7 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
      * @return array Array with venues
      */
     public function getNearbyVenues($lat, $long, $term = null, $category = null) {
-        $endpoint = 'venues/search';
+        $endpoint = '/venues/search';
         
         $client = $this->_constructClient($endpoint,
                                         array(  'll'            => "$lat,$long",
@@ -55,6 +55,7 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
             // TODO: log $result['meta']['errorType'] and $result['meta']['errorDetail']
         }
         
+        // Load venues into array of GSAA_Model_POI        
         $pois = array();
         foreach ($result['response']['venues'] as $entry) {
             $poi = new GSAA_Model_POI();

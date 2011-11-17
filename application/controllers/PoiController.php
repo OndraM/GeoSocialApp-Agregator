@@ -40,6 +40,25 @@ class PoiController extends Zend_Controller_Action
         //$response = $this->getResponse();
         //$response->setHeader('Content-Type', 'text/html');
     }
+    
+    public function testAction() {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+        
+        $lat = $this->_getParam('lat');
+        $long = $this->_getParam('long');
+        $term = $this->_getParam('term');
+        
+        $gowallaModel = new GSAA_Model_LBS_Gowalla();
+        
+        print_r($gowallaModel->getNearbyVenues($lat, $long));
+        
+        
+        
+                
+        
+        
+    }
 
 
 }
