@@ -1,13 +1,23 @@
-    <form id="addressform">
-        <label>Address: <input type="text" name="address" value="" /></label>
-        <input type="submit" value="Submit" />
-    </form>
     <form id="searchform">
-        <label>Latitude: <input type="text" name="lat" value="50.076738" /></label>
-        <label>Longitude: <input type="text" name="long" value="14.41803" /></label><br />
-        <label>Filter name: <input type="text" name="term" value="" /></label><br />
-        <input type="submit" value="Submit" />
+        <fieldset>
+            <legend>Search venues</legend>
+            <label>Latitude: <input type="text" name="lat" value="50.076738" /></label>
+            <label>Longitude: <input type="text" name="long" value="14.41803" /></label>
+            <br />
+            <label>Filter name: <input type="text" name="term" value="" /></label>
+            
+            <input type="submit" value="Submit" />
+        </fieldset>
     </form>
+    <form id="addressform">
+        <fieldset>
+            <legend>Search location by address</legend>
+            <label>Address: <input type="text" name="address" value="" /></label>
+            <br />
+            <input type="submit" value="Submit" />
+        </fieldset>
+    </form>
+    
 
     <div id="venues-wrapper">
         <div id="venues-map">
