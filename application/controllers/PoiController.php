@@ -30,10 +30,10 @@ class PoiController extends Zend_Controller_Action
             return;
         }
         
-        $venues = $this->_foursquareModel->getNearbyVenues($lat, $long, $term);
+        $pois = $this->_foursquareModel->getNearbyVenues($lat, $long, $term);
         
-        if (count($venues) > 0) {
-            $this->view->venues = $venues['venues'];
+        if (count($pois) > 0) {
+            $this->view->pois = $pois;
         }
         
         // overwrite context setting for testing purposes // TODO

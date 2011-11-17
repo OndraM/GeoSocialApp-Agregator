@@ -3,8 +3,11 @@
 class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract 
 {
     const SERVICE_URL = 'https://api.foursquare.com/v2/';
+    const PUBLIC_URL = 'https://foursquare.com/';
     const CLIENT_ID = 'QJ52TX1UJUBCPJ3DMOWS52I5MK5WJTDD3ZGCDFFWHWISUQ3K';
     const CLIENT_SECRET = 'XFCVWF3HNGWVQWZJQC32ZMYBUHTGNKFR4IKJUHMYJNE2ZFDW';
+    const LIMIT = 30;
+    const TYPE = 'fq';
     
     // Date of 4SQ API is verified to be up-to-date.
     const DATEVERIFIED = '20111027';
@@ -30,7 +33,7 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
                                         array(  'll'            => "$lat,$long",
                                                 'query'         => $term,
                                                 // 'categoryId'    => $category // TODO category mapping
-                                                'limit'         => 30
+                                                'limit'         => self::LIMIT
                                             ));
 
         $response = $client->request();
@@ -51,7 +54,30 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
         if (!empty($result['meta']['errorType'])) {
             // TODO: log $result['meta']['errorType'] and $result['meta']['errorDetail']
         }
-        return $result['response'];
+        
+        $pois = array();
+        foreach ($result['response']['venues'] as $entry) {
+            $poi = new GSAA_Model_POI();
+            $poi->type      = self::TYPE;
+            $poi->name      = $entry['name'];
+            $poi->id        = $entry['id'];
+            $poi->url       = self::PUBLIC_URL . "venue/" . $entry['id'];
+            $poi->location->lat     = $entry['location']['lat'];
+            $poi->location->lng     = $entry['location']['lng'];
+            if (isset($entry['location']['distance']))
+                $poi->location->distance = $entry['location']['distance'];
+            if (isset($entry['location']['address']))
+              $poi->location->address = $entry['location']['address'];
+            if (isset($entry['location']['postalCode']))
+              $poi->location->postalCode = $entry['location']['postalCode'];
+            if (isset($entry['location']['city']))
+                $poi->location->city    = $entry['location']['city'];
+            if (isset($entry['location']['country']))
+                $poi->location->country = $entry['location']['country'];
+            
+            $pois[] = $poi;
+        }
+        return $pois;
     }
     
     /**

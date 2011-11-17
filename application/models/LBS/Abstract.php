@@ -3,6 +3,7 @@
 abstract class GSAA_Model_LBS_Abstract
 {
     const SERVICE_URL = null;
+    const TYPE = null;
     
     /**
      * Constructor.
