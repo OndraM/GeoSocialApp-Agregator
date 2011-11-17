@@ -33,11 +33,11 @@ function init() {
         $.getJSON(getNearbyUrl + '?' + $('#searchform input[type=text]').serialize(), function(data) {
             toggleVenuesLoading();
             if (typeof data == 'object'
-                    && typeof data.venues != 'undefined'
-                    && data.venues.length > 0) {
+                    && typeof data.pois != 'undefined'
+                    && data.pois.length > 0) {
                 var listItems = [];
                 var mapItems = [];
-                $.each(data.venues, function(key, val) {
+                $.each(data.pois, function(key, val) {
                     listItems.push('<li id="' + val.id + '">' + val.name + '</li>');
                     mapItems.push(val);
                 });
@@ -196,15 +196,17 @@ function addPoisOnMap(pois) {
         google.maps.event.addListener(poiMarkers[poi.id], 'click', function() {
             content = '<div id="infoWindow">'
                 + '<div><b>' + poi.name + ' </b></div>';
-            if (typeof poi.location.address !== "undefined") {
-                content += '<div>' + poi.location.address + '</div>'
-            }
+            if (typeof poi.location.address !== "undefined" && poi.location.address)
+                content += '<div>' + poi.location.address + '</div>';
+
             
-            if (typeof poi.location.postalCode !== "undefined"
-                || typeof poi.location.city !== "undefined") {
+            if ((typeof poi.location.postalCode !== "undefined" && poi.location.postalCode)
+                || (typeof poi.location.city !== "undefined" && poi.location.city)) {
                 content += '<div>';
-                if (typeof poi.location.postalCode !== "undefined") content += poi.location.postalCode + '  ';
-                if (typeof poi.location.city !== "undefined") content += poi.location.city;
+                if (typeof poi.location.postalCode !== "undefined" && poi.location.postalCode)
+                    content += poi.location.postalCode + '  ';
+                if (typeof poi.location.city !== "undefined" && poi.location.city)
+                    content += poi.location.city;
                 content += '</div>';
             }
             
