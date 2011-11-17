@@ -38,7 +38,11 @@ function init() {
                 var listItems = [];
                 var mapItems = [];
                 $.each(data.pois, function(key, val) {
-                    listItems.push('<li id="' + val.id + '">' + val.name + '</li>');
+                    var itemContent = '<li id="' + val.id + '">' + val.name;
+                    if (typeof val.location.distance !== "undefined" && val.location.distance)
+                        itemContent  += ' <span>('  + val.location.distance + ' m)</span>'
+                    itemContent  += '</li>'
+                    listItems.push(itemContent);
                     mapItems.push(val);
                 });
 

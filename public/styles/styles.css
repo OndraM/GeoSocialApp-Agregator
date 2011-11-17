@@ -102,6 +102,10 @@ img.left {
     margin-top: 0;
 }
 
+#venues-list ul li span {
+    color: #aaa;
+}
+
 /* Forms */
 
 form fieldset {
