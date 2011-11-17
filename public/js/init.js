@@ -32,8 +32,8 @@ function init() {
         toggleVenuesLoading();
         $.getJSON(getNearbyUrl + '?' + $('#searchform input[type=text]').serialize(), function(data) {
             toggleVenuesLoading();
-            if (typeof(data) == 'object'
-                    && typeof(data.venues) != 'undefined'
+            if (typeof data == 'object'
+                    && typeof data.venues != 'undefined'
                     && data.venues.length > 0) {
                 var listItems = [];
                 var mapItems = [];
@@ -192,10 +192,21 @@ function addPoisOnMap(pois) {
             
         google.maps.event.addListener(poiMarkers[poi.id], 'click', function() {
             content = '<div id="infoWindow">'
-                + '<div><b>' + poi.name + ' </b></div>'
-                + '<div>' + poi.location.address + '</div>'
-                + '<div>' + poi.location.postalCode + '  ' + poi.location.city + '</div>'
-                + ''
+                + '<div><b>' + poi.name + ' </b></div>';
+            if (typeof poi.location.address !== "undefined") {
+                content += '<div>' + poi.location.address + '</div>'
+            }
+            
+            if (typeof poi.location.postalCode !== "undefined"
+                || typeof poi.location.city !== "undefined") {
+                content += '<div>';
+                if (typeof poi.location.postalCode !== "undefined") content += poi.location.postalCode + '  ';
+                if (typeof poi.location.city !== "undefined") content += poi.location.city;
+                content += '</div>';
+            }
+            
+                
+            content += ''
                 + ''
                 + '</div>';
             infoWindow.setContent(content);
