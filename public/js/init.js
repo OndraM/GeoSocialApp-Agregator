@@ -26,6 +26,8 @@ function doGeolocate() {
 var map;
 var geocoder = new google.maps.Geocoder();
 var poiMarkers = [];
+var mapCenterPoiner;
+var mapCenterImage = './images/pointer-small.png';
 
 function mapInit() {
     var latlng;
@@ -47,6 +49,14 @@ function mapInit() {
         mapOptions
     );
         
+    mapCenterPoiner = new google.maps.Marker({
+        position: latlng,
+        map: map,
+        icon: mapCenterImage,
+        zIndex: -1
+    });
+
+        
     google.maps.event.addListener(map, 'dragend', function() {
 		var latlng = map.getCenter();
         //console.log(latlng.toUrlValue());
@@ -62,7 +72,15 @@ function setMapCenter(lat, lng) {
         var mapCenter = map.getCenter();
         if (!mapCenter.equals(newMapCenter)) {
             map.panTo(newMapCenter);
+            mapCenterPoiner.setMap(null);
+            mapCenterPoiner = new google.maps.Marker({
+                position: newMapCenter,
+                map: map,
+                icon: mapCenterImage,
+                zIndex: -1
+            });
         }
+        
     }
 }
 
