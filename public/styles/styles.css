@@ -76,6 +76,13 @@ img.left {
 #header h1 {
     
 }
+#footer {
+    clear: both;
+    margin-top: 2em;
+    color: #aaa;
+    display: none; /* Don't display in testing environment */
+}
+
 
 #content {
     padding: 0 1em;
