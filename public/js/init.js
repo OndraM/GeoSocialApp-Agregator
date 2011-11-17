@@ -16,9 +16,9 @@ var geocoder = new google.maps.Geocoder();
 var poiMarkers = [];
 var mapCenterPoiner;
 var mapCenterImage = './images/pointer-small.png';
+var mapCenterTimeout;
 var getNearbyUrl = '/poi/get-nearby';
 var infoWindow;
-
 
 /*
  * Init main page:
@@ -124,6 +124,7 @@ function initMap() {
         icon: mapCenterImage,
         zIndex: -1
     });
+    mapCenterTimeout = setTimeout("mapCenterPoiner.setMap(null)", 3000);
         
     google.maps.event.addListener(map, 'dragend', function() {
 		var latlng = map.getCenter();
@@ -143,7 +144,7 @@ function initMap() {
  */
 
 function setMapCenter(lat, lng) {
-    if (map != undefined) {
+    if (typeof map !== "undefined") {
         var newMapCenter = new google.maps.LatLng(lat, lng);
         var mapCenter = map.getCenter();
         if (!mapCenter.equals(newMapCenter)) {
@@ -154,7 +155,9 @@ function setMapCenter(lat, lng) {
                 map: map,
                 icon: mapCenterImage,
                 zIndex: -1
-            });
+            });            
+            clearTimeout(mapCenterTimeout);
+            mapCenterTimeout = setTimeout("mapCenterPoiner.setMap(null)", 2000);
         }
         
     }
