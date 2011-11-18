@@ -1,12 +1,15 @@
-<?php echo $this->doctype() ?>
+<?php echo $this->doctype() . "\n"?>
 <html>
     <head>
+
 <?php
     $this->headMeta()
 		->setCharset('utf-8');
     
     $this->headLink()
-        ->appendStylesheet($this->baseUrl() . '/styles/styles.css', 'all');
+        ->appendStylesheet($this->baseUrl() . '/styles/styles.css', 'all')
+        ->appendStylesheet('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/ui-lightness/jquery-ui.css', 'all');
+    
 
     $this->headScript()
         ->prependFile('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js')
@@ -21,6 +24,7 @@
     
 ?>
     <title><?php echo Zend_Registry::isRegistered('var') ? Zend_Registry::get('var')->sitename : "";?></title>
+
     </head>
     <body>
 <div id="document">
