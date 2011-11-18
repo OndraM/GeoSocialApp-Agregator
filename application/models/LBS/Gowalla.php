@@ -59,12 +59,12 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
             $urlExploded    = explode('/',  $entry['url']);
             $poi->id        = $urlExploded[2];
             $poi->url       = self::PUBLIC_URL . $entry['url'];
-            $poi->location->lat     = $entry['lat'];
-            $poi->location->lng     = $entry['lng'];
-            if (isset($entry['location']['city']))
-                $poi->location->city    = $entry['address']['locality'];
+            $poi->lat     = $entry['lat'];
+            $poi->lng     = $entry['lng'];
+            if (isset($entry['location']['address']))
+                $poi->address    = $entry['address']['locality'];
             
-            $poi->location->distance = $this->_getDistance($lat, $long, $poi->location->lat, $poi->location->lng);
+            $poi->distance = $this->_getDistance($lat, $long, $poi->lat, $poi->lng);
             
             $pois[] = $poi;
         }

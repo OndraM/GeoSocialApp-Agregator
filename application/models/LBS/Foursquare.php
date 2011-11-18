@@ -63,21 +63,22 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
             $poi->name      = $entry['name'];
             $poi->id        = $entry['id'];
             $poi->url       = self::PUBLIC_URL . "venue/" . $entry['id'];
-            $poi->location->lat     = $entry['location']['lat'];
-            $poi->location->lng     = $entry['location']['lng'];
+            $poi->lat     = $entry['location']['lat'];
+            $poi->lng     = $entry['location']['lng'];
             if (isset($entry['location']['distance'])) {
-                $poi->location->distance = $entry['location']['distance'];
+                $poi->distance = $entry['location']['distance'];
             } else {
-                $poi->location->distance = $this->_getDistance($lat, $long, $poi->location->lat, $poi->location->lng);
+                $poi->distance = $this->_getDistance($lat, $long, $poi->lat, $poi->lng);
             }
             if (isset($entry['location']['address']))
-              $poi->location->address = $entry['location']['address'];
-            if (isset($entry['location']['postalCode']))
-              $poi->location->postalCode = $entry['location']['postalCode'];
+                $poi->address = $entry['location']['address'];
+            //if (isset($entry['location']['postalCode']))
+            //  $poi->postalCode = $entry['location']['postalCode'];
             if (isset($entry['location']['city']))
-                $poi->location->city    = $entry['location']['city'];
-            if (isset($entry['location']['country']))
-                $poi->location->country = $entry['location']['country'];
+                $poi->address .= (!empty($poi->address) ? ', ' : '')
+                            . $entry['location']['city'];
+            //if (isset($entry['location']['country']))
+            //    $poi->country = $entry['location']['country'];
             
             $pois[] = $poi;
         }

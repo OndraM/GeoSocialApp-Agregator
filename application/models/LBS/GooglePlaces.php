@@ -8,7 +8,7 @@ class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
     const CLIENT_SECRET = 'j90OM1fvYso4p0haoZbZPUoY';
     const CLIENT_KEY = 'AIzaSyAtSx0_q5JPDtU0GPzlgSi5ZkRvJ1Jmy24';    
     //const LIMIT = 30;
-    const RADIUS = 10000;
+    const RADIUS = 1000; // To be changed dynamically (see #33)
     const TYPE = 'gg';
     
     public function init() {
@@ -62,11 +62,11 @@ class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
             $poi->id        = $entry['id'];
             //$poi->url       = self::PUBLIC_URL . "venue/" . $entry['id'];
             $poi->reference = $entry['reference'];
-            $poi->location->lat     = $entry['geometry']['location']['lat'];
-            $poi->location->lng     = $entry['geometry']['location']['lng'];
+            $poi->lat     = $entry['geometry']['location']['lat'];
+            $poi->lng     = $entry['geometry']['location']['lng'];
             if (isset($entry['vicinity']))
-              $poi->location->address = $entry['vicinity'];
-            $poi->location->distance = $this->_getDistance($lat, $long, $poi->location->lat, $poi->location->lng);
+              $poi->address = $entry['vicinity'];
+            $poi->distance = $this->_getDistance($lat, $long, $poi->lat, $poi->lng);
             
             $pois[] = $poi;
         }

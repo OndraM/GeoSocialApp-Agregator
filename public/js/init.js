@@ -39,8 +39,8 @@ function init() {
                 var mapItems = [];
                 $.each(data.pois, function(key, val) {
                     var itemContent = '<li id="' + val.id + '"><a>' + val.name + '</a>';
-                    if (typeof val.location.distance !== "undefined" && val.location.distance)
-                        itemContent  += ' <span>('  + val.location.distance + ' m)</span>'
+                    if (typeof val.distance !== "undefined" && val.distance)
+                        itemContent  += ' <span>('  + val.distance + ' m)</span>'
                     itemContent  += '<img src="/images/icon-'
                                  + val.type
                                  + '.png" alt="'
@@ -196,7 +196,7 @@ function addPoisOnMap(pois) {
     $.each(pois, function(i, poi) {
         var content;
         poiMarkers[poi.id] = new google.maps.Marker({
-                position: new google.maps.LatLng(poi.location.lat, poi.location.lng),
+                position: new google.maps.LatLng(poi.lat, poi.lng),
                 map: map,
                 title: poi.name
             });
@@ -208,17 +208,8 @@ function addPoisOnMap(pois) {
             + poi.type
             + '" class="icon" />'
             + '</div>';
-        if (typeof poi.location.address !== "undefined" && poi.location.address)
-            content += '<div>' + poi.location.address + '</div>';            
-        if ((typeof poi.location.postalCode !== "undefined" && poi.location.postalCode)
-            || (typeof poi.location.city !== "undefined" && poi.location.city)) {
-            content += '<div>';
-            if (typeof poi.location.postalCode !== "undefined" && poi.location.postalCode)
-                content += poi.location.postalCode + '  ';
-            if (typeof poi.location.city !== "undefined" && poi.location.city)
-                content += poi.location.city;
-            content += '</div>';
-        }                
+        if (typeof poi.address !== "undefined" && poi.address)
+            content += '<div>' + poi.address + '</div>';
         content += ''
             + ''
             + '</div>';
