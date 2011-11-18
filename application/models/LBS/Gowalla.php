@@ -15,15 +15,16 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
     }
 
     /**
-     * Abstract funtion to get nearby venues.
+     * Funtion to get nearby venues.
      * 
      * @param double $lat Latitude
      * @param double $long Longitude
+     * @param int    $radius Radius to search
      * @param string $term Search term
      * @param string $category Category id (TODO)
      * @return array Array with venues
      */
-    public function getNearbyVenues($lat, $long, $term = null, $category = null) {
+    public function getNearbyVenues($lat, $long, $radius, $term = null, $category = null) {
         $endpoint = '/spots';
         
         $client = $this->_constructClient($endpoint,
@@ -31,7 +32,7 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
                                                 'lng'           => $long,
                                                 'q'              => $term,
                                                 // 'categoryId'    => $category // TODO category mapping
-                                                //'limit'         => 30
+                                                'radius'        => ($radius > 0 ? $radius : self::RADIUS)
                                             ));
         $response = $client->request();
         

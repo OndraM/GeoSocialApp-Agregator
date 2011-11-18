@@ -18,22 +18,24 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
     }
 
     /**
-     * Abstract funtion to get nearby venues.
+     * Funtion to get nearby venues.
      * 
      * @param double $lat Latitude
      * @param double $long Longitude
+     * @param int    $radius Radius to search
      * @param string $term Search term
      * @param string $category Category id (TODO)
      * @return array Array with venues
      */
-    public function getNearbyVenues($lat, $long, $term = null, $category = null) {
+    public function getNearbyVenues($lat, $long, $radius, $term = null, $category = null) {
         $endpoint = '/venues/search';
         
         $client = $this->_constructClient($endpoint,
                                         array(  'll'            => "$lat,$long",
                                                 'query'         => $term,
                                                 // 'categoryId'    => $category // TODO category mapping
-                                                'limit'         => self::LIMIT
+                                                'limit'         => self::LIMIT,
+                                                'radius'        => ($radius > 0 ? $radius : self::RADIUS)
                                             ));
 
         $response = $client->request();

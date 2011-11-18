@@ -4,7 +4,9 @@ abstract class GSAA_Model_LBS_Abstract
 {
     const SERVICE_URL = null;
     const TYPE = null;
-    
+    const RADIUS = 2500;
+
+
     /**
      * Constructor.
      * 
@@ -27,9 +29,16 @@ abstract class GSAA_Model_LBS_Abstract
     }
     
     /**
-     * Abstract funtion to get nearby venues
+     * Abstract funtion to get nearby venues.
+     * 
+     * @param double $lat Latitude
+     * @param double $long Longitude
+     * @param int    $radius Radius to search
+     * @param string $term Search term
+     * @param string $category Category id
+     * @return array Array with venues
      */
-    abstract public function getNearbyVenues($x, $y, $term = null, $category = null);
+    abstract public function getNearbyVenues($x, $y, $radius, $term = null, $category = null);
     
     /**
      * Calculate distance between two coordinates. 

@@ -24,18 +24,19 @@ class PoiController extends Zend_Controller_Action
 
     public function getNearbyAction()
     {
-        $lat = $this->_getParam('lat');
-        $long = $this->_getParam('long');
-        $term = $this->_getParam('term');
+        $lat = (double) $this->_getParam('lat');
+        $long = (double) $this->_getParam('long');
+        $radius = (int) $this->_getParam('radius');
+        $term = (string) $this->_getParam('term');
         
         // lat and long params are mandatory
         if (empty($lat) || empty($long) || !is_numeric($lat) || !is_numeric($long)) {
             return;
         }
         
-        $poisFoursquare = $this->_foursquareModel->getNearbyVenues($lat, $long, $term);
-        $poisGowalla    = $this->_gowallaModel->getNearbyVenues($lat, $long, $term);
-        $poisGooglePlaces = $this->_googePlacesModel->getNearbyVenues($lat, $long, $term);
+        $poisFoursquare = $this->_foursquareModel->getNearbyVenues($lat, $long, $radius, $term);
+        $poisGowalla    = $this->_gowallaModel->getNearbyVenues($lat, $long, $radius, $term);
+        $poisGooglePlaces = $this->_googePlacesModel->getNearbyVenues($lat, $long, $radius, $term);
         
         
         $pois = array_merge($poisFoursquare, $poisGowalla, $poisGooglePlaces);
@@ -52,13 +53,14 @@ class PoiController extends Zend_Controller_Action
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender();
         
-        $lat = $this->_getParam('lat');
-        $long = $this->_getParam('long');
-        $term = $this->_getParam('term');
+        $lat = (double) $this->_getParam('lat');
+        $long = (double) $this->_getParam('long');
+        $radius = (int) $this->_getParam('radius');
+        $term = (string) $this->_getParam('term');
         
         $model = new GSAA_Model_LBS_GooglePlaces();
         
-        print_r($model->getNearbyVenues($lat, $long, $term));
+        print_r($model->getNearbyVenues($lat, $long, $radius, $term));
     }
 
 

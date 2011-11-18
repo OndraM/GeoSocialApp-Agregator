@@ -8,7 +8,6 @@ class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
     const CLIENT_SECRET = 'j90OM1fvYso4p0haoZbZPUoY';
     const CLIENT_KEY = 'AIzaSyAtSx0_q5JPDtU0GPzlgSi5ZkRvJ1Jmy24';    
     //const LIMIT = 30;
-    const RADIUS = 1000; // To be changed dynamically (see #33)
     const TYPE = 'gg';
     
     public function init() {
@@ -17,15 +16,16 @@ class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
     }
 
     /**
-     * Abstract funtion to get nearby venues.
+     * Funtion to get nearby venues.
      * 
      * @param double $lat Latitude
      * @param double $long Longitude
+     * @param int    $radius Radius to search
      * @param string $term Search term
      * @param string $category Category id (TODO)
      * @return array Array with venues
      */
-    public function getNearbyVenues($lat, $long, $term = null, $category = null) {
+    public function getNearbyVenues($lat, $long, $radius, $term = null, $category = null) {
         $endpoint = '/search/json';
         
         $client = $this->_constructClient($endpoint,
@@ -33,8 +33,7 @@ class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
                                                 'sensor'        => 'false',
                                                 'name'          => $term,
                                                 // 'categoryId'    => $category // TODO category mapping
-                                                'radius'        => self::RADIUS,
-                                                
+                                                'radius'        => ($radius > 0 ? $radius : self::RADIUS)                                                
                                             ));
 
         $response = $client->request();
