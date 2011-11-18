@@ -82,6 +82,14 @@ img.left {
 #header h1 {
     
 }
+#header h2 {
+    position: absolute;
+    top: -.75em;
+    right: 0;
+    color: #aaa;
+    font-weight: normal;
+}
+
 #footer {
     clear: both;
     margin-top: 2em;
@@ -178,6 +186,6 @@ form#searchform #search-services {
 }
 
 form#searchform #search-services .ui-button-text {
-    line-height: 1;
+    line-height: .9;
     padding: .2em .5em;
 }
