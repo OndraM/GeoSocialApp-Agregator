@@ -65,8 +65,11 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
             $poi->url       = self::PUBLIC_URL . "venue/" . $entry['id'];
             $poi->location->lat     = $entry['location']['lat'];
             $poi->location->lng     = $entry['location']['lng'];
-            if (isset($entry['location']['distance']))
+            if (isset($entry['location']['distance'])) {
                 $poi->location->distance = $entry['location']['distance'];
+            } else {
+                $poi->location->distance = $this->_getDistance($lat, $long, $poi->location->lat, $poi->location->lng);
+            }
             if (isset($entry['location']['address']))
               $poi->location->address = $entry['location']['address'];
             if (isset($entry['location']['postalCode']))

@@ -64,20 +64,8 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
             if (isset($entry['location']['city']))
                 $poi->location->city    = $entry['address']['locality'];
             
-            $poi->location->distance
-                    = round(
-                        6378
-                        * M_PI
-                        * sqrt(
-                            ($poi->location->lat-$lat)
-                                * ($poi->location->lat-$lat)
-                            + cos(deg2rad($poi->location->lat))
-                                * cos(deg2rad($lat)) 
-                                * ($poi->location->lng-$long) 
-                                * ($poi->location->lng-$long))
-                        / 180
-                        * 1000);
-
+            $poi->location->distance = $this->_getDistance($lat, $long, $poi->location->lat, $poi->location->lng);
+            
             $pois[] = $poi;
         }
         return $pois;

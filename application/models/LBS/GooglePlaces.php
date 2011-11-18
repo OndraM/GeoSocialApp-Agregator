@@ -8,7 +8,7 @@ class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
     const CLIENT_SECRET = 'j90OM1fvYso4p0haoZbZPUoY';
     const CLIENT_KEY = 'AIzaSyAtSx0_q5JPDtU0GPzlgSi5ZkRvJ1Jmy24';    
     //const LIMIT = 30;
-    const RADIUS = 100;
+    const RADIUS = 10000;
     const TYPE = 'gg';
     
     public function init() {
@@ -66,10 +66,12 @@ class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
             $poi->location->lng     = $entry['geometry']['location']['lng'];
             if (isset($entry['vicinity']))
               $poi->location->address = $entry['vicinity'];
-                        
+            $poi->location->distance = $this->_getDistance($lat, $long, $poi->location->lat, $poi->location->lng);
+            
             $pois[] = $poi;
         }
-        print_r($pois);
+        
+        //->direct
         return $pois;
     }
     
