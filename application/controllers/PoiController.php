@@ -28,15 +28,24 @@ class PoiController extends Zend_Controller_Action
         $long = (double) $this->_getParam('long');
         $radius = (int) $this->_getParam('radius');
         $term = (string) $this->_getParam('term');
+        $service_fq = (boolean) $this->_getParam('fq');
+        $service_gw = (boolean) $this->_getParam('gw');
+        $service_gg = (boolean) $this->_getParam('gg');
         
         // lat and long params are mandatory
         if (empty($lat) || empty($long) || !is_numeric($lat) || !is_numeric($long)) {
             return;
         }
         
-        $poisFoursquare = $this->_foursquareModel->getNearbyVenues($lat, $long, $radius, $term);
-        $poisGowalla    = $this->_gowallaModel->getNearbyVenues($lat, $long, $radius, $term);
-        $poisGooglePlaces = $this->_googePlacesModel->getNearbyVenues($lat, $long, $radius, $term);
+        // initialize empty arrays
+        $poisFoursquare = $poisGowalla = $poisGooglePlaces = array();
+        
+        if ($service_fq)
+            $poisFoursquare = $this->_foursquareModel->getNearbyVenues($lat, $long, $radius, $term);
+        if ($service_gw)
+            $poisGowalla    = $this->_gowallaModel->getNearbyVenues($lat, $long, $radius, $term);
+        if ($service_gg)
+            $poisGooglePlaces = $this->_googePlacesModel->getNearbyVenues($lat, $long, $radius, $term);
         
         
         $pois = array_merge($poisFoursquare, $poisGowalla, $poisGooglePlaces);
@@ -57,6 +66,12 @@ class PoiController extends Zend_Controller_Action
         $long = (double) $this->_getParam('long');
         $radius = (int) $this->_getParam('radius');
         $term = (string) $this->_getParam('term');
+        $service_fq = (boolean) $this->_getParam('fq');
+        $service_gw = (boolean) $this->_getParam('gw');
+        $service_gg = (boolean) $this->_getParam('gg');
+        
+        d($service_gg);
+
         
         $model = new GSAA_Model_LBS_GooglePlaces();
         
