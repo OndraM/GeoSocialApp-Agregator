@@ -71,7 +71,6 @@ class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
             $pois[] = $poi;
         }
         
-        //->direct
         return $pois;
     }
     

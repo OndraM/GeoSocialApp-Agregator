@@ -30,7 +30,8 @@ function init() {
     $('#searchform').submit(function() {
         
         toggleVenuesLoading();
-        $.getJSON(getNearbyUrl + '?' + $('#searchform input[type=text]').serialize(), function(data) {
+        getAndSetRadius();
+        $.getJSON(getNearbyUrl + '?' + $('#searchform input').serialize(), function(data) {
             toggleVenuesLoading();
             if (typeof data == 'object'
                     && typeof data.pois != 'undefined'
@@ -251,3 +252,41 @@ function toggleVenuesLoading() {
     }        
 }
 
+/**
+ * Calculate radius of current map (if defined) and set it as <input name=radius> value.
+ * In map is not defined, return default radius.
+ * 
+ * Algorithm source: 
+ * http://stackoverflow.com/questions/3525670/radius-of-viewable-region-in-google-maps-v3/3527136#3527136
+ * 
+ * @return int Radius in meters.
+ */
+
+function getAndSetRadius() {
+    if (typeof map == "undefined") {
+        return 2500;
+    }
+    bounds = map.getBounds();
+
+    center = bounds.getCenter();
+    ne = bounds.getNorthEast();
+
+    // r = radius of the earth
+    var r = 6378;  
+
+    // Convert lat or lng from decimal degrees into radians (divide by 57.2958)
+    var lat1 = (center.lat() / 180) * Math.PI;
+    var lng1 = (center.lng() / 180) * Math.PI;
+    var lat2 = (ne.lat() / 180) * Math.PI;
+    var lng2 = (ne.lng() / 180) * Math.PI;
+
+    // radius = circle radius from center to Northeast corner of bounds
+    var radius = Math.round(
+        1000 * r * Math.acos(Math.sin(lat1) * Math.sin(lat2) + 
+      Math.cos(lat1) * Math.cos(lat2) * Math.cos(lng2 - lng1))
+      );
+    
+    $('#searchform input[name=radius]').val(radius);
+
+    return radius;        
+}
