@@ -3,6 +3,23 @@
             <legend>Search nearby venues</legend>
             <label>Latitude: <input type="text" name="lat" value="50.076738" /></label>
             <label>Longitude: <input type="text" name="long" value="14.41803" /></label>
+            <div id="search-services">
+                <input type="checkbox" name="fq" id="service-fq" checked />
+                <label for="service-fq" title="Include Foursquare in search results">
+                        <img src="<?=$this->baseUrl();?>/images/icon-fq.png" alt="fq"/>
+                        <img src="<?=$this->baseUrl();?>/images/icon-fq-disabled.png" class="hidden" alt="fq"/>
+                </label>
+                <input type="checkbox" name="gw" id="service-gw" checked />
+                    <label for="service-gw" title="Include Gowalla in search results">
+                        <img src="<?=$this->baseUrl();?>/images/icon-gw.png" alt="gw"/>
+                        <img src="<?=$this->baseUrl();?>/images/icon-gw-disabled.png" alt="gw" class="hidden"/>
+                    </label>
+                <input type="checkbox" name="gg" id="service-gg" checked />
+                    <label for="service-gg" title="Include Google Places in search results">
+                        <img src="<?=$this->baseUrl();?>/images/icon-gg.png" alt="gg"/>
+                        <img src="<?=$this->baseUrl();?>/images/icon-gg-disabled.png" alt="gg" class="hidden"/>
+                    </label>
+            </div>
             <br />
             <label>Filter name: <input type="text" name="term" value="" /></label>
             <input type="hidden" name="radius" value="2500" />
@@ -28,6 +45,16 @@
     </div>
 
 <?php
-$this->script("init();")
+$this->script("
+init();
+
+$('#search-services').buttonset();
+
+// toggle image
+$('#search-services input').click(function() {
+    $('label[for=' + $(this).attr('id') + '] img').toggle();
+});
+
+")
 ?>
 

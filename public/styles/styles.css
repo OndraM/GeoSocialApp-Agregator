@@ -150,3 +150,34 @@ form#searchform input[name=lat], form#searchform input[name=long] {
 form input {
     margin: .5ex 0;
 }
+
+form#searchform #search-services {
+    float: right;
+}
+
+/* jQuery UI CSS overrides */
+.ui-state-focus {
+    border: 1px solid #cccccc;
+    background: #f6f6f6 url('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/ui-lightness/images/ui-bg_glass_100_f6f6f6_1x400.png') 50% 50% repeat-x;
+    font-weight: bold;
+    color: #1c94c4; 
+}
+.ui-state-active,
+.ui-widget-content .ui-state-active,
+.ui-widget-header .ui-state-active {
+    border: 1px solid #fbd850;
+    background: #ffffff url('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/ui-lightness/images/ui-bg_glass_65_ffffff_1x400.png') 50% 50% repeat-x;
+    font-weight: bold;
+    color: #eb8f00; 
+}
+.ui-state-active a, 
+.ui-state-active a:link,
+.ui-state-active a:visited {
+    color: #eb8f00; 
+    text-decoration: none;
+}
+
+form#searchform #search-services .ui-button-text {
+    line-height: 1;
+    padding: .2em .5em;
+}
