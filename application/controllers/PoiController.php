@@ -14,6 +14,7 @@ class PoiController extends Zend_Controller_Action
     {
         $this->_foursquareModel = new GSAA_Model_LBS_Foursquare();
         $this->_gowallaModel = new GSAA_Model_LBS_Gowalla();
+        $this->_googePlacesModel = new GSAA_Model_LBS_GooglePlaces();
         
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
         
@@ -34,8 +35,10 @@ class PoiController extends Zend_Controller_Action
         
         $poisFoursquare = $this->_foursquareModel->getNearbyVenues($lat, $long, $term);
         $poisGowalla    = $this->_gowallaModel->getNearbyVenues($lat, $long, $term);
+        $poisGooglePlaces = $this->_googePlacesModel->getNearbyVenues($lat, $long, $term);
         
-        $pois = array_merge($poisFoursquare, $poisGowalla);
+        
+        $pois = array_merge($poisFoursquare, $poisGowalla, $poisGooglePlaces);
         if (count($pois) > 0) {
             $this->view->pois = $pois;
         }
@@ -53,9 +56,9 @@ class PoiController extends Zend_Controller_Action
         $long = $this->_getParam('long');
         $term = $this->_getParam('term');
         
-        $gowallaModel = new GSAA_Model_LBS_Gowalla();
+        $model = new GSAA_Model_LBS_GooglePlaces();
         
-        print_r($gowallaModel->getNearbyVenues($lat, $long));
+        print_r($model->getNearbyVenues($lat, $long, $term));
     }
 
 
