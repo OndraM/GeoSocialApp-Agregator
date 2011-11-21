@@ -29,7 +29,7 @@ abstract class GSAA_Model_LBS_Abstract
     }
     
     /**
-     * Abstract funtion to get nearby venues.
+     * Abstract function to get nearby venues.
      * 
      * @param double $lat Latitude
      * @param double $long Longitude

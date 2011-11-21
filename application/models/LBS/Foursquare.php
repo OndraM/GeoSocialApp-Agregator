@@ -18,7 +18,7 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
     }
 
     /**
-     * Funtion to get nearby venues.
+     * Function to get nearby venues.
      * 
      * @param double $lat Latitude
      * @param double $long Longitude

@@ -65,9 +65,6 @@ class PoiController extends Zend_Controller_Action
         $service_gw = (boolean) $this->_getParam('gw');
         $service_gg = (boolean) $this->_getParam('gg');
         
-        d($service_gg);
-
-        
         $model = new GSAA_Model_LBS_GooglePlaces();
         
         print_r($model->getNearbyVenues($lat, $long, $radius, $term));
