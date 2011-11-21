@@ -84,7 +84,7 @@ function init() {
     
     $('#searchform').submit();
     initMap();
-    //doGeolocate(); // commented just for testing purposes
+    doGeolocate(); // commented just for testing purposes
 }
 
 /*

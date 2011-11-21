@@ -3,6 +3,7 @@
             <legend>Search nearby venues</legend>
             <label>Latitude: <input type="text" name="lat" value="50.076738" /></label>
             <label>Longitude: <input type="text" name="long" value="14.41803" /></label>
+            <label>Radius: <input type="text" name="radius" value="500" /></label>
             <div id="search-services">
                 Search in: 
                 <input type="checkbox" name="fq" id="service-fq" checked />
@@ -23,7 +24,6 @@
             </div>
             <br />
             <label>Filter name: <input type="text" name="term" value="" /></label>
-            <input type="hidden" name="radius" value="2500" />
             <input type="submit" value="Submit" />
         </fieldset>
     </form>
