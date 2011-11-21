@@ -141,14 +141,8 @@ function initMap() {
     map = new google.maps.Map(
         document.getElementById('venues-map'),
         mapOptions
-    );        
-    mapCenterPoiner = new google.maps.Marker({
-        position: latlng,
-        map: map,
-        icon: mapCenterImage,
-        zIndex: -1
-    });
-    mapCenterTimeout = setTimeout("mapCenterPoiner.setMap(null)", 5000);
+    );     
+    showMapCenterPointer(latlng, 5000);
         
     google.maps.event.addListener(map, 'dragend', function() {
 		var latlng = map.getCenter();
@@ -161,10 +155,9 @@ function initMap() {
     google.maps.event.addListener(map, 'zoom_changed', function() {
 		var latlng = map.getCenter();
         getAndSetRadius();
-        //$('#searchform input[type=submit]').effect("pulsate", {times: 3}, 300);
         $('#searchform input[name=lat]').val(latlng.lat().toFixed(6));
-        $('#searchform input[name=long]').val(latlng.lng().toFixed(6));
-        //$('#searchform').submit();
+        $('#searchform input[name=long]').val(latlng.lng().toFixed(6));        
+        showMapCenterPointer(latlng, 1000);
 	});
     
     
@@ -183,15 +176,7 @@ function setMapCenter(lat, lng) {
         var mapCenter = map.getCenter();
         if (!mapCenter.equals(newMapCenter)) {
             map.panTo(newMapCenter);
-            mapCenterPoiner.setMap(null);
-            mapCenterPoiner = new google.maps.Marker({
-                position: newMapCenter,
-                map: map,
-                icon: mapCenterImage,
-                zIndex: -1
-            });            
-            clearTimeout(mapCenterTimeout);
-            mapCenterTimeout = setTimeout("mapCenterPoiner.setMap(null)", 3000);
+            showMapCenterPointer(newMapCenter, 3000);
         }
         
     }
@@ -318,4 +303,26 @@ function getAndSetRadius() {
     //$('#searchform input[name=radius]')
 
     return radius;        
+}
+
+/**
+ * Show map center crosshair pointer for specified time.
+ * 
+ * @param latlng google.maps.LatLng object
+ * @param timeout Timeout in miliseconds
+ */
+
+function showMapCenterPointer (latlng, timeout) {
+    if (typeof mapCenterPoiner !== "undefined") {
+        mapCenterPoiner.setMap(null);
+        console.log('Set pointer map to null');
+    }
+    mapCenterPoiner = new google.maps.Marker({
+        position: latlng,
+        map: map,
+        icon: mapCenterImage,
+        zIndex: -1
+    });
+    clearTimeout(mapCenterTimeout);
+    mapCenterTimeout = setTimeout("mapCenterPoiner.setMap(null)", timeout);
 }
