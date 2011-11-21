@@ -46,6 +46,7 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
             return array();
         }
         
+        // cut unwanted part of result (longer than self::LIMIT)
         if ($result['total_results'] > self::LIMIT) {
             array_splice($result['spots'], self::LIMIT);
         }
