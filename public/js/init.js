@@ -19,6 +19,7 @@ var mapCenterImage = './images/pointer-small.png';
 var mapCenterTimeout;
 var getNearbyUrl = '/poi/get-nearby';
 var infoWindow;
+var xhrRequest;
 
 /*
  * Init main page:
@@ -28,12 +29,15 @@ var infoWindow;
  */
 function init() {
     $.ajaxSetup({
-        "error":function() {
+        "error": function(jqXHR, textStatus, errorThrown) {
+            if (textStatus == 'abort') { // don't throw error when xhr request aborted from client side
+               return;
+            }
             toggleVenuesLoading(true);
             // show error message
             $('#venues-list').html('<p>Sorry, there was an error loading your request :-(.</p>');
         },
-        timeout: 60000 // set timeout to 60 seconds
+            timeout: 60000 // set timeout to 60 seconds
     });
 
 
@@ -44,7 +48,16 @@ function init() {
         // reset possible highlight
         $('#searchform input[type=submit]').stop().css({backgroundColor: "#F6F6F6"});
         
-        $.getJSON(getNearbyUrl + '?' + $('#searchform input').serialize(), function(data) {
+        // check whether xhrRequest isn't already running
+        if (xhrRequest && xhrRequest.readyState != 4){
+            xhrRequest.abort(); // if so, abort it first
+        }
+        
+        // do the xhr request itself
+        xhrRequest = $.ajax({
+          url: getNearbyUrl + '?' + $('#searchform input').serialize(),
+          dataType: 'json',
+          success: function(data) {
             // got result; don't show venues loading anymore
             toggleVenuesLoading(true);
             
@@ -81,7 +94,7 @@ function init() {
                 $('#venues-list').html('<p>Sorry, no matching places nearby.</p><p>Try zooming out the map or redefining name or category filter.</p>');
             }
 
-        });
+        }});
         // move map to values in from (in case they have been changed by user ipnut, not by dragging map)
         setMapCenter( $('#searchform input[name=lat]').val(), $('#searchform input[name=long]').val());
         
@@ -331,7 +344,7 @@ function getAndSetRadius() {
  */
 
 function showMapCenterPointer (latlng, timeout) {
-    if (typeof mapCenterPoiner !== "undefined") {
+    if (typeof mapCenterPoiner !== "undefined" && mapCenterPoiner) {
         mapCenterPoiner.setMap(null);
     }
     mapCenterPoiner = new google.maps.Marker({
