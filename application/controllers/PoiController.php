@@ -7,14 +7,14 @@
 class PoiController extends Zend_Controller_Action
 {
 
-    protected $_foursquareModel;
-    protected $_gowallaModel;
+    protected $_serviceModels = array();
 
     public function init()
     {
-        $this->_foursquareModel = new GSAA_Model_LBS_Foursquare();
-        $this->_gowallaModel = new GSAA_Model_LBS_Gowalla();
-        $this->_googePlacesModel = new GSAA_Model_LBS_GooglePlaces();
+        foreach(Zend_Registry::get('var')->services as $serviceId => $service) {
+            $classname = $service['model'];
+            $this->_serviceModels[$serviceId] = new $classname();
+        }
         
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
         
@@ -28,27 +28,22 @@ class PoiController extends Zend_Controller_Action
         $long = (double) $this->_getParam('long');
         $radius = (int) $this->_getParam('radius');
         $term = (string) $this->_getParam('term');
-        $service_fq = (boolean) $this->_getParam('fq');
-        $service_gw = (boolean) $this->_getParam('gw');
-        $service_gg = (boolean) $this->_getParam('gg');
         
         // lat and long params are mandatory
         if (empty($lat) || empty($long) || !is_numeric($lat) || !is_numeric($long)) {
             return;
         }
         
-        // initialize empty arrays
-        $poisFoursquare = $poisGowalla = $poisGooglePlaces = array();
+        $pois = array();
         
-        if ($service_fq)
-            $poisFoursquare = $this->_foursquareModel->getNearbyVenues($lat, $long, $radius, $term);
-        if ($service_gw)
-            $poisGowalla    = $this->_gowallaModel->getNearbyVenues($lat, $long, $radius, $term);
-        if ($service_gg)
-            $poisGooglePlaces = $this->_googePlacesModel->getNearbyVenues($lat, $long, $radius, $term);
-        
-        
-        $pois = array_merge($poisFoursquare, $poisGowalla, $poisGooglePlaces);
+        foreach ($this->_serviceModels as $modelId => $model) { // iterate through availabe models
+            if ((boolean) $this->_getParam($modelId)) { // use service
+                $pois = array_merge(
+                        $pois,
+                        $model->getNearbyVenues($lat, $long, $radius, $term));
+            }
+        }
+
         if (count($pois) > 0) {
             $this->view->pois = $pois;
         }
