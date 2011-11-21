@@ -35,7 +35,10 @@ function init() {
         $('#searchform input[type=submit]').stop().css({backgroundColor: "#F6F6F6"});
         
         $.getJSON(getNearbyUrl + '?' + $('#searchform input').serialize(), function(data) {
+            // got result; don't show venues loading anymore
             toggleVenuesLoading();
+            
+            // something found:
             if (typeof data == 'object'
                     && typeof data.pois != 'undefined'
                     && data.pois.length > 0) {
@@ -61,7 +64,10 @@ function init() {
                     })
                 );
                 addPoisOnMap(mapItems);
-            } else {
+            } else {  // no pois found
+                // clear the previous ones
+                clearMap();
+                // show error message
                 $('#venues-list').html('<p>Sorry, no matching places nearby.</p><p>Try zooming out the map or redefining name or category filter.</p>');
             }
 
