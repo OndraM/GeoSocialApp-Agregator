@@ -7,7 +7,9 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
     const CLIENT_ID = 'QJ52TX1UJUBCPJ3DMOWS52I5MK5WJTDD3ZGCDFFWHWISUQ3K';
     const CLIENT_SECRET = 'XFCVWF3HNGWVQWZJQC32ZMYBUHTGNKFR4IKJUHMYJNE2ZFDW';
     const LIMIT = 30;
+    const RADIUS_MAX = 100000;
     const TYPE = 'fq';
+    
     
     // Date of 4SQ API is verified to be up-to-date.
     const DATEVERIFIED = '20111027';
@@ -29,7 +31,10 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
      */
     public function getNearbyVenues($lat, $long, $radius, $term = null, $category = null) {
         $endpoint = '/venues/search';
-        
+        if ($radius > self::RADIUS_MAX) {
+            $radius = self::RADIUS_MAX;
+        }
+
         $client = $this->_constructClient($endpoint,
                                         array(  'll'            => "$lat,$long",
                                                 'query'         => $term,

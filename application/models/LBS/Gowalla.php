@@ -26,6 +26,9 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
      */
     public function getNearbyVenues($lat, $long, $radius, $term = null, $category = null) {
         $endpoint = '/spots';
+        if ($radius > self::RADIUS_MAX) {
+            $radius = self::RADIUS_MAX;
+        }
         
         $client = $this->_constructClient($endpoint,
                                         array(  'lat'            => $lat,

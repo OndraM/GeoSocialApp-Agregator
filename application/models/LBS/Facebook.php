@@ -30,10 +30,10 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
      * @return array Array with venues
      */
     public function getNearbyVenues($lat, $long, $radius, $term = null, $category = null) {
-        //d($this->facebook->getUser());
-        //print_r($this->facebook->api('/search?type=place&center=50.076738,14.41803&distance=1000'));
-        
         $endpoint = '/search';
+        if ($radius > self::RADIUS_MAX) {
+            $radius = self::RADIUS_MAX;
+        }
         
         $queryParams = array('type'     => 'place',
                              'center'   => "$lat,$long",                            

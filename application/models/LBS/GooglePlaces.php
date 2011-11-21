@@ -27,6 +27,9 @@ class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
      */
     public function getNearbyVenues($lat, $long, $radius, $term = null, $category = null) {
         $endpoint = '/search/json';
+        if ($radius > self::RADIUS_MAX) {
+            $radius = self::RADIUS_MAX;
+        }
         
         $client = $this->_constructClient($endpoint,
                                         array(  'location'      => "$lat,$long",
