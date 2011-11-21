@@ -28,9 +28,12 @@ var infoWindow;
  */
 function init() {
     $('#searchform').submit(function() {
-        
+        // show ajax spinner
         toggleVenuesLoading();
-        getAndSetRadius();
+        
+        // reset possible highlight
+        $('#searchform input[type=submit]').stop().css({backgroundColor: "#F6F6F6"});
+        
         $.getJSON(getNearbyUrl + '?' + $('#searchform input').serialize(), function(data) {
             toggleVenuesLoading();
             if (typeof data == 'object'
@@ -63,7 +66,9 @@ function init() {
             }
 
         });
+        // move map to values in from (in case they have been changed by user ipnut, not by dragging map)
         setMapCenter( $('#searchform input[name=lat]').val(), $('#searchform input[name=long]').val());
+        
         return false;
     });
     
@@ -82,9 +87,19 @@ function init() {
         return false;
     });
     
+    // when any text value is changed by manual user input, highlight submit button
+    $('#searchform input[type=text]').change(function() {
+        $('#searchform input[type=submit]').animate({backgroundColor: "#ffe45c"}, 500);
+    });
+    
+    // also when any checbox is clicked, highlight submit button
+    $('#searchform input[type=checkbox]').click(function() {
+        $('#searchform input[type=submit]').animate({backgroundColor: "#ffe45c"}, 500);
+    });    
+    
     $('#searchform').submit();
     initMap();
-    doGeolocate(); // commented just for testing purposes
+    //doGeolocate(); // commented just for testing purposes
 }
 
 /*
@@ -142,6 +157,16 @@ function initMap() {
         $('#searchform input[name=long]').val(latlng.lng().toFixed(6));
         $('#searchform').submit();
 	});
+    
+    google.maps.event.addListener(map, 'zoom_changed', function() {
+		var latlng = map.getCenter();
+        getAndSetRadius();
+        //$('#searchform input[type=submit]').effect("pulsate", {times: 3}, 300);
+        $('#searchform input[name=lat]').val(latlng.lat().toFixed(6));
+        $('#searchform input[name=long]').val(latlng.lng().toFixed(6));
+        //$('#searchform').submit();
+	});
+    
     
     infoWindow = new google.maps.InfoWindow({
         maxWidth: 400
@@ -286,7 +311,11 @@ function getAndSetRadius() {
       Math.cos(lat1) * Math.cos(lat2) * Math.cos(lng2 - lng1))
       );
     
-    $('#searchform input[name=radius]').val(radius);
+    var prevVal = $('#searchform input[name=radius]').val();
+    if (prevVal != radius) {
+        $('#searchform input[name=radius]').val(radius).change();
+    }
+    //$('#searchform input[name=radius]')
 
     return radius;        
 }

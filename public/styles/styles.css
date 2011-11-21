@@ -153,11 +153,10 @@ form#addressform {
 
 form#searchform input[name=lat], form#searchform input[name=long] {
     width: 11ex;
-    margin-right: 1ex;
+    margin-right: .75ex;
 }
 form#searchform input[name=radius] {
     width: 6ex;
-    margin-right: 1ex;
 }
 
 form input {
@@ -193,4 +192,8 @@ form#searchform #search-services {
 form#searchform #search-services .ui-button-text {
     line-height: .9;
     padding: .2em .5em;
+}
+input.ui-button {
+    padding: 0.15em 1em;
+    background-image: none;
 }
