@@ -57,6 +57,11 @@ class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
             /*if (in_array('political', $entry['types'])) { // dont include political venues
                 //continue;
             }*/
+            // skip venues that are not in radius x2 (avoid showing venues that are too far)
+            if ($this->_getDistance($lat, $long,
+                                    $entry['geometry']['location']['lat'], $entry['geometry']['location']['lng']) > $radius*2) {
+                continue;
+            }
             $poi = new GSAA_Model_POI();
             $poi->type      = self::TYPE;
             $poi->name      = $entry['name'];

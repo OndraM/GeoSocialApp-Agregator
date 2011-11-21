@@ -60,6 +60,11 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
         // Load venues into array of GSAA_Model_POI        
         $pois = array();
         foreach ($result['response']['venues'] as $entry) {
+            // skip venues that are not in radius x2 (avoid showing venues that are too far)
+            if ($this->_getDistance($lat, $long,
+                                    $entry['location']['lat'], $entry['location']['lng']) > $radius*2) {
+                continue;
+            }
             $poi = new GSAA_Model_POI();
             $poi->type      = self::TYPE;
             $poi->name      = $entry['name'];

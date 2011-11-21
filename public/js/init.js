@@ -315,7 +315,6 @@ function getAndSetRadius() {
 function showMapCenterPointer (latlng, timeout) {
     if (typeof mapCenterPoiner !== "undefined") {
         mapCenterPoiner.setMap(null);
-        console.log('Set pointer map to null');
     }
     mapCenterPoiner = new google.maps.Marker({
         position: latlng,

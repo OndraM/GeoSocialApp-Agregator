@@ -54,6 +54,10 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
         // Load venues into array of GSAA_Model_POI        
         $pois = array();
         foreach ($result['spots'] as $entry) {
+            // skip venues that are not in radius x2 (avoid showing venues that are too far)
+            if ($this->_getDistance($lat, $long, $entry['lat'], $entry['lng']) > $radius) {
+                continue;
+            }
             $poi = new GSAA_Model_POI();
             $poi->type      = self::TYPE;
             $poi->name      = $entry['name'];
