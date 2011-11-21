@@ -27,6 +27,16 @@ var infoWindow;
  *  Do geolocate
  */
 function init() {
+    $.ajaxSetup({
+        "error":function() {
+            toggleVenuesLoading(true);
+            // show error message
+            $('#venues-list').html('<p>Sorry, there was an error loading your request :-(.</p>');
+        },
+        timeout: 60000 // set timeout to 60 seconds
+    });
+
+
     $('#searchform').submit(function() {
         // show ajax spinner
         toggleVenuesLoading();
@@ -36,7 +46,7 @@ function init() {
         
         $.getJSON(getNearbyUrl + '?' + $('#searchform input').serialize(), function(data) {
             // got result; don't show venues loading anymore
-            toggleVenuesLoading();
+            toggleVenuesLoading(true);
             
             // something found:
             if (typeof data == 'object'
@@ -256,9 +266,11 @@ function addPoisOnMap(pois) {
 
 /*
  * Toggle venues loading spinner & wait cursor
+ * 
+ * @param forceRemove If set, force loading state to off.
  */
-function toggleVenuesLoading() {
-    if ($('#venues-list').hasClass('loading')) {
+function toggleVenuesLoading(forceRemove) {
+    if (forceRemove || $('#venues-list').hasClass('loading')) {
         $('#venues-list').removeClass('loading');
         $('#venues-wrapper').css('cursor', 'default')
     } else {
