@@ -121,6 +121,7 @@ img.left {
 
 #venues-list ul {
     margin-top: 0;
+    padding-left: 3em;
 }
 
 #venues-list ul li span {
@@ -130,6 +131,10 @@ img.left {
 #venues-list ul li a {
     color: #00f;
     cursor: pointer;
+}
+
+#venues-list p {
+    padding-left: 2em;
 }
 
 /* Forms */

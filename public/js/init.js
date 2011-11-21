@@ -62,7 +62,7 @@ function init() {
                 );
                 addPoisOnMap(mapItems);
             } else {
-                $('#venues-list').html('<p>Sorry, no matching places nearby.</p>');
+                $('#venues-list').html('<p>Sorry, no matching places nearby.</p><p>Try zooming out the map or redefining name or category filter.</p>');
             }
 
         });
