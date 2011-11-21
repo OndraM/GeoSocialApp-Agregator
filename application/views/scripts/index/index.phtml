@@ -1,9 +1,9 @@
     <form id="searchform">
         <fieldset>
             <legend>Search nearby venues</legend>
-            <label>Latitude: <input type="text" name="lat" value="50.076738" /></label>
-            <label>Longitude: <input type="text" name="long" value="14.41803" /></label>
-            <label>Radius: <input type="text" name="radius" value="500" /></label>
+            <label>Latitude: <input type="text" name="lat" value="<?=Zend_Registry::get('var')->defaultLat;?>" /></label>
+            <label>Longitude: <input type="text" name="long" value="<?=Zend_Registry::get('var')->defaultLong;?>" /></label>
+            <label>Radius: <input type="text" name="radius" value="<?=Zend_Registry::get('var')->defaultRadius;?>" /></label>
             <div id="search-services">
                 Search in: 
 <?php
