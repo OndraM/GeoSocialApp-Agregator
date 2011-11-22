@@ -110,24 +110,31 @@ class PoiController extends Zend_Controller_Action
             $agPoi = new GSAA_Model_AggregatedPOI();
             $agPoi->addPoi($pois_raw[$x]); // copy entire POI
             
+            $poiXName = strtolower($pois_raw[$x]->name);
             for ($y = 0; $y < count($pois_raw); $y++) {
                 if (is_null($pois_raw[$y])) continue; // skip already merged items
                 if ($x == $y) continue; // skip the same POI
-                
-                $similar_percent = 0;
-                /* TODO: convert name to ASCII, to get better results
-                 * Test case: 50.076738, 14.5; Strasnicke divadlo
-                 */
-                /*
-                 * TODO: other text matching improvenets (maybe remove some chars,
-                 * divide name on parts dividers like | and (),
-                 * remove common prefixes like "Restaurace" [but then be more strict on distance] etc.)
-                 */
-                
-                $poiXName = strtolower($pois_raw[$x]->name);
                 $poiYName = strtolower($pois_raw[$y]->name);
                 
-                similar_text($poiXName, $poiYName, $similar_percent);
+                $similar_percent_basic = 0;
+                $similar_percent_alpha = 0;
+                /*
+                 * TODO: other text matching improvements suggestions:
+                 * - maybe remove some chars
+                 * - divide name on parts dividers like | and ()
+                 * - remove common prefixes like "Restaurace" (but then be more strict on distance)
+                 * - try different word order
+                 */
+                
+                
+                
+                
+                //d($poiYName, '$poiYName');
+                
+                
+                similar_text($poiXName, $poiYName, $similar_percent_basic);
+                similar_text( Zend_Filter::filterStatic($poiXName, 'Alpha'),
+                              Zend_Filter::filterStatic($poiYName, 'Alpha'), $similar_percent_alpha);                
                 
                 $distance = $this->_serviceModels[$pois_raw[$x]->type]->getDistance(
                                 $pois_raw[$x]->lat,
@@ -140,7 +147,9 @@ class PoiController extends Zend_Controller_Action
                         . 'distance: '
                         . $distance
                         . "<br />\n";*/
-                if ($similar_percent > 75 && $distance < 150) { // Merge objects
+                if (($similar_percent_basic > 75
+                         || $similar_percent_alpha > 80)
+                    && $distance < 150) { // Merge objects
                     
                     $agPoi->addPoi($pois_raw[$y]); // copy entire POI
                     $pois_raw[$y] = null; // remove content from array, so that the POI wont be merged again
