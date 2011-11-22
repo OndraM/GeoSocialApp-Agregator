@@ -67,18 +67,20 @@ function init() {
                     && data.pois.length > 0) {
                 var listItems = [];
                 var mapItems = [];
-                $.each(data.pois, function(key, val) {
-                    var itemContent = '<li id="' + val.id + '"><a>' + val.name + '</a>';
-                    if (typeof val.distance !== "undefined" && val.distance)
-                        itemContent  += ' <span>('  + val.distance + ' m)</span>'
-                    itemContent  += '<img src="/images/icon-'
-                                 + val.type
-                                 + '.png" alt="'
-                                 + val.type
-                                 + '" class="icon" />';
+                $.each(data.pois, function(key, poi) {
+                    var itemContent = '<li id="' + poi.id + '"><a>' + poi.name + '</a>';
+                    if (typeof poi.distance !== "undefined")
+                        itemContent  += ' <span>('  + poi.distance + ' m)</span>'
+                    $.each(poi.types, function(i, type) {
+                        itemContent  += '<img src="/images/icon-'
+                                     + type
+                                     + '.png" alt="'
+                                     + type
+                                     + '" class="icon" />';
+                    });
                     itemContent  += '</li>'
                     listItems.push(itemContent);
-                    mapItems.push(val);
+                    mapItems.push(poi);
                 });
 
                 $('#venues-list').html(
@@ -253,13 +255,15 @@ function addPoisOnMap(pois) {
                 title: poi.name
             });
         content = '<div id="infoWindow">'
-            + '<div><b>' + poi.name + ' </b>'
-            + '<img src="/images/icon-'
-            + poi.type
-            + '.png" alt="'
-            + poi.type
-            + '" class="icon" />'
-            + '</div>';
+            + '<div><strong>' + poi.name + ' </strong>';
+        $.each(poi.types, function(i, type) {
+            content += '<img src="/images/icon-'
+                + type
+                + '.png" alt="'
+                + type
+                + '" class="icon" />';
+        });
+        content += ' </div>';
         if (typeof poi.address !== "undefined" && poi.address)
             content += '<div>' + poi.address + '</div>';
         content += ''
