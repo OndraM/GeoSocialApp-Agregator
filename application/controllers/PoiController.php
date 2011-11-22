@@ -61,13 +61,45 @@ class PoiController extends Zend_Controller_Action
         $long = (double) $this->_getParam('long');
         $radius = (int) $this->_getParam('radius');
         $term = (string) $this->_getParam('term');
-        $service_fq = (boolean) $this->_getParam('fq');
-        $service_gw = (boolean) $this->_getParam('gw');
-        $service_gg = (boolean) $this->_getParam('gg');
+        $service['fq'] = (boolean) $this->_getParam('fq');
+        $service['gw'] = (boolean) $this->_getParam('gw');
+        $service['gg'] = (boolean) $this->_getParam('gg');
+        $service['fb'] = (boolean) $this->_getParam('fb');
         
-        $model = new GSAA_Model_LBS_GooglePlaces();
+        //$model = new GSAA_Model_LBS_GooglePlaces();        
+        //print_r($model->getNearbyVenues($lat, $long, $radius, $term));
+        $pois_raw = array();
+        foreach ($this->_serviceModels as $modelId => $model) { // iterate through availabe models
+            if ((boolean) $service[$modelId] ) { // use service
+                $pois_raw = array_merge(
+                        $pois_raw,
+                        $model->getNearbyVenues($lat, $long, $radius, $term));
+            }
+        }      
         
-        print_r($model->getNearbyVenues($lat, $long, $radius, $term));
+        for ($x = 0; $x < count($pois_raw); $x++) {
+            //d($pois_raw[$x], $x);
+            echo $x . ": " . $pois_raw[$x]->name . "<br />\n";
+            for ($y = 0; $y < count($pois_raw); $y++) {
+                if ($x == $y) continue; // skip the same POI
+                $similair_percent = 0;
+                similar_text($pois_raw[$x]->name, $pois_raw[$y]->name, $similair_percent);
+                if ($similair_percent > 75) {
+                    echo "&nbsp;&nbsp;&nbsp;&nbsp;" . $y . ": " . $pois_raw[$y]->name . " | "
+                        . 'similair_text: ' . round($similair_percent, 1) . " | "
+                        . 'distance: '
+                        . $this->_serviceModels[$pois_raw[$x]->type]->getDistance(
+                                $pois_raw[$x]->lat,
+                                $pois_raw[$x]->lng,
+                                $pois_raw[$y]->lat,
+                                $pois_raw[$y]->lng)
+                        . "<br />\n";
+                }
+            }
+        }
+        
+        
+        //d($pois);
     }
 
 
