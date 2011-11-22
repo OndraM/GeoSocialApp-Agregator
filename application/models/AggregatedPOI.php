@@ -29,8 +29,9 @@ class GSAA_Model_AggregatedPOI
      * Get aggregated id of POI
      */
     public function getId() {
-        // TODO
-        return;
+        $this->_sortPois();
+        // return ID of primary POI
+        return reset($this->getPois())->id;
     }
 
     /* 
@@ -38,6 +39,7 @@ class GSAA_Model_AggregatedPOI
      */
     public function getName() {
         $this->_sortPois();
+        // return name of primary POI
         return reset($this->getPois())->name;
     }
     
@@ -46,6 +48,7 @@ class GSAA_Model_AggregatedPOI
      */
     public function getLat() {
         $this->_sortPois();
+        // TODO: mayby get average location?
         return reset($this->getPois())->lat;
     }
 
@@ -54,6 +57,7 @@ class GSAA_Model_AggregatedPOI
      */
     public function getLng() {
         $this->_sortPois();
+        // TODO: mayby get average location?
         return reset($this->getPois())->lng;
     }
 
@@ -70,7 +74,8 @@ class GSAA_Model_AggregatedPOI
      */
     public function getAddress() {
         $this->_sortPois();
-        // TODO - get best address, if none set, maybe search on Google?
+        // TODO - get best address, if none of primary POI, try onother ones, 
+        // if none of them has address, maybe search on Google :)?
         return reset($this->getPois())->address;
     }
     
