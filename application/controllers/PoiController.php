@@ -110,11 +110,11 @@ class PoiController extends Zend_Controller_Action
             $agPoi = new GSAA_Model_AggregatedPOI();
             $agPoi->addPoi($pois_raw[$x]); // copy entire POI
             
-            $poiXName = strtolower($pois_raw[$x]->name);
+            $poiXName = Zend_Filter::filterStatic($pois_raw[$x]->name, 'StringToLower');
             for ($y = 0; $y < count($pois_raw); $y++) {
                 if (is_null($pois_raw[$y])) continue; // skip already merged items
                 if ($x == $y) continue; // skip the same POI
-                $poiYName = strtolower($pois_raw[$y]->name);
+                $poiYName = Zend_Filter::filterStatic($pois_raw[$y]->name, 'StringToLower');
                 
                 $similar_percent_basic = 0;
                 $similar_percent_alpha = 0;
@@ -125,7 +125,6 @@ class PoiController extends Zend_Controller_Action
                  * - remove common prefixes like "Restaurace" (but then be more strict on distance)
                  * - try different word order
                  */                
-                
                 
                 similar_text($poiXName, $poiYName, $similar_percent_basic);
                 similar_text( Zend_Filter::filterStatic($poiXName, 'Alnum'),
