@@ -7,7 +7,7 @@ class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
     const CLIENT_ID = '702732417915.apps.googleusercontent.com';
     const CLIENT_SECRET = 'j90OM1fvYso4p0haoZbZPUoY';
     const CLIENT_KEY = 'AIzaSyAtSx0_q5JPDtU0GPzlgSi5ZkRvJ1Jmy24';    
-    //const LIMIT = 30;
+    const LIMIT = 30; // Though Google Places return just 20 POIs at once...
     const TYPE = 'gg';
     
     public function init() {
@@ -29,6 +29,10 @@ class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
         $endpoint = '/search/json';
         if ($radius > self::RADIUS_MAX) {
             $radius = self::RADIUS_MAX;
+        }
+        $limit = self::LIMIT_WITHOUT_FILTER;
+        if ($term || $category) {
+            $limit = self::LIMIT;
         }
         
         $client = $this->_constructClient($endpoint,
@@ -52,6 +56,11 @@ class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
         if ($result['status'] != 'OK') {
             return array();
         };
+        
+        // cut unwanted part of result (longer than $limit)
+        if (count($result['results']) > $limit) {
+            array_splice($result['results'], $limit);
+        }
                 
         // Load venues into array of GSAA_Model_POI        
         $pois = array();

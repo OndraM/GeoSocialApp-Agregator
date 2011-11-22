@@ -2,10 +2,30 @@
 
 abstract class GSAA_Model_LBS_Abstract
 {
+    /*
+     * Url of service itself
+     */
     const SERVICE_URL = null;
+    /*
+     * Two-letter service shortcut (like "fq" for foursquare etc)
+     */
     const TYPE = null;
+    /*
+     * Default radius for requesting venues if none set
+     */
     const RADIUS = 2500;
+    /* 
+     * Maximum radius for requesting venues
+     */
     const RADIUS_MAX = 50000;
+    /*
+     * Limit for requesting places
+     */
+    const LIMIT = 30;
+    /*
+     * Limit for requesting places when no filter is applied
+     */
+    const LIMIT_WITHOUT_FILTER = 10;
 
 
     /**

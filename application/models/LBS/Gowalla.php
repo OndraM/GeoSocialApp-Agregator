@@ -29,6 +29,10 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
         if ($radius > self::RADIUS_MAX) {
             $radius = self::RADIUS_MAX;
         }
+        $limit = self::LIMIT_WITHOUT_FILTER;
+        if ($term || $category) {
+            $limit = self::LIMIT;
+        }
         
         $client = $this->_constructClient($endpoint,
                                         array(  'lat'            => $lat,
@@ -49,11 +53,10 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
             return array();
         }
         
-        // cut unwanted part of result (longer than self::LIMIT)
-        if ($result['total_results'] > self::LIMIT) {
-            array_splice($result['spots'], self::LIMIT);
-        }
-        
+        // cut unwanted part of result (longer than $limit)
+        if ($result['total_results'] > $limit) {
+            array_splice($result['spots'], $limit);
+        }        
         
         // Load venues into array of GSAA_Model_POI        
         $pois = array();

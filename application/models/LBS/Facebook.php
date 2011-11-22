@@ -34,11 +34,15 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
         if ($radius > self::RADIUS_MAX) {
             $radius = self::RADIUS_MAX;
         }
+        $limit = self::LIMIT_WITHOUT_FILTER;
+        if ($term || $category) {
+            $limit = self::LIMIT;
+        }
         
         $queryParams = array('type'     => 'place',
                              'center'   => "$lat,$long",                            
                              // 'categoryId'    => $category // TODO category mapping
-                             'limit'    => self::LIMIT,
+                             'limit'    => $limit,
                              'distance' => ($radius > 0 ? $radius : self::RADIUS)
                              );
         if ($term) {

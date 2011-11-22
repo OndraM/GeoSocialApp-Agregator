@@ -34,12 +34,16 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
         if ($radius > self::RADIUS_MAX) {
             $radius = self::RADIUS_MAX;
         }
+        $limit = self::LIMIT_WITHOUT_FILTER;
+        if ($term || $category) {
+            $limit = self::LIMIT;
+        }
 
         $client = $this->_constructClient($endpoint,
                                         array(  'll'            => "$lat,$long",
                                                 'query'         => $term,
                                                 // 'categoryId'    => $category // TODO category mapping
-                                                'limit'         => self::LIMIT,
+                                                'limit'         => $limit,
                                                 'radius'        => ($radius > 0 ? $radius : self::RADIUS)
                                             ));
 
