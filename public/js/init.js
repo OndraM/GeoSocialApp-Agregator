@@ -101,6 +101,16 @@ function init() {
         return false;
     });
     
+    // when any text value is changed by manual user input, highlight submit button
+    $('#searchform input[type=text]').change(function() {
+        $('#searchform input[type=submit]').animate({backgroundColor: "#ffe45c"}, 500);
+    });
+    
+    // also when any checbox is clicked, highlight submit button
+    $('#searchform input[type=checkbox]').click(function() {
+        $('#searchform input[type=submit]').animate({backgroundColor: "#ffe45c"}, 500);
+    });    
+    
     $('#addressform').submit(function() {
         geocoder.geocode({"address": $('#addressform input[name=address]').val()}, function(results, status) {
 			if (status == google.maps.GeocoderStatus.OK) {
@@ -120,16 +130,6 @@ function init() {
 		});
         return false;
     });
-    
-    // when any text value is changed by manual user input, highlight submit button
-    $('#searchform input[type=text]').change(function() {
-        $('#searchform input[type=submit]').animate({backgroundColor: "#ffe45c"}, 500);
-    });
-    
-    // also when any checbox is clicked, highlight submit button
-    $('#searchform input[type=checkbox]').click(function() {
-        $('#searchform input[type=submit]').animate({backgroundColor: "#ffe45c"}, 500);
-    });    
     
     $('#searchform').submit();
     initMap();
@@ -192,12 +192,16 @@ function initMap() {
         $('#searchform input[name=lat]').val(latlng.lat().toFixed(6));
         $('#searchform input[name=long]').val(latlng.lng().toFixed(6));        
         showMapCenterPointer(latlng, 1000);
-	});
-    
+	});    
     
     infoWindow = new google.maps.InfoWindow({
         maxWidth: 400
     });
+    
+    var input = document.getElementById('search-address');
+    var autocomplete = new google.maps.places.Autocomplete(input, {types: ['geocode']});
+
+    autocomplete.bindTo('bounds', map);
 }
 
 /*

@@ -151,11 +151,6 @@ form#searchform {
     float: right;
 }
 
-form#addressform {
-    width: 37%;
-    
-}
-
 form#searchform input[name=lat], form#searchform input[name=long] {
     width: 11ex;
     margin-right: .75ex;
@@ -171,6 +166,15 @@ form input {
 form#searchform #search-services {
     float: right;
 }
+
+form#addressform {
+    width: 37%;
+}
+
+form#addressform input[name=address] {
+    width: 40ex;
+}
+
 
 /* jQuery UI CSS overrides */
 .ui-state-focus {
@@ -201,4 +205,10 @@ form#searchform #search-services .ui-button-text {
 input.ui-button {
     padding: 0.15em 1em;
     background-image: none;
+}
+
+/* Google Maps CSS overrides */
+
+.pac-item {
+    text-align: left;
 }

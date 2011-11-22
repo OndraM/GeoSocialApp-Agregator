@@ -26,7 +26,7 @@ foreach(Zend_Registry::get('var')->services as $serviceId => $service) {
     <form id="addressform">
         <fieldset>
             <legend>Search location by address</legend>
-            <label>Address: <input type="text" name="address" value="" /></label>
+            <label>Address: <input type="text" name="address" value="" id="search-address" placeholder="Enter a location" /></label>
             <br />
             <input type="submit" value="Submit" />
         </fieldset>
