@@ -42,6 +42,11 @@ class GSAA_Model_POI
      */
     public $url     = null;
     
+    public function getPriority() {
+        return Zend_Registry::get('var')->services[$this->type]['priority'];
+    }
+
+        
     /*
      * TODO: stats
      */
