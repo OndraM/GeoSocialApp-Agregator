@@ -46,7 +46,7 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
                              'distance' => ($radius > 0 ? $radius : self::RADIUS)
                              );
         if ($term) {
-            $queryParams['q'] = $term;
+            $queryParams['q'] = Zend_Filter::filterStatic($term, 'ASCII', array(), array('GSAA_Filter'));
         }
         $client = $this->_constructClient($endpoint, $queryParams);
 
