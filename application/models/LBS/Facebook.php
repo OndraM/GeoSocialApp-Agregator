@@ -63,7 +63,7 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
         foreach ($result['data'] as $entry) {
             // skip venues that are not in radius x2 (avoid showing venues that are too far)
             // in fact the distance parametr do the same on FB side (and actually works), so this is kind of redundant check
-            if ($this->_getDistance($lat, $long,
+            if ($this->getDistance($lat, $long,
                                     $entry['location']['latitude'], $entry['location']['longitude']) > $radius*2) {
                 continue;
             }
@@ -74,7 +74,7 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
             $poi->url       = self::PUBLIC_URL . "/" . $entry['id'];
             $poi->lat     = $entry['location']['latitude'];
             $poi->lng     = $entry['location']['longitude'];
-            $poi->distance = $this->_getDistance($lat, $long, $poi->lat, $poi->lng);
+            $poi->distance = $this->getDistance($lat, $long, $poi->lat, $poi->lng);
 
             if (isset($entry['location']['street']))
                 $poi->address = $entry['location']['street'];

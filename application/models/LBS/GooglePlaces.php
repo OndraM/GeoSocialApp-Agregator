@@ -70,7 +70,7 @@ class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
                 //continue;
             }*/
             // skip venues that are not in radius x2 (avoid showing venues that are too far)
-            if ($this->_getDistance($lat, $long,
+            if ($this->getDistance($lat, $long,
                                     $entry['geometry']['location']['lat'], $entry['geometry']['location']['lng']) > $radius*2) {
                 continue;
             }
@@ -84,7 +84,7 @@ class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
             $poi->lng     = $entry['geometry']['location']['lng'];
             if (isset($entry['vicinity']))
               $poi->address = $entry['vicinity'];
-            $poi->distance = $this->_getDistance($lat, $long, $poi->lat, $poi->lng);
+            $poi->distance = $this->getDistance($lat, $long, $poi->lat, $poi->lng);
             
             $pois[] = $poi;
         }

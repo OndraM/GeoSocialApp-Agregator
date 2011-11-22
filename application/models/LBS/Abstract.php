@@ -70,7 +70,7 @@ abstract class GSAA_Model_LBS_Abstract
      * @param double $long2 Second longitude
      * @return int Distance in meters. 
      */
-    protected function _getDistance($lat1, $long1, $lat2, $long2) {
+    final public static function getDistance($lat1, $long1, $lat2, $long2) {
         return round(   6378
                         * M_PI
                         * sqrt(

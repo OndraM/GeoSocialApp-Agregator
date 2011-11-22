@@ -62,7 +62,7 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
         $pois = array();
         foreach ($result['spots'] as $entry) {
             // skip venues that are not in radius x2 (avoid showing venues that are too far)
-            if ($this->_getDistance($lat, $long, $entry['lat'], $entry['lng']) > $radius) {
+            if ($this->getDistance($lat, $long, $entry['lat'], $entry['lng']) > $radius) {
                 continue;
             }
             $poi = new GSAA_Model_POI();
@@ -76,7 +76,7 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
             if (isset($entry['location']['address']))
                 $poi->address    = $entry['address']['locality'];
             
-            $poi->distance = $this->_getDistance($lat, $long, $poi->lat, $poi->lng);
+            $poi->distance = $this->getDistance($lat, $long, $poi->lat, $poi->lng);
             
             $pois[] = $poi;
         }
