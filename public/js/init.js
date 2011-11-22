@@ -200,6 +200,9 @@ function initMap() {
     
     var input = document.getElementById('search-address');
     var autocomplete = new google.maps.places.Autocomplete(input, {types: ['geocode']});
+    google.maps.event.addListener(autocomplete, 'place_changed', function() {
+       getAndSetRadius(); 
+    });
 
     autocomplete.bindTo('bounds', map);
 }
