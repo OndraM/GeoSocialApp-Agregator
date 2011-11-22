@@ -56,7 +56,8 @@ class PoiController extends Zend_Controller_Action
                 $this->view->pois[$i]['lat']    = $poi->getLat();
                 $this->view->pois[$i]['lng']    = $poi->getLng();
                 $this->view->pois[$i]['distance'] = $poi->getDistance();
-                $this->view->pois[$i]['address'] = $poi->getAddress();                
+                $this->view->pois[$i]['address'] = $poi->getAddress();     
+                $this->view->pois[$i]['pois']   = $poi->getPois();
                 $i++;
             }
             

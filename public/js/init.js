@@ -78,7 +78,7 @@ function init() {
                                      + type
                                      + '" class="icon" />';
                     });
-                    itemContent  += '</li>'
+                    itemContent  += '</li>';
                     listItems.push(itemContent);
                     mapItems.push(poi);
                 });
@@ -270,10 +270,24 @@ function addPoisOnMap(pois) {
         });
         content += ' </div>';
         if (typeof poi.address !== "undefined" && poi.address)
-            content += '<div>' + poi.address + '</div>';
-        content += ''
-            + ''
-            + '</div>';
+            content += '<div>' + poi.address + '</div>';        
+        
+        
+        if (poi.pois.length > 1) { // if this is more merged venues, list original names
+            content += '<ul>'
+            $.each(poi.pois, function(i, specificPoi) {
+                content += '<li>' + specificPoi.name
+                        + '<img src="/images/icon-'
+                        + specificPoi.type
+                        + '.png" alt="'
+                        + specificPoi.type
+                        + '" class="icon" />'
+                        + '</li>';
+            });
+            content += '</ul>';
+        }
+        
+        content += '</div>';
 
         google.maps.event.addListener(poiMarkers[poi.id], 'click', function() {
             infoWindow.setContent(content);

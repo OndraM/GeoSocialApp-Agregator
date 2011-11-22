@@ -212,3 +212,8 @@ input.ui-button {
 .pac-item {
     text-align: left;
 }
+
+#infoWindow ul {
+    margin: 1ex 0;
+    padding-left: 1.5em;
+}
