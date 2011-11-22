@@ -124,7 +124,10 @@ class PoiController extends Zend_Controller_Action
                  * remove common prefixes like "Restaurace" [but then be more strict on distance] etc.)
                  */
                 
-                similar_text($pois_raw[$x]->name, $pois_raw[$y]->name, $similar_percent);
+                $poiXName = strtolower($pois_raw[$x]->name);
+                $poiYName = strtolower($pois_raw[$y]->name);
+                
+                similar_text($poiXName, $poiYName, $similar_percent);
                 
                 $distance = $this->_serviceModels[$pois_raw[$x]->type]->getDistance(
                                 $pois_raw[$x]->lat,
