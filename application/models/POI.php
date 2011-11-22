@@ -2,27 +2,52 @@
 
 class GSAA_Model_POI
 {
-    // Type of POI {fq, gw, gg, fb}
+    /* 
+     * Type of POI {fq, gw, gg, fb}
+     */
     public $type    = null;
-    // Id of POI 
+    
+    /*
+     * Id of POI 
+     */
     public $id      = null;
-    // Name of POI
+    
+    /*
+     * Name of POI
+     */
     public $name    = null;
-    // Latitude
+    
+    /*
+     * Latitude
+     */
     public $lat     = null;
-    // Longitude
+    
+    /*
+     * Longitude
+     */
     public $lng     = null;
-    // Distance in meters from search coords (if available)
+    
+    /*
+     * Distance in meters from search coords
+     */
     public $distance = null;
-    // Address (if available)
+    
+    /*
+     * Address (if available)
+     */
     public $address = null;
     
-    // Full URL of POI detail in its service (if available)
+    /*
+     * Full URL of POI detail in its service (if available)
+     */
     public $url     = null;
     
-    // TODO: stats
+    /*
+     * TODO: stats
+     */
     
-    // TODO: categories
-    
+    /*
+     * TODO: categories
+     */    
     
 }
