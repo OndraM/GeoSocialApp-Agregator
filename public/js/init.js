@@ -97,7 +97,7 @@ function init() {
             }
 
         }});
-        // move map to values in from (in case they have been changed by user ipnut, not by dragging map)
+        // move map to values in from (in case they have been changed by user input, not by dragging map)
         setMapCenter( $('#searchform input[name=lat]').val(), $('#searchform input[name=long]').val());
         
         return false;
@@ -215,14 +215,9 @@ function initMap() {
 
 function setMapCenter(lat, lng) {
     if (typeof map !== "undefined") {
-        // when map is so zoomed in or out, zoom to default 
-        if (map.getZoom() > 17 || map.getZoom() < 12) {
-            map.setZoom(14);
-            getAndSetRadius();
-        }
         var newMapCenter = new google.maps.LatLng(lat, lng);
         var mapCenter = map.getCenter();
-        if (!mapCenter.equals(newMapCenter)) {
+        if (!mapCenter.equals(newMapCenter)) {            
             map.panTo(newMapCenter);
             showMapCenterPointer(newMapCenter, 3000);
         }
