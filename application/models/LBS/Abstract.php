@@ -27,7 +27,7 @@ abstract class GSAA_Model_LBS_Abstract
      */
     const LIMIT_WITHOUT_FILTER = 10;
 
-
+    
     /**
      * Constructor.
      * 
@@ -57,7 +57,7 @@ abstract class GSAA_Model_LBS_Abstract
      * @param int    $radius Radius to search
      * @param string $term Search term
      * @param string $category Category id
-     * @return array Array with venues
+     * @return array Array of GSAA_Model_POI
      */
     abstract public function getNearbyVenues($x, $y, $radius, $term = null, $category = null);
     
