@@ -111,10 +111,12 @@ class PoiController extends Zend_Controller_Action
             $agPoi->addPoi($pois_raw[$x]); // copy entire POI
             
             $poiXName = Zend_Filter::filterStatic($pois_raw[$x]->name, 'StringToLower');
+            $poiXName = Zend_Filter::filterStatic($poiXName, 'ASCII', array(), array('GSAA_Filter'));
             for ($y = 0; $y < count($pois_raw); $y++) {
                 if (is_null($pois_raw[$y])) continue; // skip already merged items
                 if ($x == $y) continue; // skip the same POI
                 $poiYName = Zend_Filter::filterStatic($pois_raw[$y]->name, 'StringToLower');
+                $poiYName = Zend_Filter::filterStatic($poiYName, 'ASCII', array(), array('GSAA_Filter'));
                 
                 $similar_percent_basic = 0;
                 $similar_percent_alpha = 0;
