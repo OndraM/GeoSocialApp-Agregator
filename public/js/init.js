@@ -106,6 +106,11 @@ function init() {
 			if (status == google.maps.GeocoderStatus.OK) {
 				var latlng = results[0].geometry.location;
 				map.panTo(latlng);
+                // when map is so zoomed in or out, zoom to default 
+                if (map.getZoom() > 17 || map.getZoom() < 12) {
+					map.setZoom(14);
+                    getAndSetRadius();
+                }
                 $('#searchform input[name=lat]').val(latlng.lat().toFixed(6));
                 $('#searchform input[name=long]').val(latlng.lng().toFixed(6));
                 $('#searchform').submit();
