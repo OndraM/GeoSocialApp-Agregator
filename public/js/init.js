@@ -215,6 +215,11 @@ function initMap() {
 
 function setMapCenter(lat, lng) {
     if (typeof map !== "undefined") {
+        // when map is so zoomed in or out, zoom to default 
+        if (map.getZoom() > 17 || map.getZoom() < 12) {
+            map.setZoom(14);
+            getAndSetRadius();
+        }
         var newMapCenter = new google.maps.LatLng(lat, lng);
         var mapCenter = map.getCenter();
         if (!mapCenter.equals(newMapCenter)) {
