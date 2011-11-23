@@ -3,8 +3,8 @@
             <legend>Search nearby venues</legend>
             <label>Latitude: <input type="text" name="lat" value="<?=Zend_Registry::get('var')->defaultLat;?>" /></label>
             <label>Longitude: <input type="text" name="long" value="<?=Zend_Registry::get('var')->defaultLong;?>" /></label>
-            <label>Radius: <input type="text" name="radius" value="<?=Zend_Registry::get('var')->defaultRadius;?>" /></label>
-            <div id="search-services">
+            <label title="Average radius of venue search.">Radius: <input type="text" name="radius" value="<?=Zend_Registry::get('var')->defaultRadius;?>" /></label>
+            <div id="search-services" title="Select services, which you want to include in venue search.">
                 Search in: 
 <?php
 foreach(Zend_Registry::get('var')->services as $serviceId => $service) {
@@ -19,14 +19,14 @@ foreach(Zend_Registry::get('var')->services as $serviceId => $service) {
 ?>
             </div>
             <br />
-            <label>Filter name: <input type="text" name="term" value="" /></label>
+            <label title="Though you can filter venues by name, please prefer category filter to get better results.">Filter name: <input type="text" name="term" value="" /></label>
             <input type="submit" value="Submit" />
         </fieldset>
     </form>
     <form id="addressform">
         <fieldset>
-            <legend>Search location by address</legend>
-            <label>Address: <input type="text" name="address" value="" id="search-address" placeholder="Enter a location" /></label>
+            <legend>Move map to location</legend>
+            <label title="Enter a location, and we will move the map here!">Address: <input type="text" name="address" value="" id="search-address" placeholder="Enter a location" /></label>
             <br />
             <input type="submit" value="Submit" />
         </fieldset>
