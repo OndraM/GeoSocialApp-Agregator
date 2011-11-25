@@ -63,9 +63,11 @@ class PoiController extends Zend_Controller_Action
             
         }
         
-        // overwrite context setting for testing purposes // TODO
-        //$response = $this->getResponse();
-        //$response->setHeader('Content-Type', 'text/html');
+    }
+    
+    public function showDetailAction()
+    {
+        $this->_helper->layout->disableLayout();
     }
     
     public function testAction() {
