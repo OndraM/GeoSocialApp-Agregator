@@ -21,10 +21,33 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
      * Init global variables from config file
      */
     
-    public function _initVar()
+    protected function _initVar()
     {
-        Zend_Registry::set('var', (object) $this->getOption('var'));
+        // Load var from config file
+        $var = (object) $this->getOption('var');
+        
+        // Sort services by priority                
+        $this->arraySortByColumn($var->services, 'priority');
+        // Reverse array order
+        $var->services = array_reverse($var->services);
+        
+        
+        // store all var in Zend Registry
+        Zend_Registry::set('var', $var);
+        
     }
+    
+
+    public function arraySortByColumn(&$arr, $col, $dir = SORT_ASC) {
+        $sort_col = array();
+        foreach ($arr as $key=> $row) {
+            $sort_col[$key] = $row[$col];
+        }
+
+        array_multisort($sort_col, $dir, $arr);
+    }
+
+
 
 
 
