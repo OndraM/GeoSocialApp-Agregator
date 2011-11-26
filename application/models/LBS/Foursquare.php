@@ -102,6 +102,16 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
     }
     
     /**
+     * Get full detail of venue.
+     * 
+     * @param string $id Venue ID
+     * @return array Array
+     */
+    public function getDetail($id) {
+        
+    }
+    
+    /**
      * Construct Zend_Http_Client object.
      * 
      * @param type $endpoint

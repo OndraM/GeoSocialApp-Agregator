@@ -11,7 +11,7 @@ class PoiController extends Zend_Controller_Action
 
     public function init()
     {
-        foreach(Zend_Registry::get('var')->services as $serviceId => $service) {
+        foreach (Zend_Registry::get('var')->services as $serviceId => $service) {
             $classname = $service['model'];
             $this->_serviceModels[$serviceId] = new $classname();
         }
@@ -68,6 +68,12 @@ class PoiController extends Zend_Controller_Action
     public function showDetailAction()
     {
         $this->_helper->layout->disableLayout();
+        
+        foreach ($this->_request->getParams() as $index => $value) {
+            if (array_key_exists($value, $this->_serviceModels)) { // only parameters representing POIs
+                //$this->_serviceModels[$value]->getDetail();
+            }
+        }
     }
     
     public function testAction() {
@@ -96,7 +102,7 @@ class PoiController extends Zend_Controller_Action
         
         $pois = $this->_mergePois($pois_raw);
                 
-        print_r($pois);
+        //print_r($pois);
     }
     
     

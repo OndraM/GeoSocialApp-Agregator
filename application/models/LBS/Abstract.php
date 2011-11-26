@@ -61,6 +61,15 @@ abstract class GSAA_Model_LBS_Abstract
      */
     abstract public function getNearbyVenues($x, $y, $radius, $term = null, $category = null);
     
+    
+    /**
+     * Abstract function to get full detail of venue.
+     * 
+     * @param string $id Venue ID
+     * @return array Array
+     */
+    abstract public function getDetail($id);
+    
     /**
      * Calculate distance between two coordinates. 
      * 

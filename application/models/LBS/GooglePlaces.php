@@ -82,8 +82,9 @@ class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
             $poi->reference = $entry['reference'];
             $poi->lat     = $entry['geometry']['location']['lat'];
             $poi->lng     = $entry['geometry']['location']['lng'];
-            if (isset($entry['vicinity']))
-              $poi->address = $entry['vicinity'];
+            if (isset($entry['vicinity'])) {
+                $poi->address = $entry['vicinity'];
+            }
             $poi->distance = $this->getDistance($lat, $long, $poi->lat, $poi->lng);
             
             $pois[] = $poi;
