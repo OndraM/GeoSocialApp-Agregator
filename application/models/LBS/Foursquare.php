@@ -105,10 +105,57 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
      * Get full detail of venue.
      * 
      * @param string $id Venue ID
-     * @return array Array
+     * @return GSAA_Model_POI
      */
     public function getDetail($id) {
+        $endpoint = '/venues';
+
+        $client = $this->_constructClient($endpoint . '/' . $id);
+
+        $response = $client->request();
         
+        // error in response
+        if ($response->isError()) {
+            return;
+        }
+        
+        $result = Zend_Json::decode($response->getBody());
+        
+        // foursquare returned an error
+        if ($result['meta']['code'] != 200) {
+            return;
+        };
+        
+        $entry = $result['response']['venue'];
+        
+        $poi = new GSAA_Model_POI();
+        
+        $poi->type      = self::TYPE;
+        $poi->name      = $entry['name'];
+        $poi->id        = $entry['id'];
+        $poi->url       = $entry['canonicalUrl'];
+        $poi->lat       = $entry['location']['lat'];
+        $poi->lng       = $entry['location']['lng'];
+        
+        if (isset($entry['location']['address']))
+            $poi->address = $entry['location']['address'];
+        if (isset($entry['location']['postalCode']))
+            $poi->address .= (!empty($poi->address) ? ', ' : '')
+                        . $entry['location']['postalCode'];
+        if (isset($entry['location']['city']))
+            $poi->address .= (!empty($poi->address) ? ', ' : '')
+                        . $entry['location']['city'];
+        
+        if (isset($entry['description']))
+            $poi->description = $entry['description'];
+        
+        $poi->links = array();
+        if (isset($entry['url'])) // Website
+            $poi->links["Web"] = $entry['url'];        
+        if (isset($entry['contact']['twitter'])) // twitter account
+            $poi->links["Twitter"] = "http://twitter.com/" . $entry['contact']['twitter'];
+        
+        return $poi;
     }
     
     /**
