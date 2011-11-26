@@ -302,7 +302,19 @@ function addPoisOnMap(pois) {
             content += '</ul>';
         }
         
-        detailUrl = '/poi/show-detail'; // TODO paramaters
+        detailPois = [];
+        $.each(poi.pois, function(i, specificPoi) {
+            // "id = type" order is there on purpose (to allow multiple pois from one service)
+            detailPois.push(encodeURIComponent(
+                                specificPoi.type == 'gg' ?
+                                    specificPoi.reference : // exception for google places - use reference instead of ID
+                                    specificPoi.id)
+                            + '='
+                            + encodeURIComponent(specificPoi.type));
+        });
+
+        detailUrl = '/poi/show-detail?' + detailPois.join('&');
+        
         content += '<div>' 
                 + '<a href="' + detailUrl + '" class ="popUp fancybox.ajax" title="Show all details of this venue">Show details &raquo;</a>'
                 + '</div>';        
