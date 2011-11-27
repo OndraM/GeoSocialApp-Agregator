@@ -72,8 +72,8 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
             $poi->name      = $entry['name'];
             $poi->id        = $entry['id'];
             $poi->url       = self::PUBLIC_URL . "/" . $entry['id'];
-            $poi->lat     = $entry['location']['latitude'];
-            $poi->lng     = $entry['location']['longitude'];
+            $poi->lat       = $entry['location']['latitude'];
+            $poi->lng       = $entry['location']['longitude'];
             $poi->distance = $this->getDistance($lat, $long, $poi->lat, $poi->lng);
 
             if (isset($entry['location']['street']))
@@ -86,6 +86,50 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
         }
 
         return $pois;
+    }
+    
+    /**
+     * Get full detail of venue.
+     * 
+     * @param string $id Venue ID
+     * @return GSAA_Model_POI
+     */
+    public function getDetail($id) {
+        $endpoint = '';
+        $client = $this->_constructClient($endpoint . '/' . $id);
+        $response = $client->request();
+        
+        // error in response
+        if ($response->isError()) return;
+        
+        $entry = Zend_Json::decode($response->getBody());
+        
+        $poi = new GSAA_Model_POI();
+        $poi->type      = self::TYPE;
+        $poi->name      = $entry['name'];
+        $poi->id        = $entry['id'];
+        $poi->url       = $entry['link'];
+        $poi->lat       = $entry['location']['latitude'];
+        $poi->lng       = $entry['location']['longitude'];
+        if (isset($entry['location']['street']))
+                $poi->address = $entry['location']['street'];
+        if (isset($entry['location']['zip']))
+            $poi->address .= (!empty($poi->address) ? ', ' : '')
+                        . $entry['location']['zip'];
+        if (isset($entry['location']['city']))
+            $poi->address .= (!empty($poi->address) ? ', ' : '')
+                        . $entry['location']['city'];            
+
+        if (isset($entry['phone'])) {
+            $poi->phone = $entry['phone'];
+        }
+        
+        /**
+         * Add photos
+         */
+        // TODO
+        
+        return $poi;
     }
     
     /**
