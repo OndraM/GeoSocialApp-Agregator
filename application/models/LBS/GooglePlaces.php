@@ -2,7 +2,7 @@
 
 class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract 
 {
-    const SERVICE_URL = 'https://maps.googleapis.com/maps/api/place';
+    const SERVICE_URL = 'https://maps.googleapis.com/maps/api';
     const PUBLIC_URL = 'FIXME';
     const CLIENT_ID = '702732417915.apps.googleusercontent.com';
     const CLIENT_SECRET = 'j90OM1fvYso4p0haoZbZPUoY';
@@ -26,7 +26,7 @@ class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
      * @return array Array of GSAA_Model_POI
      */
     public function getNearbyVenues($lat, $long, $radius, $term = null, $category = null) {
-        $endpoint = '/search/json';
+        $endpoint = '/place/search/json';
         if ($radius > self::RADIUS_MAX) {
             $radius = self::RADIUS_MAX;
         }
@@ -37,7 +37,6 @@ class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
         
         $client = $this->_constructClient($endpoint,
                                         array(  'location'      => "$lat,$long",
-                                                'sensor'        => 'false',
                                                 'name'          => $term,
                                                 // 'categoryId'    => $category // TODO category mapping
                                                 'types'         => 'establishment',
@@ -80,8 +79,8 @@ class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
             $poi->id        = $entry['id'];
             //$poi->url       = self::PUBLIC_URL . "venue/" . $entry['id'];
             $poi->reference = $entry['reference'];
-            $poi->lat     = $entry['geometry']['location']['lat'];
-            $poi->lng     = $entry['geometry']['location']['lng'];
+            $poi->lat       = $entry['geometry']['location']['lat'];
+            $poi->lng       = $entry['geometry']['location']['lng'];
             if (isset($entry['vicinity'])) {
                 $poi->address = $entry['vicinity'];
             }
@@ -91,6 +90,54 @@ class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
         }
         
         return $pois;
+    }
+    
+    /**
+     * Get full detail of venue.
+     * 
+     * @param string $id Venue reference
+     * @return GSAA_Model_POI
+     */
+    public function getDetail($id) {
+        $endpoint = '/place/details/json';
+        
+        $client = $this->_constructClient($endpoint, 
+                                        array('reference' => $id));
+
+        $response = $client->request();
+       
+        // error in response
+        if ($response->isError()) {
+            return;
+        }
+        $result = Zend_Json::decode($response->getBody());
+        
+        // returned an error
+        if ($result['status'] != 'OK') {
+            return;
+        };
+        
+        $entry = $result['result'];
+        
+        $poi = new GSAA_Model_POI();
+        $poi->type      = self::TYPE;
+        $poi->name      = $entry['name'];
+        $poi->id        = $entry['id'];
+        $poi->url       = $entry['url'];
+        $poi->reference = $entry['reference'];
+        $poi->lat       = $entry['geometry']['location']['lat'];
+        $poi->lng       = $entry['geometry']['location']['lng'];
+        if (isset($entry['formatted_address'])) {
+            $poi->address = $entry['formatted_address'];
+        }
+        if (isset($entry['formatted_phone_number'])) { // may use international_phone_number
+            $poi->phone = $entry['formatted_phone_number'];
+        }
+        
+        if (isset($entry['website'])) // Website
+            $poi->links["Website"] = $entry['website'];        
+        
+        return $poi;
     }
     
     /**
@@ -107,6 +154,7 @@ class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
         
         // add predefined params
         $queryParams['key'] = self::CLIENT_KEY;
+        $queryParams['sensor'] = 'false';
         
         // set client options
         $client->setUri(self::SERVICE_URL . $endpoint);
