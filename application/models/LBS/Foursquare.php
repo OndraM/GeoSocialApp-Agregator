@@ -146,6 +146,9 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
             $poi->address .= (!empty($poi->address) ? ', ' : '')
                         . $entry['location']['city'];
         
+        if (isset($entry['contact']['formattedPhone']))
+            $poi->description = $entry['contact']['formattedPhone'];
+        
         if (isset($entry['description']))
             $poi->description = $entry['description'];
         
