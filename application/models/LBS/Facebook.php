@@ -120,9 +120,11 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
             $poi->address .= (!empty($poi->address) ? ', ' : '')
                         . $entry['location']['city'];            
 
-        if (isset($entry['phone'])) {
+        if (isset($entry['phone']))
             $poi->phone = $entry['phone'];
-        }
+        
+        if (isset($entry['website']))
+            $poi->links["Website"] = 'http://' . $entry['website']; 
         
         /**
          * Add photos
