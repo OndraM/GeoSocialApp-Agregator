@@ -71,8 +71,8 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
             $urlExploded    = explode('/',  $entry['url']);
             $poi->id        = $urlExploded[2];
             $poi->url       = self::PUBLIC_URL . $entry['url'];
-            $poi->lat     = $entry['lat'];
-            $poi->lng     = $entry['lng'];
+            $poi->lat       = $entry['lat'];
+            $poi->lng       = $entry['lng'];
             if (isset($entry['location']['address']))
                 $poi->address    = $entry['address']['locality'];
             
@@ -81,6 +81,67 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
             $pois[] = $poi;
         }
         return $pois;
+    }
+    
+    /**
+     * Get full detail of venue.
+     * 
+     * @param string $id Venue ID
+     * @return GSAA_Model_POI
+     */
+    public function getDetail($id) {
+        $endpoint = '/spots';
+        
+        $client = $this->_constructClient($endpoint . '/' . $id);
+        $response = $client->request();
+        
+        // error in response
+        if ($response->isError()) {
+            return array();
+        }
+        $entry = Zend_Json::decode($response->getBody());       
+        
+        $poi = new GSAA_Model_POI();
+        
+        $poi->type      = self::TYPE;
+        $poi->name      = $entry['name'];
+        $urlExploded    = explode('/',  $entry['url']);
+        $poi->id        = $urlExploded[2];
+        $poi->url       = self::PUBLIC_URL . $entry['url'];
+        $poi->lat       = $entry['lat'];
+        $poi->lng       = $entry['lng'];
+        if (isset($entry['location']['address']))
+            $poi->address    = $entry['address']['locality'];
+
+        if (isset($entry['phone_number']))
+            $poi->phone = $entry['phone_number'];
+        
+        if (isset($entry['description']))
+            $poi->description = $entry['description'];
+        
+        /*
+         * Links
+         */
+        if (isset($entry['websites'])) {
+            foreach ($entry['websites'] as $websiteIndex => $website)
+            $poi->links["Website" . ($websiteIndex == 0 ? '' : $websiteIndex+1)] = $website;
+        }
+        if (isset($entry['twitter_username'])) // twitter account
+            $poi->links["Twitter"] = "http://twitter.com/" . $entry['twitter_username'];
+
+        
+        /**
+         * TODO photos? See photos_count
+         */
+        
+        /*
+         * Add tips (aka highlights)
+         */
+        $poi->tips = array();
+        // TODO
+        
+        return $poi;
+        
     }
     
     /**
