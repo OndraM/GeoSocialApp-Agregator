@@ -109,22 +109,16 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
      */
     public function getDetail($id) {
         $endpoint = '/venues';
-
         $client = $this->_constructClient($endpoint . '/' . $id);
-
         $response = $client->request();
         
         // error in response
-        if ($response->isError()) {
-            return;
-        }
+        if ($response->isError()) return;
         
-        $result = Zend_Json::decode($response->getBody());
+        $result = Zend_Json::decode($response->getBody());        
         
         // foursquare returned an error
-        if ($result['meta']['code'] != 200) {
-            return;
-        };
+        if ($result['meta']['code'] != 200) return;
         
         $entry = $result['response']['venue'];
         
@@ -157,6 +151,37 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
             $poi->links["Web"] = $entry['url'];        
         if (isset($entry['contact']['twitter'])) // twitter account
             $poi->links["Twitter"] = "http://twitter.com/" . $entry['contact']['twitter'];
+        
+
+        $poi->photos = array();        
+        $clientPhotos = $this->_constructClient($endpoint . '/' . $id . '/photos');
+        $responsePhotos = $clientPhotos->request();
+        
+        // error in response
+        if ($responsePhotos->isError()) return;
+        
+        $resultPhotos = Zend_Json::decode($responsePhotos->getBody());        
+        // foursquare returned an error
+        if ($resultPhotos['meta']['code'] != 200) return;
+        
+        $entryPhotos = $resultPhotos['response']['photos'];
+        
+        foreach($entryPhotos['groups'] as $photos) {
+            if ($photos['type']!="venue") { // skip checkin photos
+                continue;
+            }
+            if (count($photos['items']) > 0) {
+                foreach ($photos['items'] as $photo) {
+                    $tmpPhoto = array(
+                        'url'   => $photo['url'],
+                        'id'    => $photo['id']
+                        // 'title' => $photo['tip']['text'] // TODO?
+                        // TODO: thumbnail url
+                    );
+                    $poi->photos[] = $tmpPhoto;
+                }
+            }            
+        }
         
         return $poi;
     }
