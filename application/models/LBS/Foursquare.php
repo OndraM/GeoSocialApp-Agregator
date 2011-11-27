@@ -153,8 +153,12 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
             $poi->links["Twitter"] = "http://twitter.com/" . $entry['contact']['twitter'];
         
 
+        /*
+         * Tips search
+         */
         $poi->photos = array();        
-        $clientPhotos = $this->_constructClient($endpoint . '/' . $id . '/photos');
+        $clientPhotos = $this->_constructClient($endpoint . '/' . $id . '/photos',
+                                                array('group' => 'venue'));
         $responsePhotos = $clientPhotos->request();
         
         // error in response
@@ -166,21 +170,47 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
         
         $entryPhotos = $resultPhotos['response']['photos'];
         
-        foreach($entryPhotos['groups'] as $photos) {
-            if ($photos['type']!="venue") { // skip checkin photos
-                continue;
+        if (count($entryPhotos['items']) > 0) {
+            foreach ($entryPhotos['items'] as $photo) {
+                $tmpPhoto = array(
+                    'url'   => $photo['url'],
+                    'id'    => $photo['id']
+                    // 'title' => $photo['tip']['text'] // TODO?
+                    // TODO: thumbnail url
+                );
+                $poi->photos[] = $tmpPhoto;
             }
-            if (count($photos['items']) > 0) {
-                foreach ($photos['items'] as $photo) {
-                    $tmpPhoto = array(
-                        'url'   => $photo['url'],
-                        'id'    => $photo['id']
-                        // 'title' => $photo['tip']['text'] // TODO?
-                        // TODO: thumbnail url
-                    );
-                    $poi->photos[] = $tmpPhoto;
-                }
-            }            
+        }
+        
+        /*
+         * Photos search
+         */
+        $poi->tips = array();        
+        $clientTips = $this->_constructClient($endpoint . '/' . $id . '/tips',
+                                              array('sort' => 'popular',
+                                                    'limit' => 100
+                                                  ));
+        $responseTips = $clientTips->request();
+        
+        // error in response
+        if ($responseTips->isError()) return;
+        
+        $resultTips = Zend_Json::decode($responseTips->getBody());        
+        // foursquare returned an error
+        if ($resultTips['meta']['code'] != 200) return;
+        
+        $entryTips = $resultTips['response']['tips'];        
+       
+        if (count($entryTips['items']) > 0) {
+            foreach ($entryTips['items'] as $tip) {
+                $tmpTip = array(
+                    'id'    => $tip['id'],
+                    'text'  => $tip['text'],
+                    'date'  => $tip['createdAt']
+                    // TODO? Photo
+                );
+                $poi->tips[] = $tmpTip;
+            }
         }
         
         return $poi;
