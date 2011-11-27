@@ -117,7 +117,7 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
             $poi->phone = $entry['phone_number'];
         
         if (isset($entry['description']))
-            $poi->description = $entry['description'];
+            $poi->description = trim($entry['description']);
         
         /*
          * Links

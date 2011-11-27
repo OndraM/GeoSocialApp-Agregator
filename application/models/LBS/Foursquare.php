@@ -147,7 +147,7 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
             $poi->phone = $entry['contact']['formattedPhone'];
         
         if (isset($entry['description']))
-            $poi->description = $entry['description'];
+            $poi->description = trim($entry['description']);
         
         /*
          * Links
@@ -159,7 +159,7 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
         
 
         /*
-         * Photos search
+         * Add photos
          */
         $clientPhotos = $this->_constructClient($endpoint . '/' . $id . '/photos',
                                                 array('group' => 'venue'));
@@ -187,7 +187,7 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
         }
         
         /*
-         * Tips search
+         * Add tips
          */
         $poi->tips = array();
         $clientTips = $this->_constructClient($endpoint . '/' . $id . '/tips',
