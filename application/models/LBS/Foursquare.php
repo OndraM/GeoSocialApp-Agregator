@@ -133,12 +133,15 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
         
         if (isset($entry['location']['address']))
             $poi->address = $entry['location']['address'];
+        if (isset($entry['location']['crossStreet']))
+            $poi->address .= (!empty($poi->address) ? ' ' : '')
+                        . '(' . $entry['location']['crossStreet'] . ')';
         if (isset($entry['location']['postalCode']))
             $poi->address .= (!empty($poi->address) ? ', ' : '')
                         . $entry['location']['postalCode'];
         if (isset($entry['location']['city']))
             $poi->address .= (!empty($poi->address) ? ', ' : '')
-                        . $entry['location']['city'];
+                        . $entry['location']['city'];        
         
         if (isset($entry['contact']['formattedPhone']))
             $poi->phone = $entry['contact']['formattedPhone'];
