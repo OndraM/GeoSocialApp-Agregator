@@ -8,7 +8,7 @@ class GSAA_Model_POI
     public $type    = null;
     
     /*
-     * Id of POI 
+     * Unique id of POI 
      */
     public $id      = null;
     
@@ -28,19 +28,48 @@ class GSAA_Model_POI
     public $lng     = null;
     
     /*
-     * Distance in meters from search coords
+     * Distance in meters from search coords (optional).
+     * Not available in POI detail.
      */
     public $distance = null;
     
     /*
-     * Address (if available)
+     * Address (optional).
      */
     public $address = null;
     
     /*
-     * Full URL of POI detail in its service (if available)
+     * Full URL of POI detail in its service (optional).
+     * May not be available in compact POI.
      */
     public $url     = null;
+    
+    /*
+     * Phone (optional).
+     * Available only in POI detail.
+     */
+    public $phone = null;
+    
+    /*
+     * Associative array of links (optional).
+     * Available only in POI detail.
+     * Key - Description
+     * Value - link url
+     */
+    public $links    = array();
+    
+    /*
+     * Array of POI photos array (optional).
+     * Available only in POI detail.
+     * Structure:
+     *      array(
+     *          id,
+     *          url
+     *      )
+     * 
+     */
+    public $photos    = array();
+    
     
     public function getPriority() {
         return Zend_Registry::get('var')->services[$this->type]['priority'];

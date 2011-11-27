@@ -141,11 +141,14 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
                         . $entry['location']['city'];
         
         if (isset($entry['contact']['formattedPhone']))
-            $poi->description = $entry['contact']['formattedPhone'];
+            $poi->phone = $entry['contact']['formattedPhone'];
         
         if (isset($entry['description']))
             $poi->description = $entry['description'];
         
+        /*
+         * Links
+         */
         $poi->links = array();
         if (isset($entry['url'])) // Website
             $poi->links["Web"] = $entry['url'];        
@@ -154,9 +157,8 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
         
 
         /*
-         * Tips search
+         * Photos search
          */
-        $poi->photos = array();        
         $clientPhotos = $this->_constructClient($endpoint . '/' . $id . '/photos',
                                                 array('group' => 'venue'));
         $responsePhotos = $clientPhotos->request();
@@ -183,9 +185,9 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
         }
         
         /*
-         * Photos search
+         * Tips search
          */
-        $poi->tips = array();        
+        $poi->tips = array();
         $clientTips = $this->_constructClient($endpoint . '/' . $id . '/tips',
                                               array('sort' => 'popular',
                                                     'limit' => 100
