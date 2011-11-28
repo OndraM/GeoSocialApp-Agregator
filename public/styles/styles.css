@@ -210,9 +210,10 @@ form#addressform input[name=address] {
 }
 
 /* carousel */
-
-#photos-wrapper {
+#venue-photos {
     clear: both;
+}
+#photos-wrapper {    
     margin: 0 auto;
     width: 600px;
 }
