@@ -190,6 +190,7 @@ form#addressform input[name=address] {
 /* POI detail window */
 #detail {
     text-align: left;
+    padding: 1ex;
 }
 
 #detail-map {
@@ -197,7 +198,12 @@ form#addressform input[name=address] {
     height: 300px;
     float: right;
     border: 1px solid black;
-    margin: 0 2ex 1ex 1em;
+    margin: 0 1ex 1ex 1em;
+}
+
+#detail ul {
+    margin-top: 0;
+    padding-left: 2em;
 }
 
 
