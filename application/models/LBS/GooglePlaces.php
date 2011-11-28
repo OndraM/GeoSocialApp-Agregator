@@ -107,15 +107,12 @@ class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
         $response = $client->request();
        
         // error in response
-        if ($response->isError()) {
-            return;
-        }
+        if ($response->isError()) return;
+        
         $result = Zend_Json::decode($response->getBody());
         
         // returned an error
-        if ($result['status'] != 'OK') {
-            return;
-        };
+        if ($result['status'] != 'OK') return;
         
         $entry = $result['result'];
         

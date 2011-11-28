@@ -96,9 +96,8 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
         $response = $client->request();
         
         // error in response
-        if ($response->isError()) {
-            return array();
-        }
+        if ($response->isError()) return;
+
         $entry = Zend_Json::decode($response->getBody());       
         
         $poi = new GSAA_Model_POI();
@@ -131,8 +130,33 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
 
         
         /**
-         * TODO photos? See photos_count
+         * Add photos
          */
+        if ($entry['photos_count'] > 0) {
+            $clientPhotos = $this->_constructClient($endpoint . '/' . $id . '/photos');
+            $responsePhotos = $clientPhotos->request();
+
+            // error in response
+            if ($responsePhotos->isError()) return;
+            
+            $resultPhotos = Zend_Json::decode($responsePhotos->getBody());       
+            $entryPhotos = $resultPhotos['activity'];
+
+            if (count($entryPhotos) > 0) {
+                foreach ($entryPhotos as $photo) {
+                    if ($photo['type']!='photo') continue;
+                    $tmpDate = new Zend_Date(substr($photo['created_at'], 0, -1) . '+00:00', Zend_Date::W3C);
+                    $tmpPhoto = array(
+                        'url'   => $photo['photo_urls']['high_res_320x480'],
+                        'thumbnail' => $photo['photo_urls']['square_100'],
+                        'id'    => md5($photo['checkin_url']), // create "static" url 
+                        'date'  => $tmpDate->get(Zend_Date::TIMESTAMP),
+                        'title' => trim($photo['message'])
+                    );
+                    $poi->photos[] = $tmpPhoto;
+                }
+            }
+        }
         
         /*
          * Add tips (aka highlights)
