@@ -69,11 +69,29 @@ class PoiController extends Zend_Controller_Action
     {
         $this->_helper->layout->disableLayout();
         
+        $pois = array();
         foreach ($this->_request->getParams() as $index => $value) {
             if (array_key_exists($value, $this->_serviceModels)) { // only parameters representing POIs
-                //$this->_serviceModels[$value]->getDetail();
+                $pois[] = $this->_serviceModels[$value]->getDetail($index);
             }
         }
+        
+        $tmp = array();
+        // cycle throught all POIs, put in array indexed by priority
+        foreach ($pois as $poi) {
+            $tmp[$poi->getPriority()] = $poi;
+        }
+        // sort array by priority
+        krsort($tmp);
+        
+        // remove current POIs
+        unset($pois);
+        $pois = array();
+        // put pois in array one-by-one, sorted by priority
+        foreach($tmp as $poi) $pois[] = $poi;
+        
+        $this->view->pois = $pois;
+        $this->view->services = Zend_Registry::get('var')->services;
     }
     
     public function testAction() {

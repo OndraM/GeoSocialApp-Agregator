@@ -70,7 +70,12 @@ class GSAA_Model_POI
      */
     public $photos    = array();
     
-    
+    /**
+     * Get unique priority of the service.
+     * Zero is the lowest possible priority.
+     * 
+     * @return int
+     */    
     public function getPriority() {
         return Zend_Registry::get('var')->services[$this->type]['priority'];
     }

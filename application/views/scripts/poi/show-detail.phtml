@@ -1,1 +1,28 @@
-<h1>TODO</h1>
+<div id="show-detail">
+<h1><?=$this->pois[0]->name;?></h1>
+<strong>Sources of venue data:</strong>
+<?php
+echo "<ul>\n";
+foreach ($this->pois as $poi) {
+    echo "\t<li><a href=\""
+        . $this->escape($poi->url)
+        . "\" target=\"_blank\" class=\"external\""
+        . "title=\"Open venue detail on "
+        . $this->services[$poi->type]['name']
+        . " (opens in new window)\""
+        . ">"
+        . $this->serviceIcon($poi->type)
+        . $this->escape($poi->name)
+        . "</a></li>\n";
+}
+echo "</ul>\n";
+?>
+<h2>Contact</h2>
+<h3>Address</h3>
+<h3>Phone</h3>
+<h3>Links</h3>
+
+<h2>Photos</h2>
+
+<h2>Tips</h2>
+</div>

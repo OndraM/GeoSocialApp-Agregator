@@ -96,7 +96,7 @@ function init() {
                                      + type
                                      + '.png" alt="'
                                      + type
-                                     + '" class="icon" />';
+                                     + '" class="icon-right" />';
                     });
                     itemContent  += '</li>';
                     listItems.push(itemContent);
@@ -281,7 +281,7 @@ function addPoisOnMap(pois) {
                 + type
                 + '.png" alt="'
                 + type
-                + '" class="icon" />';
+                + '" class="icon-right" />';
         });
         content += ' </div>';
         if (typeof poi.address !== "undefined" && poi.address)
@@ -296,7 +296,7 @@ function addPoisOnMap(pois) {
                         + specificPoi.type
                         + '.png" alt="'
                         + specificPoi.type
-                        + '" class="icon" />'
+                        + '" class="icon-right" />'
                         + '</li>';
             });
             content += '</ul>';

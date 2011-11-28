@@ -20,17 +20,30 @@ a:active {
 	color: #008;
 }
 
+a:link[href^="http://"], a.external {
+	padding-right: 1.25em;
+	background: transparent url('../images/external.png') no-repeat right;
+}
+
+
 /* Images */
 a img {
 	display: inline-block;
 	border-style: none;
 }
 
-img.icon {
-	margin-left: 1ex;
-	vertical-align: middle;
+img.icon, img.icon-right, img.icon-left {
+    vertical-align: middle;
 	border-style: none;    
 }
+
+img.icon-right, img.icon {
+	margin-left: 1ex;
+}
+img.icon-left {
+	margin-right: 1ex;
+}
+
 
 /* Text */
 p {
@@ -173,6 +186,11 @@ form#addressform {
 
 form#addressform input[name=address] {
     width: 40ex;
+}
+
+/* POI detail window */
+#show-detail {
+    text-align: left;
 }
 
 
