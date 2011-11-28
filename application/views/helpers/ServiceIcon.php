@@ -12,8 +12,8 @@ class GSAA_View_Helper_ServiceIcon extends Zend_View_Helper_Abstract
 
     /**
      *
-     * @param type $service
-     * @param type $align
+     * @param string $service
+     * @param string $align
      * @return string 
      */
     public function serviceIcon($service, $align = 'left')

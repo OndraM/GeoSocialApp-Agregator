@@ -17,9 +17,9 @@ class GSAA_View_Helper_Script extends Zend_View_Helper_Abstract
      * In case $inPlace is false, script is apended to header (default). 
      * Otherwise its returned as string.
      *
-     * @param type $script
-     * @param type $inPlace
-     * @param type $pack
+     * @param string $script
+     * @param bool $inPlace
+     * @param bool $pack
      * @return string 
      */
     public function script($script, $inPlace = false, $pack = true)

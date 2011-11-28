@@ -151,7 +151,6 @@ img.left {
 }
 
 /* Forms */
-
 form fieldset {
     border: 1px solid #ccc;
 }
@@ -189,8 +188,16 @@ form#addressform input[name=address] {
 }
 
 /* POI detail window */
-#show-detail {
+#detail {
     text-align: left;
+}
+
+#detail-map {
+    width: 350px;
+    height: 300px;
+    float: right;
+    border: 1px solid black;
+    margin: 0 1ex 1ex 1em;
 }
 
 
