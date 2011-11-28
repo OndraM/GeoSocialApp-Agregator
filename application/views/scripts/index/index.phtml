@@ -42,7 +42,7 @@ foreach(Zend_Registry::get('var')->services as $serviceId => $service) {
     </div>
 <?php
 $this->script("
-init();
+initIndex();
 
 $('#search-services').buttonset();
 $('form [type=submit]').button();

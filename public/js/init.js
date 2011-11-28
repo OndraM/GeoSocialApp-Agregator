@@ -48,7 +48,7 @@ var xhrRequest;
  *  Init map
  *  Do geolocate
  */
-function init() {
+function initIndex() {
     $.ajaxSetup({
         "error": function(jqXHR, textStatus, errorThrown) {
             if (textStatus == 'abort') { // don't throw error when xhr request aborted from client side
@@ -155,7 +155,7 @@ function init() {
     });
     
     $('#searchform').submit();
-    initMap();
+    initIndexMap();
     //doGeolocate(); // commented just for testing purposes
 }
 
@@ -180,7 +180,7 @@ function doGeolocate() {
  * Initialize google map
  */
 
-function initMap() {
+function initIndexMap() {
     var latlng;
     if ( $('#searchform input[name=lat]').val() != ''
         && $('#searchform input[name=long]').val() != '' ) { // if set, get location from form values

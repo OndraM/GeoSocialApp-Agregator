@@ -39,12 +39,13 @@ if (!empty($links)) {
     echo "<h3>Links</h3>\n";
     echo $links;
 }
+/*
 ?>
-
 <h2>Photos</h2>
 <p>TODO</p>
-
 <?php
+ * 
+ */
 $tips = $this->listPoisField($this->pois, 'tips');
 if (!empty($tips)) {
     echo "<h2>Tips</h2>\n";
@@ -52,3 +53,29 @@ if (!empty($tips)) {
 }
 ?>
 </div>
+<?php
+$script = "
+    var latlng = new google.maps.LatLng(" . $this->pois[0]->lat . "," . $this->pois[0]->lng . ");
+    
+    var mapOptions = {
+        zoom: 17,
+        center: latlng,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+        // TODO: hide some control elements?
+    };
+    var map = new google.maps.Map(
+        document.getElementById('detail-map'),
+        mapOptions
+    );         
+";
+foreach ($this->pois as $poi) {
+    $script .= "
+    new google.maps.Marker({
+                position: new google.maps.LatLng(" . $poi->lat . ", " . $poi->lng . "),
+                map: map,
+                title: 'Venue location by " . $this->services[$poi->type]['name'] . "'
+            });
+    ";
+}
+echo $this->script($script, true);
+?>
