@@ -54,11 +54,16 @@ if (!empty($tips)) {
 ?>
 </div>
 <?php
-$script = "
+$script = "var markers = [];";
+foreach ($this->pois as $poi) {
+    $script .= "markers.push([new google.maps.LatLng(" . $poi->lat . ", " . $poi->lng . "), 'Venue location by " . $this->services[$poi->type]['name'] . "']);";
+}
+
+$script .= "
     var latlng = new google.maps.LatLng(" . $this->pois[0]->lat . "," . $this->pois[0]->lng . ");
     
     var mapOptions = {
-        zoom: 17,
+        zoom: 16,
         center: latlng,
         mapTypeId: google.maps.MapTypeId.ROADMAP
         // TODO: hide some control elements?
@@ -66,16 +71,22 @@ $script = "
     var map = new google.maps.Map(
         document.getElementById('detail-map'),
         mapOptions
-    );         
-";
-foreach ($this->pois as $poi) {
-    $script .= "
-    new google.maps.Marker({
-                position: new google.maps.LatLng(" . $poi->lat . ", " . $poi->lng . "),
-                map: map,
-                title: 'Venue location by " . $this->services[$poi->type]['name'] . "'
-            });
+    );    
+    
+    var bounds = new google.maps.LatLngBounds ();
+    $.each(markers, function(i, marker) {    
+        new google.maps.Marker({
+            position: marker[0],
+            map: map,
+            title: marker[1]
+        });
+      bounds.extend(marker[0]);
+    });
+    map.fitBounds(bounds);
+    // limit maximum zoom after fit bounds 
+    if (map.getZoom() > 17) {
+        map.setZoom(17);
+    }
     ";
-}
 echo $this->script($script, true);
 ?>
