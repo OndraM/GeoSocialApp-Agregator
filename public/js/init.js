@@ -12,7 +12,7 @@ $(document).ready(function() {
     
     // Fancubox popUp windows
     $(".popUp").fancybox({
-        minWidth    : 500,
+        minWidth    : 750,
         maxWidth	: 800,        
         /*maxHeight	: 600,*/
         fitToView	: false,

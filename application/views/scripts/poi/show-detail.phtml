@@ -39,13 +39,27 @@ if (!empty($links)) {
     echo "<h3 id=\"venue-links\">Links</h3>\n";
     echo $links;
 }
-/*
 ?>
-<h2 id=\"venue-photos\">Photos</h2>
-<p>TODO</p>
 <?php
- * 
- */
+$photos = '';
+foreach ($this->pois as $poi) {
+    foreach ($poi->photos as $arrI => $arrV) {
+        $photos .= "\t<li><img src=\"{$arrV["thumbnail"]}\" width=\"100\" height=\"100\" /></li>\n";
+    }
+}
+
+if (!empty($photos)) {
+    echo "<h2 id=\"venue-photos\">Photos</h2>\n";
+    echo "<div id=\"photos-wrapper\">";
+    echo "<ul id=\"photos-carousel\" class=\"jcarousel-skin-tango\">\n";
+    echo $photos;
+    echo "</ul>";
+    echo "</div>\n";
+    
+}
+?>
+
+<?php
 $tips = $this->listPoisField($this->pois, 'tips');
 if (!empty($tips)) {
     echo "<h2 id=\"venue-tips\">Tips</h2>\n";
@@ -100,8 +114,14 @@ $script .= "
                 $(this).remove();
             });
     }
-    
-
-    ";
+            
+    $('#photos-carousel').bxSlider({
+        displaySlideQty: 5,
+        moveSlideQty: 5,
+        infiniteLoop: false,
+        hideControlOnEnd: true,
+        startingSlide: 0
+    });
+";
 echo $this->script($script, true);
 ?>

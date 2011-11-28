@@ -25,6 +25,9 @@ a:link[href^="http://"], a.external {
 	background: transparent url('../images/external.png') no-repeat right;
 }
 
+:focus {
+    outline: none !important
+}
 
 /* Images */
 a img {
@@ -206,6 +209,25 @@ form#addressform input[name=address] {
     padding-left: 2em;
 }
 
+/* carousel */
+
+#photos-wrapper {
+    clear: both;
+    margin: 0 auto;
+    width: 600px;
+}
+#photos-wrapper ul, #photos-wrapper li {
+    padding: 0;
+    margin: 0;
+}
+
+ul#photos-carousel {
+    width: 600px;
+}
+
+#photos-carousel li {
+    width: 120px;
+}
 
 /* jQuery UI CSS overrides */
 .ui-state-focus {

@@ -67,7 +67,7 @@ class PoiController extends Zend_Controller_Action
     
     public function showDetailAction()
     {
-        $this->_helper->layout->disableLayout();
+        $this->_helper->layout->disableLayout(); // TODO: disable only on XHR
         
         $pois = array();
         foreach ($this->_request->getParams() as $index => $value) {
