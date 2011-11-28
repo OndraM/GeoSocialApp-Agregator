@@ -154,7 +154,12 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
                         'date'  => $tmpDate->get(Zend_Date::TIMESTAMP),
                         'title' => trim($photo['message'])
                     );
-                    $poi->photos[] = $tmpPhoto;
+                    // check whether image really exists - do HEAD request for each of them
+                    $tmpClient = new Zend_Http_Client($tmpPhoto['thumbnail']);
+                    if ($tmpClient->request('HEAD')->isSuccessful()) {
+                        $poi->photos[] = $tmpPhoto;
+                    }
+                    
                 }
             }
         }

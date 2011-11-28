@@ -191,7 +191,11 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
                     'date'  => $photo['createdAt'],
                     'title' => '' // TODO? But $photo['tip']['text'] is never present in venue photos...
                 );
-                $poi->photos[] = $tmpPhoto;
+                // check whether image really exists - do HEAD request for each of them
+                $tmpClient = new Zend_Http_Client($tmpPhoto['thumbnail']);
+                if ($tmpClient->request('HEAD')->isSuccessful()) {
+                    $poi->photos[] = $tmpPhoto;
+                }
             }
         }
         
