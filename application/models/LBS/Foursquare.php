@@ -153,7 +153,7 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
          * Links
          */
         if (isset($entry['url'])) // Website
-            $poi->links["Website"] = $entry['url'];        
+            $poi->links["Website"] = (strncmp($entry['url'], 'http', 4) == 0 ? '' : 'http://') . $entry['url'];
         if (isset($entry['contact']['twitter'])) // twitter account
             $poi->links["Twitter"] = "http://twitter.com/" . $entry['contact']['twitter'];
         

@@ -132,7 +132,7 @@ class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
         }
         
         if (isset($entry['website'])) // Website
-            $poi->links["Website"] = $entry['website'];        
+            $poi->links["Website"] = (strncmp($entry['website'], 'http', 4) == 0 ? '' : 'http://') . $entry['website'];
         
         return $poi;
     }
