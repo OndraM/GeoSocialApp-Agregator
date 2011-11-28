@@ -63,8 +63,11 @@ class GSAA_Model_POI
      * Available only in POI detail.
      * Structure:
      *      array(
-     *          id,
-     *          url
+     *          id,         // unique ID for photo
+     *          url,        // url to full photo
+     *          thumbnail,  // url to photo thumnail (100px square)
+     *          title,      // title of photo (optional)
+     *          date        // date of photo (optional)
      *      )
      * 
      */

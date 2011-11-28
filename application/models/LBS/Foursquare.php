@@ -176,11 +176,20 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
         
         if (count($entryPhotos['items']) > 0) {
             foreach ($entryPhotos['items'] as $photo) {
+                $thumbUrl = null;
+                // find apropriate thumbnail size 
+                foreach ($photo['sizes']['items'] as $sizes) {
+                    if ($sizes['height'] == 100) {
+                        $thumbUrl = $sizes['url'];
+                        break;
+                    }
+                }
                 $tmpPhoto = array(
                     'url'   => $photo['url'],
-                    'id'    => $photo['id']
-                    // 'title' => $photo['tip']['text'] // TODO?
-                    // TODO: thumbnail url
+                    'thumbnail' => $thumbUrl,
+                    'id'    => $photo['id'],
+                    'date'  => $photo['createdAt'],
+                    'title' => '' // TODO? But $photo['tip']['text'] is never present in venue photos...
                 );
                 $poi->photos[] = $tmpPhoto;
             }
