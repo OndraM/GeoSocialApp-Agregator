@@ -47,7 +47,7 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
         if ($response->isError()) {
             return array();
         }
-        $result = Zend_Json::decode($response->getBody());       
+        $result = Zend_Json::decode($response->getBody());
         
         if ($result['total_results'] == 0) {
             return array();
@@ -162,7 +162,27 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
          * Add tips (aka highlights)
          */
         $poi->tips = array();
-        // TODO
+        $clientTips = $this->_constructClient($endpoint . '/' . $id . '/highlights');
+        $responseTips = $clientTips->request();
+
+        // error in response
+        if ($responseTips->isError()) return;
+
+        $resultTips = Zend_Json::decode($responseTips->getBody());        
+        $entryTips = $resultTips['highlights'];
+
+        if (count($entryTips) > 0) {
+            foreach ($entryTips as $tip) {
+                if (empty($tip['comment'])) continue; // skip highlights without text
+                $tmpDate = new Zend_Date(substr($tip['updated_at'], 0, -1) . '+00:00', Zend_Date::W3C);
+                $tmpTip = array(
+                    'id'    => md5($tip['updated_at']), // create "static" url 
+                    'text'  => $tip['comment'],
+                    'date'  => $tmpDate->get(Zend_Date::TIMESTAMP)
+                );
+                $poi->tips[] = $tmpTip;
+            }
+        }
         
         return $poi;
         

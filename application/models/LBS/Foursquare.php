@@ -220,7 +220,6 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
                     'id'    => $tip['id'],
                     'text'  => $tip['text'],
                     'date'  => $tip['createdAt']
-                    // TODO? Photo
                 );
                 $poi->tips[] = $tmpTip;
             }
