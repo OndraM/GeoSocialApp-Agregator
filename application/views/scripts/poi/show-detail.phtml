@@ -1,7 +1,7 @@
 <div id="detail">
 <h1><?=$this->pois[0]->name;?></h1>
 <div id="detail-map"></div>
-<strong>Sources of venue data:</strong>
+<strong id="venue-source">Sources of venue data:</strong>
 <?php
 echo "<ul>\n";
 foreach ($this->pois as $poi) {
@@ -22,33 +22,33 @@ echo "</ul>\n";
 <?php
 $address = $this->listPoisField($this->pois, 'address');
 if (!empty($address)) {
-    echo "<h3>Address</h3>\n";
+    echo "<h3 id=\"venue-address\">Address</h3>\n";
     echo $address;
 }
 ?>
 <?php
 $phone = $this->listPoisField($this->pois, 'phone');
 if (!empty($phone)) {
-    echo "<h3>Phone</h3>\n";
+    echo "<h3 id=\"venue-phone\">Phone</h3>\n";
     echo $phone;
 }
 ?>
 <?php
 $links = $this->listPoisField($this->pois, 'links');
 if (!empty($links)) {
-    echo "<h3>Links</h3>\n";
+    echo "<h3 id=\"venue-links\">Links</h3>\n";
     echo $links;
 }
 /*
 ?>
-<h2>Photos</h2>
+<h2 id=\"venue-photos\">Photos</h2>
 <p>TODO</p>
 <?php
  * 
  */
 $tips = $this->listPoisField($this->pois, 'tips');
 if (!empty($tips)) {
-    echo "<h2>Tips</h2>\n";
+    echo "<h2 id=\"venue-tips\">Tips</h2>\n";
     echo $tips;
 }
 ?>
@@ -87,6 +87,21 @@ $script .= "
     if (map.getZoom() > 17) {
         map.setZoom(17);
     }
+    
+    var allTips = $('#venue-tips').next('ul').children();
+    var tipsLimit = 10;
+    if (allTips.length > tipsLimit) {
+        var hideTips = allTips.slice(tipsLimit);
+        hideTips.hide();
+        $('<li><a href=\"#\">Only ' + tipsLimit + ' first tips are shown. Click here to show remaining ' + hideTips.length + '.</a></li>')
+            .appendTo($('#venue-tips').next('ul'))
+            .click(function() {
+                hideTips.show();
+                $(this).remove();
+            });
+    }
+    
+
     ";
 echo $this->script($script, true);
 ?>
