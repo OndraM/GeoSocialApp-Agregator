@@ -1,7 +1,5 @@
-var markers = [];
-
-function initDetail() {
-    initDetailMap();
+function initDetail(markers) {
+    initDetailMap(markers);
     
     // Show only 10 first tips, other on demand
     var allTips = $('#venue-tips').next('ul').children();
@@ -77,7 +75,7 @@ function initDetail() {
     }
 }
 
-function initDetailMap() {
+function initDetailMap(markers) {
     var latlng = new google.maps.LatLng(" . $this->pois[0]->lat . "," . $this->pois[0]->lng . ");
     
     var mapOptions = {
@@ -108,11 +106,4 @@ function initDetailMap() {
         // Why use listener? It is way how to ensure is is called after map init.
     });
     map.fitBounds(bounds);   
-}
-
-/**
- * Add marker to array
- */
-function addMarker(marker) {
-    markers.push(marker);
 }

@@ -84,12 +84,12 @@ if (!empty($tips)) {
 ?>
 </div>
 <?php
-$script = "";
+$script = "var markers = [];";
 foreach ($this->pois as $poi) {
-    $script .= "addMarker([new google.maps.LatLng(" . $poi->lat . ", " . $poi->lng . "), 'Venue location by " . $this->services[$poi->type]['name'] . "']);";
+    $script .= "markers.push([new google.maps.LatLng(" . $poi->lat . ", " . $poi->lng . "), 'Venue location by " . $this->services[$poi->type]['name'] . "']);";
 }
 $script .= "
-    initDetail();
+    initDetail(markers);
 ";
 echo $this->script($script, true);
 ?>
