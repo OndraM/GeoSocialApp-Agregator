@@ -64,7 +64,7 @@ foreach ($this->pois as $poi) {
         if (isset($arrV["date"])) $photoDate = new Zend_Date($arrV['date']);
         $photos .= "\t<li title=\"Click to show image detail\">"
                 . "<a href=\"{$arrV["url"]}\" data-type=\"{$poi->type}\" data-title=\""
-                . (isset($arrV["title"]) ? 'Lorem ipsum dolor sit amet est lupidum' . $this->escape($arrV["title"]) : '')
+                . (isset($arrV["title"]) ? $this->escape($arrV["title"]) : '')
                 . "\" data-date=\""
                 . (isset($arrV["date"]) ? $photoDate->get(Zend_Date::DATETIME_MEDIUM) : '')
                 . "\" title=\"Click to show image detail\">"
