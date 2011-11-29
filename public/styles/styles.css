@@ -228,13 +228,20 @@ ul#photos-carousel {
 
 #photos-carousel li {
     width: 120px;
-}
-#photos-carousel li img {
-    cursor: pointer;
+    height: 100px;
 }
 #photos-carousel li a {
     display: block;
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    text-align: center;
 }
+#photos-carousel li img {
+    height: 100px;
+    cursor: pointer;
+}
+
 
 /* Tooltip for photos */
 .photo-tooltip {

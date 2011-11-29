@@ -61,7 +61,7 @@ if (!empty($links)) {
 $photos = '';
 foreach ($this->pois as $poi) {
     foreach ($poi->photos as $arrI => $arrV) {
-        $photos .= "\t<li title=\"Click to show image detail\"><a href=\"{$arrV["url"]}\" title=\"Click to show image detail\"><img src=\"{$arrV["thumbnail"]}\" width=\"100\" height=\"100\" /></a></li>\n";
+        $photos .= "\t<li title=\"Click to show image detail\"><a href=\"{$arrV["url"]}\" title=\"Click to show image detail\"><img src=\"{$arrV["thumbnail"]}\" height=\"100\" /></a></li>\n";
     }
 }
 

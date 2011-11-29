@@ -127,9 +127,41 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
             $poi->links["Website"] = (strncmp($entry['website'], 'http', 4) == 0 ? '' : 'http://') . $entry['website'];
         
         /**
-         * Add photos
+         * Add photos (Facebook profile photos)
          */
-        // TODO
+        $clientPhotos = $this->_constructClient($endpoint . '/' . $id . '/' . 'photos');
+        $responsePhotos = $clientPhotos->request();
+        
+        // error in response
+        if ($responsePhotos->isError()) return;
+        
+        $resultPhotos = Zend_Json::decode($responsePhotos->getBody());
+        $entryPhotos = $resultPhotos['data'];
+        if (count($entryPhotos) > 0) {
+            foreach ($entryPhotos as $photo) {
+                $thumbUrl = null;
+                // find apropriate thumbnail size 
+                foreach ($photo['images'] as $sizes) {
+                    if ($sizes['height'] < 150) { // firt thumbnail smaller the 150px
+                        $thumbUrl = $sizes['source'];
+                        break;
+                    }
+                }
+                $tmpDate = new Zend_Date(substr($photo['created_time'], 0, -2) . ':' . substr($photo['created_time'], -2), Zend_Date::W3C);
+                $tmpPhoto = array(
+                    'url'   => $photo['source'],
+                    'thumbnail' => $thumbUrl,
+                    'id'    => $photo['id'],
+                    'date'  => $tmpDate->get(Zend_Date::TIMESTAMP),
+                    'title' => (isset($photo['name']) ? $photo['name'] : '')
+                );
+                // check whether image really exists - do HEAD request for each of them
+                $tmpClient = new Zend_Http_Client($tmpPhoto['thumbnail']);
+                if ($tmpClient->request('HEAD')->isSuccessful()) {
+                    $poi->photos[] = $tmpPhoto;
+                }
+            }
+        }
         
         return $poi;
     }
