@@ -138,6 +138,7 @@ class PoiController extends Zend_Controller_Action
      */    
     protected function _mergePois(array $pois_raw) {                
         $pois = array(); // Array of GSAA_Model_AggregatedPOI
+        // iterate through array of pois
         for ($x = 0; $x < count($pois_raw); $x++) {
             if (is_null($pois_raw[$x])) continue; // skip already merged items
             $agPoi = new GSAA_Model_AggregatedPOI();
@@ -154,7 +155,7 @@ class PoiController extends Zend_Controller_Action
                 $similar_percent_basic = 0;
                 $similar_percent_alpha = 0;
                 /*
-                 * TODO: other text matching improvements suggestions:
+                 * TODO: other text matching improvements suggestions (see also issue #45):
                  * - maybe remove some chars
                  * - divide name on parts dividers like | and ()
                  * - remove common prefixes like "Restaurace" (but then be more strict on distance)

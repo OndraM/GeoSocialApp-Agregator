@@ -79,7 +79,7 @@ function initDetail(markers) {
     });
     // We are in standalone window, so don't open fancybox when removing service,
     // rather leave it to redirect
-    if ($('#fancybox-overlay').length == 0 && $('#detail').length > 0) {
+    if ($('div.fancybox-wrap').length == 0 && $('#detail').length > 0) {
         $('.removeService').removeClass('popUp');
     }
 }

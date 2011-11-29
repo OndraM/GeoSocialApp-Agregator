@@ -157,7 +157,7 @@ function initIndex() {
     
     $('#searchform').submit();
     initIndexMap();
-    //doGeolocate(); // commented just for testing purposes
+    //doGeolocate(); // commented just for testing purposes // TODO uncomment
 }
 
 /*
