@@ -20,7 +20,7 @@ a:active {
 	color: #008;
 }
 
-a:link[href^="http://"], a.external {
+a.external {
 	padding-right: 1.25em;
 	background: transparent url('../images/external.png') no-repeat right;
 }

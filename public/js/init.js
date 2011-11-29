@@ -3,7 +3,8 @@
  */
 $(document).ready(function() {
 	// Open external Links in new window
-	$('a[href^="http://"]').click(function() {
+	//$('a[href^="http://"]').click(function() {
+    $('a.external').click(function() {
 		this.target = '_blank';
 	});
     
