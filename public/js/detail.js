@@ -38,7 +38,16 @@ function initDetail(markers) {
         console.log($(this).attr('data-detail'));
         $(this).attr('original-title', 
             '<div class=\"photo-tooltip\">'
-            + '<img src=\"' + $(this).attr('href') + '\" height=\"210\"/>'
+            + '<div class=\"photo-tooltip-image\"><img src=\"' + $(this).attr('href') + '\" height=\"210\"/></div>'
+            + '<div class=\"photo-tooltip-title\">'
+            + '<img src="/images/icon-'
+            +  $(this).attr('data-type')
+            + '.png" alt="'
+            +  $(this).attr('data-type')
+            + '" class="icon-left" />'
+            + '' + $(this).attr('data-date') + ''
+            + ($(this).attr('data-title').length > 0 ? ' | ' + $(this).attr('data-title') : '')
+            + '</div>'
             + '</div>'
         );
         $(this).tipsy('show');

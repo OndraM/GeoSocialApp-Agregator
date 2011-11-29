@@ -251,8 +251,19 @@ ul#photos-carousel {
     background-position: center center;
     background-repeat: no-repeat;    
 }
-.photo-tooltip img {
+.photo-tooltip-image img {
     height: 210px;
+}
+.photo-tooltip-title {
+    position: absolute;
+    bottom: 1em;
+    height: 2em;
+    width: 320px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;    
+    text-align: left;
+    text-shadow:  0 0 .3em #000, 0 0 .2em #000, 0 0 .1em #000;
 }
 
 /* jQuery UI CSS overrides */

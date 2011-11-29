@@ -13,7 +13,7 @@ foreach ($this->pois as $poi) {
     echo "\t<li><a href=\""
         . $this->escape($poi->url)
         . "\" class=\"external\""
-        . "title=\"Open venue detail on "
+        . " title=\"Open venue detail on "
         . $this->services[$poi->type]['name']
         . " (opens in new window)\""
         . ">"
@@ -61,7 +61,15 @@ if (!empty($links)) {
 $photos = '';
 foreach ($this->pois as $poi) {
     foreach ($poi->photos as $arrI => $arrV) {
-        $photos .= "\t<li title=\"Click to show image detail\"><a href=\"{$arrV["url"]}\" title=\"Click to show image detail\"><img src=\"{$arrV["thumbnail"]}\" height=\"100\" /></a></li>\n";
+        if (isset($arrV["date"])) $photoDate = new Zend_Date($arrV['date']);
+        $photos .= "\t<li title=\"Click to show image detail\">"
+                . "<a href=\"{$arrV["url"]}\" data-type=\"{$poi->type}\" data-title=\""
+                . (isset($arrV["title"]) ? 'Lorem ipsum dolor sit amet est lupidum' . $this->escape($arrV["title"]) : '')
+                . "\" data-date=\""
+                . (isset($arrV["date"]) ? $photoDate->get(Zend_Date::DATETIME_MEDIUM) : '')
+                . "\" title=\"Click to show image detail\">"
+                . "<img src=\"{$arrV["thumbnail"]}\" height=\"100\" />"
+                . "</a></li>\n";
     }
 }
 
