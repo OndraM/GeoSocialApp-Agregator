@@ -44,14 +44,14 @@ if (!empty($links)) {
 $photos = '';
 foreach ($this->pois as $poi) {
     foreach ($poi->photos as $arrI => $arrV) {
-        $photos .= "\t<li><img src=\"{$arrV["thumbnail"]}\" width=\"100\" height=\"100\" /></li>\n";
+        $photos .= "\t<li title=\"Show image detail\"><a href=\"{$arrV["url"]}\" title=\"Show image detail\"><img src=\"{$arrV["thumbnail"]}\" width=\"100\" height=\"100\" /></a></li>\n";
     }
 }
 
 if (!empty($photos)) {
     echo "<h2 id=\"venue-photos\">Photos</h2>\n";
     echo "<div id=\"photos-wrapper\">";
-    echo "<ul id=\"photos-carousel\" class=\"jcarousel-skin-tango\">\n";
+    echo "<ul id=\"photos-carousel\">\n";
     echo $photos;
     echo "</ul>";
     echo "</div>\n";   
@@ -126,6 +126,31 @@ $script .= "
         hideControlOnEnd: true,
         startingSlide: 0
     });
+    
+    $('#photos-carousel li a').tipsy({
+        gravity: $.fn.tipsy.autoNS,
+        html: true,
+        opacity: 1,
+        trigger: 'manual'
+    });
+    
+    $('#photos-carousel li a').click(function() {
+        console.log($(this).attr('data-detail'));
+        $(this).attr('original-title', 
+            '<div class=\"photo-tooltip\">'
+            + '<img src=\"' + $(this).attr('href') + '\" height=\"210\"/>'
+            + '</div>'
+        );
+        $(this).tipsy('show');
+        return false;
+    });
+    $('#photos-carousel li a').mouseleave(function() {
+        $(this).tipsy('hide');
+    });
+    
+
+
+
 ";
 echo $this->script($script, true);
 ?>

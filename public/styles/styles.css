@@ -229,6 +229,24 @@ ul#photos-carousel {
 #photos-carousel li {
     width: 120px;
 }
+#photos-carousel li img {
+    cursor: pointer;
+}
+#photos-carousel li a {
+    display: block;
+}
+
+/* Tooltip for photos */
+.photo-tooltip {
+    height: 210px;
+    width: 320px;
+    background-image: url('../images/fancybox_loading.gif');
+    background-position: center center;
+    background-repeat: no-repeat;    
+}
+.photo-tooltip img {
+    height: 210px;
+}
 
 /* jQuery UI CSS overrides */
 .ui-state-focus {

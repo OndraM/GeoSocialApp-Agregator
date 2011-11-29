@@ -10,6 +10,7 @@
         ->appendStylesheet('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/ui-lightness/jquery-ui.css', 'screen, projection')
         ->appendStylesheet($this->baseUrl() . '/styles/jquery.fancybox.css', 'screen, projection')
         ->appendStylesheet($this->baseUrl() . '/styles/jquery.bxSlider.css', 'screen, projection')
+        ->appendStylesheet($this->baseUrl() . '/styles/jquery.tipsy.css', 'screen, projection')
         ->appendStylesheet($this->baseUrl() . '/styles/styles.css', 'screen, projection');
     
 
@@ -19,6 +20,7 @@
         ->prependFile('http://maps.googleapis.com/maps/api/js?sensor=true&libraries=places')
         ->appendFile($this->baseUrl() . '/js/jquery.fancybox.pack.js')
         ->appendFile($this->baseUrl() . '/js/jquery.bxSlider.min.js')
+        ->appendFile($this->baseUrl() . '/js/jquery.tipsy.js')
         ->appendFile($this->baseUrl() . '/js/init.js');
 
 
@@ -50,5 +52,3 @@
         
     </body>
 </html>
-
-        
