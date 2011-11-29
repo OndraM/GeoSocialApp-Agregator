@@ -4,7 +4,7 @@
 $(document).ready(function() {
 	// Open external Links in new window
 	//$('a[href^="http://"]').click(function() {
-    $('a.external').click(function() {
+    $('a.external').live('click', function() {
 		this.target = '_blank';
 	});
     
