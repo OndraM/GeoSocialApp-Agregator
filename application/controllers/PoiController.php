@@ -75,7 +75,9 @@ class PoiController extends Zend_Controller_Action
         $this->view->serviceParams = array();
         foreach ($this->_request->getParams() as $index => $value) {
             if (array_key_exists($value, $this->_serviceModels)) { // only parameters representing POIs
-                $pois[] = $this->_serviceModels[$value]->getDetail($index);
+                $poi = $this->_serviceModels[$value]->getDetail($index);
+                if (!$poi) continue;
+                $pois[] = $poi;
                 $this->view->serviceParams[$index] = $value;
             }
         }
