@@ -425,3 +425,8 @@ function showMapCenterPointer (latlng, timeout) {
     clearTimeout(mapCenterTimeout);
     mapCenterTimeout = setTimeout("mapCenterPoiner.setMap(null)", timeout);
 }
+
+
+function initDetail() {
+    
+}
