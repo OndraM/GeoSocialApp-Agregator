@@ -120,8 +120,7 @@ $script .= "
         }
         // Why use listener? It is way how to ensure is is called after map init.
     });
-    map.fitBounds(bounds);
-    
+    map.fitBounds(bounds);   
     
     
     var allTips = $('#venue-tips').next('ul').children();
@@ -188,7 +187,12 @@ $script .= "
     $('.removeService').mouseleave(function(){
         $('span:eq(1)', this).hide();
         $('span:eq(0)', this).show();
-    });    
+    });
+    // We are in standalone window, so don't open fancybox when removing service,
+    // rather leave it to redirect
+    if ($('#fancybox-overlay').length == 0 && $('#detail').length > 0) {
+        $('.removeService').removeClass('popUp');
+    }
 ";
 echo $this->script($script, true);
 ?>
