@@ -25,7 +25,6 @@ class GSAA_View_Helper_ListPoisField extends Zend_View_Helper_Abstract
                     $return .= "\t<li>"
                             . $this->view->serviceIcon($poi->type)
                             . "<a href=\"" . $this->view->escape($arrV) . "\""
-                            . " target=\"_blank\""
                             . " class=\"external\""
                             . ">"
                             . $this->view->escape($arrI)
