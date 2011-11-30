@@ -86,7 +86,8 @@ class PoiController extends Zend_Controller_Action
         
         $this->view->serviceParams = $aggregatedPOI->getTypes(true);
         $this->view->pois = $aggregatedPOI->getPois();
-        $this->view->title = $aggregatedPOI->getName();
+        $this->view->title = $aggregatedPOI->getField('name');
+        //$this->view->addresses = $aggregatedPOI->getField('name');
         $this->view->services = Zend_Registry::get('var')->services;
     }
     
