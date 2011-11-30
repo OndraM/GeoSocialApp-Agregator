@@ -84,10 +84,15 @@ class PoiController extends Zend_Controller_Action
             throw new Zend_Controller_Action_Exception('No POI specified.', 404);
         }
         
-        $this->view->serviceParams = $aggregatedPOI->getTypes(true);
-        $this->view->pois = $aggregatedPOI->getPois();
-        $this->view->title = $aggregatedPOI->getField('name');
-        //$this->view->addresses = $aggregatedPOI->getField('name');
+        $this->view->serviceParams      = $aggregatedPOI->getTypes(true);
+        $this->view->pois               = $aggregatedPOI->getPois();
+        $this->view->title              = $aggregatedPOI->getField('name');
+        $this->view->values             = array();
+        $this->view->values['address']  = $aggregatedPOI->getFieldAll('address');
+        $this->view->values['phone']    = $aggregatedPOI->getFieldAll('phone');
+        $this->view->values['links']    = $aggregatedPOI->getFieldAll('links');
+        $this->view->values['tips']     = $aggregatedPOI->getFieldAll('tips');
+        d($this->view->values);
         $this->view->services = Zend_Registry::get('var')->services;
     }
     

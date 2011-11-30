@@ -67,6 +67,23 @@ class GSAA_Model_AggregatedPOI
         }
         return;
     }
+    /**
+     * Get all values if specified field.
+     * 
+     * @param string $field Name of POI field
+     * @return array Array of values, indexed by service from which value origins.
+     */
+    public function getFieldAll($field) {
+        $this->_sortPois();
+        
+        $array = array();
+        foreach ($this->getPois() as $poi) {
+            if (isset($poi->$field) && !empty($poi->$field)) {
+                $array[$poi->type] = $poi->$field;
+            }
+        }
+        return $array;
+    }
 
     /**
      * Get current array of GSAA_Model_POI

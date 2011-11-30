@@ -37,21 +37,21 @@ echo "</ul>\n";
 ?>
 <h2>Contact</h2>
 <?php
-$address = $this->listPoisField($this->pois, 'address');
+$address = $this->listValuesArray($this->values['address'], 'address');
 if (!empty($address)) {
     echo "<h3 id=\"venue-address\">Address</h3>\n";
     echo $address;
 }
 ?>
 <?php
-$phone = $this->listPoisField($this->pois, 'phone');
+$phone = $this->listValuesArray($this->values['phone'], 'phone');
 if (!empty($phone)) {
     echo "<h3 id=\"venue-phone\">Phone</h3>\n";
     echo $phone;
 }
 ?>
 <?php
-$links = $this->listPoisField($this->pois, 'links');
+$links = $this->listValuesArray($this->values['links'], 'links');
 if (!empty($links)) {
     echo "<h3 id=\"venue-links\">Links</h3>\n";
     echo $links;
@@ -84,7 +84,7 @@ if (!empty($photos)) {
 ?>
 
 <?php
-$tips = $this->listPoisField($this->pois, 'tips');
+$tips = $this->listValuesArray($this->values['tips'], 'tips');
 if (!empty($tips)) {
     echo "<h2 id=\"venue-tips\">Tips</h2>\n";
     echo $tips;
