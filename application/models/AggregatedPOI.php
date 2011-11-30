@@ -90,9 +90,15 @@ class GSAA_Model_AggregatedPOI
      */
     public function getUrl() {
         $this->_sortPois();
-        // TODO - combine url
-        return;
+        // little bit MVC break, but we really need to get the url view heleper...
+        
+        $urlParams = array('controller' => 'poi', 'action' => 'show-detail');
+        foreach ($this->getPois() as $poi) {
+            $urlParams[$poi->id] = $poi->type;
         }
+        $url = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('view')->url($urlParams);
+        return $url;
+    }
 
     /**
      * Get current array of GSAA_Model_POI

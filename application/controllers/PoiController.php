@@ -52,6 +52,7 @@ class PoiController extends Zend_Controller_Action
             foreach ($pois as $poi) {
                 $this->view->pois[$i]['name']   = $poi->getName();
                 $this->view->pois[$i]['id']     = $poi->getId();
+                $this->view->pois[$i]['url']    = $poi->getUrl();
                 $this->view->pois[$i]['types']  = $poi->getTypes();
                 $this->view->pois[$i]['lat']    = $poi->getLat();
                 $this->view->pois[$i]['lng']    = $poi->getLng();
@@ -83,7 +84,6 @@ class PoiController extends Zend_Controller_Action
         }
         
         $this->view->pois = $aggregatedPOI->getPois();
-        d($aggregatedPOI->getUrl());
         $this->view->services = Zend_Registry::get('var')->services;
     }
     
