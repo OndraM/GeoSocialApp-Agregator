@@ -33,48 +33,6 @@ class GSAA_Model_AggregatedPOI
     }
     
     /**
-     * Get aggregated id of POI
-     */
-    public function getId() {
-        $this->_sortPois();
-        return reset($this->getPois())->id; // return ID of the primary POI
-    }
-
-    /**
-     * Get name of aggregated POI
-     */
-    public function getName() {
-        $this->_sortPois();
-        return reset($this->getPois())->name; // return name of the primary POI
-    }
-    
-    /**
-     * Get latitude of aggregated POI
-     */
-    public function getLat() {
-        $this->_sortPois();
-        return reset($this->getPois())->lat; // return latitude of the primary POI
-        // TODO: mayby get average location?
-    }
-
-    /**
-     *  Get longitude of aggregated POI
-     */
-    public function getLng() {
-        $this->_sortPois();
-        return reset($this->getPois())->lng; // return longitude of the primary POI
-        // TODO: mayby get average location?
-    }
-
-    /**
-     *  Get distance of aggregated lat & lng in meters from search coords (if available)
-     */
-    public function getDistance() {
-        $this->_sortPois();
-        return reset($this->getPois())->distance;
-    }
-    
-    /**
      * Get URL of aggregated detail     
      */
     public function getDetailUrl() {
@@ -145,8 +103,7 @@ class GSAA_Model_AggregatedPOI
         }
         // none address found
         if ($find) {
-            return "REVERSE GEOCODING";
-            // TODO: reverse geocoding (see issue #81)
+            return; // TODO: reverse geocoding (see issue #81)
         }
     }
         
@@ -171,7 +128,6 @@ class GSAA_Model_AggregatedPOI
         // put pois in array one-by-one, sorted by priority
         foreach($tmp as $poi) $this->_pois[] = $poi;
         $this->_sorted = true;
-    }
-    
+    }    
     
 }
