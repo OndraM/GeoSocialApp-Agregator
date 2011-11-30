@@ -73,26 +73,11 @@ class GSAA_Model_AggregatedPOI
         $this->_sortPois();
         return reset($this->getPois())->distance;
     }
-
-    /**
-     * Get aggregated address (if available), or find address on POI location (TODO!)
-     
-     * @param bool If none adres found, should we do reverse geocoding and try to found it
-     * @return type 
-     */
-    public function getAddress($find = false) {
-        $this->_sortPois();
-        if ($find) {
-            // TODO - get best address, if none of primary POI, try onother ones, 
-            // if none of them has address, maybe search on Google :)?
-        }
-        return reset($this->getPois())->address;
-    }
     
     /**
      * Get URL of aggregated detail     
      */
-    public function getUrl() {
+    public function getDetailUrl() {
         $this->_sortPois();
         
         $urlParams = array('controller' => 'poi', 'action' => 'show-detail');
@@ -103,6 +88,26 @@ class GSAA_Model_AggregatedPOI
         // little bit MVC break, but we really need to get the url view heleper...
         $url = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('view')->url($urlParams);
         return $url;
+    }
+
+    /**
+     * Get single value of specified field.
+     * If field is not present in POI with highest priority, try to get value from next POI and so on...
+     * 
+     * @param string $field Name of POI field
+     * @param mixed $params Specific params. If url, bool whether if none address is found, should it be reverse geocoded
+     * @return mixed 
+     */
+    public function getField($field, $params = null) {
+        $this->_sortPois();
+        if ($field == 'address') return $this->_getAddress($params  );
+        
+        foreach ($this->getPois() as $poi) {
+            if (isset($poi->$field) && !empty($poi->$field)) {
+                return $poi->$field;
+            }
+        }
+        return;
     }
 
     /**
@@ -125,6 +130,26 @@ class GSAA_Model_AggregatedPOI
         $this->_sorted = false; // indicate POIs are not in sorted state
     }
     
+    /**
+     * Get aggregated address (if available), or find address on POI location (TODO!)
+     
+     * @param bool If none adres found, should we do reverse geocoding and try to found it
+     * @return type 
+     */
+    protected function _getAddress($find = false) {
+        $this->_sortPois();
+        foreach ($this->getPois() as $poi) {
+            if (isset($poi->address) && !empty($poi->address)) {
+                return $poi->address;
+            }
+        }
+        // none address found
+        if ($find) {
+            return "REVERSE GEOCODING";
+            // TODO: reverse geocoding (see issue #81)
+        }
+    }
+        
     /**
      * Sort POIs in $this->_pois array.
      * The purpose why this is not called automatically after each addPoi() is performance.
