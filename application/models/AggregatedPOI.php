@@ -86,16 +86,17 @@ class GSAA_Model_AggregatedPOI
     }
     
     /**
-     * Get URL of aggregated detail
+     * Get URL of aggregated detail     
      */
     public function getUrl() {
         $this->_sortPois();
-        // little bit MVC break, but we really need to get the url view heleper...
         
         $urlParams = array('controller' => 'poi', 'action' => 'show-detail');
         foreach ($this->getPois() as $poi) {
-            $urlParams[$poi->id] = $poi->type;
+            // id => type order is there on purpose (to allow multiple pois from one service)
+            $urlParams[($poi->type == 'gg') ? $poi->reference : $poi->id] = $poi->type;
         }
+        // little bit MVC break, but we really need to get the url view heleper...
         $url = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('view')->url($urlParams);
         return $url;
     }

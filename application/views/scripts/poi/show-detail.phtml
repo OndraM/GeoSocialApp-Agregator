@@ -8,7 +8,7 @@ foreach ($this->pois as $poi) {
     if (count($this->serviceParams) > 1) {
         $tmpArray = $this->serviceParams;
         unset($tmpArray[array_search($poi->type, $tmpArray)]);
-        $removeServiceUrl = http_build_query($tmpArray);
+        $removeServiceUrl = $this->url(array('controller' => 'poi', 'action' => 'show-detail') + $tmpArray, null, true);
     }
     echo "\t<li><a href=\""
         . $this->escape($poi->url)
@@ -21,7 +21,7 @@ foreach ($this->pois as $poi) {
         . $this->escape($poi->name)
         . "</a>"
         . ((count($this->serviceParams) > 1) ?
-                " <a class=\"popUp fancybox.ajax removeService hidden\" title=\"Remove data from this service\"href=\"/poi/show-detail?"
+                " <a class=\"popUp fancybox.ajax removeService hidden\" title=\"Remove data from this service\"href=\""
                     . $removeServiceUrl
                     . "\"><span><img src=\""
                     . $this->baseUrl() . "/images/remove-disabled.png"
