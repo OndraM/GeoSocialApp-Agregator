@@ -73,16 +73,15 @@ class PoiController extends Zend_Controller_Action
         } 
         
         $aggregatedPOI = new GSAA_Model_AggregatedPOI();
-        $this->view->serviceParams = array();
         foreach ($this->_request->getParams() as $index => $value) {
             if (array_key_exists($value, $this->_serviceModels)) { // only parameters representing POIs
                 $poi = $this->_serviceModels[$value]->getDetail($index);
                 if (!$poi) continue;
                 $aggregatedPOI->addPoi($poi);
-                $this->view->serviceParams[$index] = $value;
             }
         }
         
+        $this->view->serviceParams = $aggregatedPOI->getTypes(true);
         $this->view->pois = $aggregatedPOI->getPois();
         $this->view->title = $aggregatedPOI->getName();
         $this->view->services = Zend_Registry::get('var')->services;

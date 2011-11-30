@@ -19,11 +19,15 @@ class GSAA_Model_AggregatedPOI
      * 
      * @return Array Array of aggreagted POI types. 
      */    
-    public function getTypes() {
+    public function getTypes($indexById = false) {
         $this->_sortPois();
         $return = array();
         foreach ($this->getPois() as $poi) {
-            $return[] = $poi->type;
+            if ($indexById) {
+                $return[($poi->type == 'gg') ? $poi->reference : $poi->id] = $poi->type;
+            } else {
+                $return[] = $poi->type;
+            }
         }
         return $return;
     }
