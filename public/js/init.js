@@ -289,8 +289,7 @@ function addPoisOnMap(pois) {
         if (typeof poi.address !== "undefined" && poi.address)
             content += '<div>' + poi.address + '</div>';        
         
-        
-        if (poi.pois.length > 1) { // if this is more merged venues, list original names
+        /*if (poi.pois.length > 1) { // if this is more merged venues, list original names
             content += '<ul>'
             $.each(poi.pois, function(i, specificPoi) {
                 content += '<li>' + specificPoi.name
@@ -302,7 +301,7 @@ function addPoisOnMap(pois) {
                         + '</li>';
             });
             content += '</ul>';
-        }
+        }*/
         
         content += '<div>' 
                 + '<a href="' + poi.url + '" class ="popUp fancybox.ajax" title="Show all details of this venue">Show details &raquo;</a>'
