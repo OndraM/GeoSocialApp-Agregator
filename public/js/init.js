@@ -1,4 +1,15 @@
 /*
+ * Global functions
+ */
+
+if (typeof console === "undefined") {
+    console = {
+        log: function() { },
+        error: function() { }
+    };
+}
+
+/*
  * Global document.ready initialization
  */
 $(document).ready(function() {

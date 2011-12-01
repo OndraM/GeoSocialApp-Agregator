@@ -82,7 +82,7 @@ class PoiController extends Zend_Controller_Action
             }
         }
         if (count($aggregatedPOI->getPois()) < 1) {
-            throw new Zend_Controller_Action_Exception('No POI specified.', 404);
+            throw new Zend_Controller_Action_Exception('No POI specified or available.', 404);
         }
         
         $this->view->serviceParams      = $aggregatedPOI->getTypes(true);
