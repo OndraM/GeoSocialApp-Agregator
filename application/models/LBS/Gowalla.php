@@ -145,35 +145,35 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
             $clientPhotos = $this->_constructClient($endpoint . '/' . $id . '/photos');
             try {
                 $responsePhotos = $clientPhotos->request();
-            } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
-                return;
-            }            
 
-            // error in response
-            if ($responsePhotos->isError()) return;
-            
-            $resultPhotos = Zend_Json::decode($responsePhotos->getBody());       
-            $entryPhotos = $resultPhotos['activity'];
+                // error in response
+                if ($responsePhotos->isError()) return;
 
-            if (count($entryPhotos) > 0) {
-                foreach ($entryPhotos as $photo) {
-                    if ($photo['type']!='photo') continue;
-                    $tmpDate = new Zend_Date(substr($photo['created_at'], 0, -1) . '+00:00', Zend_Date::W3C);
-                    $tmpPhoto = array(
-                        'url'   => $photo['photo_urls']['high_res_320x480'],
-                        'thumbnail' => $photo['photo_urls']['square_100'],
-                        'id'    => md5($photo['checkin_url']), // create "static" url 
-                        'date'  => $tmpDate->get(Zend_Date::TIMESTAMP),
-                        'title' => trim($photo['message'])
-                    );
-                    // check whether image really exists - do HEAD request for each of them
-                    $tmpClient = new Zend_Http_Client($tmpPhoto['thumbnail']);
-                    try {
-                        if ($tmpClient->request('HEAD')->isSuccessful()) $poi->photos[] = $tmpPhoto;
-                    } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
-                        // don't add
-                    }                    
+                $resultPhotos = Zend_Json::decode($responsePhotos->getBody());       
+                $entryPhotos = $resultPhotos['activity'];
+
+                if (count($entryPhotos) > 0) {
+                    foreach ($entryPhotos as $photo) {
+                        if ($photo['type']!='photo') continue;
+                        $tmpDate = new Zend_Date(substr($photo['created_at'], 0, -1) . '+00:00', Zend_Date::W3C);
+                        $tmpPhoto = array(
+                            'url'   => $photo['photo_urls']['high_res_320x480'],
+                            'thumbnail' => $photo['photo_urls']['square_100'],
+                            'id'    => md5($photo['checkin_url']), // create "static" url 
+                            'date'  => $tmpDate->get(Zend_Date::TIMESTAMP),
+                            'title' => trim($photo['message'])
+                        );
+                        // check whether image really exists - do HEAD request for each of them
+                        $tmpClient = new Zend_Http_Client($tmpPhoto['thumbnail']);
+                        try {
+                            if ($tmpClient->request('HEAD')->isSuccessful()) $poi->photos[] = $tmpPhoto;
+                        } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
+                            // don't add
+                        }                    
+                    }
                 }
+            } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
+                // keep photos empty
             }
         }
         
@@ -181,25 +181,29 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
          * Add tips (aka highlights)
          */
         $clientTips = $this->_constructClient($endpoint . '/' . $id . '/highlights');
-        $responseTips = $clientTips->request();
+        try {
+            $responseTips = $clientTips->request();
 
-        // error in response
-        if ($responseTips->isError()) return;
+            // error in response
+            if ($responseTips->isError()) return;
 
-        $resultTips = Zend_Json::decode($responseTips->getBody());        
-        $entryTips = $resultTips['highlights'];
+            $resultTips = Zend_Json::decode($responseTips->getBody());        
+            $entryTips = $resultTips['highlights'];
 
-        if (count($entryTips) > 0) {
-            foreach ($entryTips as $tip) {
-                if (empty($tip['comment'])) continue; // skip highlights without text
-                $tmpDate = new Zend_Date(substr($tip['updated_at'], 0, -1) . '+00:00', Zend_Date::W3C);
-                $tmpTip = array(
-                    'id'    => md5($tip['updated_at']), // create "static" url 
-                    'text'  => $tip['comment'],
-                    'date'  => $tmpDate->get(Zend_Date::TIMESTAMP)
-                );
-                $poi->tips[] = $tmpTip;
+            if (count($entryTips) > 0) {
+                foreach ($entryTips as $tip) {
+                    if (empty($tip['comment'])) continue; // skip highlights without text
+                    $tmpDate = new Zend_Date(substr($tip['updated_at'], 0, -1) . '+00:00', Zend_Date::W3C);
+                    $tmpTip = array(
+                        'id'    => md5($tip['updated_at']), // create "static" url 
+                        'text'  => $tip['comment'],
+                        'date'  => $tmpDate->get(Zend_Date::TIMESTAMP)
+                    );
+                    $poi->tips[] = $tmpTip;
+                }
             }
+        } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
+            // keep tips empty
         }
         
         return $poi;

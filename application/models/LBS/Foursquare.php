@@ -173,45 +173,45 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
                                                 array('group' => 'venue'));
         try {
             $responsePhotos = $clientPhotos->request();
-        } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
-            return;
-        }
         
-        // error in response
-        if ($responsePhotos->isError()) return;
-        
-        $resultPhotos = Zend_Json::decode($responsePhotos->getBody());        
-        // foursquare returned an error
-        if ($resultPhotos['meta']['code'] != 200) return;
-        
-        $entryPhotos = $resultPhotos['response']['photos'];
-        
-        if (count($entryPhotos['items']) > 0) {
-            foreach ($entryPhotos['items'] as $photo) {
-                $thumbUrl = null;
-                // find apropriate thumbnail size 
-                foreach ($photo['sizes']['items'] as $sizes) {
-                    if ($sizes['height'] == 100) {
-                        $thumbUrl = $sizes['url'];
-                        break;
+            // error in response
+            if ($responsePhotos->isError()) return;
+
+            $resultPhotos = Zend_Json::decode($responsePhotos->getBody());        
+            // foursquare returned an error
+            if ($resultPhotos['meta']['code'] != 200) return;
+
+            $entryPhotos = $resultPhotos['response']['photos'];
+
+            if (count($entryPhotos['items']) > 0) {
+                foreach ($entryPhotos['items'] as $photo) {
+                    $thumbUrl = null;
+                    // find apropriate thumbnail size 
+                    foreach ($photo['sizes']['items'] as $sizes) {
+                        if ($sizes['height'] == 100) {
+                            $thumbUrl = $sizes['url'];
+                            break;
+                        }
                     }
+                    $tmpPhoto = array(
+                        'url'   => $photo['url'],
+                        'thumbnail' => $thumbUrl,
+                        'id'    => $photo['id'],
+                        'date'  => $photo['createdAt'],
+                        'title' => '' // TODO? But $photo['tip']['text'] is never present in venue photos...
+                    );
+                    // check whether image really exists - do HEAD request for each of them
+                    $tmpClient = new Zend_Http_Client($tmpPhoto['thumbnail']);
+                    try {
+                        if ($tmpClient->request('HEAD')->isSuccessful()) $poi->photos[] = $tmpPhoto;
+                    } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
+                        // don't add
+                    }
+
                 }
-                $tmpPhoto = array(
-                    'url'   => $photo['url'],
-                    'thumbnail' => $thumbUrl,
-                    'id'    => $photo['id'],
-                    'date'  => $photo['createdAt'],
-                    'title' => '' // TODO? But $photo['tip']['text'] is never present in venue photos...
-                );
-                // check whether image really exists - do HEAD request for each of them
-                $tmpClient = new Zend_Http_Client($tmpPhoto['thumbnail']);
-                try {
-                    if ($tmpClient->request('HEAD')->isSuccessful()) $poi->photos[] = $tmpPhoto;
-                } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
-                    // don't add
-                }
-                
             }
+        } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
+            // keep photos empty
         }
         
         /*
@@ -221,27 +221,32 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
                                               array('sort' => 'popular',
                                                     'limit' => 100
                                                   ));
-        $responseTips = $clientTips->request();
-        
-        // error in response
-        if ($responseTips->isError()) return;
-        
-        $resultTips = Zend_Json::decode($responseTips->getBody());        
-        // foursquare returned an error
-        if ($resultTips['meta']['code'] != 200) return;
-        
-        $entryTips = $resultTips['response']['tips'];        
-       
-        if (count($entryTips['items']) > 0) {
-            foreach ($entryTips['items'] as $tip) {
-                $tmpTip = array(
-                    'id'    => $tip['id'],
-                    'text'  => $tip['text'],
-                    'date'  => $tip['createdAt']
-                );
-                $poi->tips[] = $tmpTip;
+        try {
+            $responseTips = $clientTips->request();
+
+            // error in response
+            if ($responseTips->isError()) return;
+
+            $resultTips = Zend_Json::decode($responseTips->getBody());        
+            // foursquare returned an error
+            if ($resultTips['meta']['code'] != 200) return;
+
+            $entryTips = $resultTips['response']['tips'];        
+
+            if (count($entryTips['items']) > 0) {
+                foreach ($entryTips['items'] as $tip) {
+                    $tmpTip = array(
+                        'id'    => $tip['id'],
+                        'text'  => $tip['text'],
+                        'date'  => $tip['createdAt']
+                    );
+                    $poi->tips[] = $tmpTip;
+                }
             }
+        } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
+            // keep tips empty
         }
+
         
         return $poi;
     }

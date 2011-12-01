@@ -140,41 +140,41 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
         $clientPhotos = $this->_constructClient($endpoint . '/' . $id . '/' . 'photos');
         try {
             $responsePhotos = $clientPhotos->request();
-        } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
-            return;
-        }        
-        
-        // error in response
-        if ($responsePhotos->isError()) return;
-        
-        $resultPhotos = Zend_Json::decode($responsePhotos->getBody());
-        $entryPhotos = $resultPhotos['data'];
-        if (count($entryPhotos) > 0) {
-            foreach ($entryPhotos as $photo) {
-                $thumbUrl = null;
-                // find apropriate thumbnail size 
-                foreach ($photo['images'] as $sizes) {
-                    if ($sizes['height'] < 150) { // firt thumbnail smaller the 150px
-                        $thumbUrl = $sizes['source'];
-                        break;
+
+            // error in response
+            if ($responsePhotos->isError()) return;
+
+            $resultPhotos = Zend_Json::decode($responsePhotos->getBody());
+            $entryPhotos = $resultPhotos['data'];
+            if (count($entryPhotos) > 0) {
+                foreach ($entryPhotos as $photo) {
+                    $thumbUrl = null;
+                    // find apropriate thumbnail size 
+                    foreach ($photo['images'] as $sizes) {
+                        if ($sizes['height'] < 150) { // firt thumbnail smaller the 150px
+                            $thumbUrl = $sizes['source'];
+                            break;
+                        }
+                    }
+                    $tmpDate = new Zend_Date(substr($photo['created_time'], 0, -2) . ':' . substr($photo['created_time'], -2), Zend_Date::W3C);
+                    $tmpPhoto = array(
+                        'url'   => $photo['source'],
+                        'thumbnail' => $thumbUrl,
+                        'id'    => $photo['id'],
+                        'date'  => $tmpDate->get(Zend_Date::TIMESTAMP),
+                        'title' => (isset($photo['name']) ? $photo['name'] : '')
+                    );
+                    // check whether image really exists - do HEAD request for each of them
+                    $tmpClient = new Zend_Http_Client($tmpPhoto['thumbnail']);
+                    try {
+                        if ($tmpClient->request('HEAD')->isSuccessful()) $poi->photos[] = $tmpPhoto;
+                    } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
+                        // don't add
                     }
                 }
-                $tmpDate = new Zend_Date(substr($photo['created_time'], 0, -2) . ':' . substr($photo['created_time'], -2), Zend_Date::W3C);
-                $tmpPhoto = array(
-                    'url'   => $photo['source'],
-                    'thumbnail' => $thumbUrl,
-                    'id'    => $photo['id'],
-                    'date'  => $tmpDate->get(Zend_Date::TIMESTAMP),
-                    'title' => (isset($photo['name']) ? $photo['name'] : '')
-                );
-                // check whether image really exists - do HEAD request for each of them
-                $tmpClient = new Zend_Http_Client($tmpPhoto['thumbnail']);
-                try {
-                    if ($tmpClient->request('HEAD')->isSuccessful()) $poi->photos[] = $tmpPhoto;
-                } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
-                    // don't add
-                }
             }
+        } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
+            // keep photos empty
         }
         
         return $poi;
