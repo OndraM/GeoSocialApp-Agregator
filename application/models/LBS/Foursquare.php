@@ -47,7 +47,11 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
                                                 'radius'        => ($radius > 0 ? $radius : self::RADIUS)
                                             ));
 
-        $response = $client->request();
+        try {
+            $response = $client->request();
+        } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
+            return array();
+        }        
         
         // error in response
         if ($response->isError()) {
@@ -110,7 +114,11 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
     public function getDetail($id) {
         $endpoint = '/venues';
         $client = $this->_constructClient($endpoint . '/' . $id);
-        $response = $client->request();
+        try {
+            $response = $client->request();
+        } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
+            return;
+        }
         
         // error in response
         if ($response->isError()) return;
@@ -163,7 +171,11 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
          */
         $clientPhotos = $this->_constructClient($endpoint . '/' . $id . '/photos',
                                                 array('group' => 'venue'));
-        $responsePhotos = $clientPhotos->request();
+        try {
+            $responsePhotos = $clientPhotos->request();
+        } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
+            return;
+        }
         
         // error in response
         if ($responsePhotos->isError()) return;
@@ -193,9 +205,12 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
                 );
                 // check whether image really exists - do HEAD request for each of them
                 $tmpClient = new Zend_Http_Client($tmpPhoto['thumbnail']);
-                if ($tmpClient->request('HEAD')->isSuccessful()) {
-                    $poi->photos[] = $tmpPhoto;
+                try {
+                    if ($tmpClient->request('HEAD')->isSuccessful()) $poi->photos[] = $tmpPhoto;
+                } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
+                    // don't add
                 }
+                
             }
         }
         

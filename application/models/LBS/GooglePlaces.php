@@ -43,7 +43,11 @@ class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
                                                 'radius'        => ($radius > 0 ? $radius : self::RADIUS)                                                
                                             ));
 
-        $response = $client->request();
+        try {
+            $response = $client->request();
+        } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
+            return array();
+        }
         
         // error in response
         if ($response->isError()) {
@@ -104,7 +108,11 @@ class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
         $client = $this->_constructClient($endpoint, 
                                         array('reference' => $id));
 
-        $response = $client->request();
+        try {
+            $response = $client->request();
+        } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
+            return;
+        }
        
         // error in response
         if ($response->isError()) return;
