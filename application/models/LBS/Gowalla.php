@@ -180,7 +180,6 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
         /*
          * Add tips (aka highlights)
          */
-        $poi->tips = array();
         $clientTips = $this->_constructClient($endpoint . '/' . $id . '/highlights');
         $responseTips = $clientTips->request();
 

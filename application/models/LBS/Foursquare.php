@@ -217,7 +217,6 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
         /*
          * Add tips
          */
-        $poi->tips = array();
         $clientTips = $this->_constructClient($endpoint . '/' . $id . '/tips',
                                               array('sort' => 'popular',
                                                     'limit' => 100

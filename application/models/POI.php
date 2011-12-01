@@ -59,6 +59,19 @@ class GSAA_Model_POI
     public $links    = array();
     
     /*
+     * Array of POI tips (optional).
+     * Available only in POI detail.
+     * Structure:
+     *      array(
+     *          id,         // unique ID for tip
+     *          text,       // text of tip
+     *          date        // date of tip
+     *      )
+     * 
+     */
+    public $tips    = array();
+    
+    /*
      * Array of POI photos array (optional).
      * Available only in POI detail.
      * Structure:
