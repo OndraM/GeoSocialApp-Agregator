@@ -14,9 +14,10 @@ class GSAA_View_Helper_ListValuesArray extends Zend_View_Helper_Abstract
      *
      * @param array $values 
      * @param string $field Field type
+     * @param bool $escape Escape output?
      * @return string 
      */
-    public function listValuesArray($valuesArray, $field)
+    public function listValuesArray($valuesArray, $field, $escape = true)
     {
         $return = "";
         if (count($valuesArray) < 1) return "";
@@ -31,14 +32,14 @@ class GSAA_View_Helper_ListValuesArray extends Zend_View_Helper_Abstract
                             . "<a href=\"" . $this->view->escape($value) . "\""
                             . " class=\"external\""
                             . ">"
-                            . $this->view->escape($value)
+                            . ($escape ? $this->view->escape($value) : $value)
                             . "</a>"
                             . "</li>\n";
                 } elseif ($field == 'tips') {
                     $date = new Zend_Date($value['date']);
                     $return .= "\t<li>"
                             . $this->view->serviceIcon($type)
-                            . $this->view->escape($value['text'])
+                            . ($escape ? $this->view->escape($value['text']) : $value['text'])
                             . " ("
                             . $date->get(Zend_Date::DATETIME_MEDIUM)
                             .")"
@@ -46,7 +47,7 @@ class GSAA_View_Helper_ListValuesArray extends Zend_View_Helper_Abstract
                 } else {
                     $return .= "\t<li>"
                             . $this->view->serviceIcon($type)
-                            . $this->view->escape($value)
+                            . ($escape ? $this->view->escape($value) : $value)
                             . "</li>\n";
                 }
             }

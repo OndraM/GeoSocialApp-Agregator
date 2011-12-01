@@ -90,6 +90,14 @@ if (!empty($tips)) {
     echo $tips;
 }
 ?>
+<?php
+$notes = $this->listValuesArray($this->values['notes'], 'notes', false);
+if (!empty($notes)) {
+    echo "<h3 id=\"venue-notes\">Notes</h3>\n";
+    echo $notes;
+}
+?>
+
 </div>
 <?php
 $script = "var markers = [];";

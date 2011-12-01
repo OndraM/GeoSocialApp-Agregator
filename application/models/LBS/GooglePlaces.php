@@ -142,6 +142,15 @@ class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
         if (isset($entry['website'])) // Website
             $poi->links["Website"] = (strncmp($entry['website'], 'http', 4) == 0 ? '' : 'http://') . $entry['website'];
         
+        /*
+         * Add html_attributions (Required by Google Places TOS)
+         */
+        if (isset($result['html_attributions']) && !empty($result['html_attributions'])) {
+            foreach ($result['html_attributions'] as $attribution) {
+                $poi->notes[] = $attribution;
+            }
+        }
+
         return $poi;
     }
     

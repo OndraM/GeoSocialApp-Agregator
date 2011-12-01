@@ -86,6 +86,13 @@ class GSAA_Model_POI
      */
     public $photos    = array();
     
+    /*
+     *  Array of notes (optional).
+     * Structure:
+     *      array[] = note
+     */
+    public $notes    = array();
+    
     /**
      * Get unique priority of the service.
      * Zero is the lowest possible priority.
