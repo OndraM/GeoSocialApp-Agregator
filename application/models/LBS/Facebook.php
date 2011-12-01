@@ -132,7 +132,7 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
             $poi->phone = $entry['phone'];
         
         if (isset($entry['website']))
-            $poi->links["Website"] = (strncmp($entry['website'], 'http', 4) == 0 ? '' : 'http://') . $entry['website'];
+            $poi->links[] = array("Website" => (strncmp($entry['website'], 'http', 4) == 0 ? '' : 'http://') . $entry['website']);
         
         /**
          * Add photos (Facebook profile photos)

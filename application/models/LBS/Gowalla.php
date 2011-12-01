@@ -131,11 +131,10 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
          */
         if (isset($entry['websites'])) {
             foreach ($entry['websites'] as $websiteIndex => $website)
-            $poi->links["Website" . ($websiteIndex == 0 ? '' : $websiteIndex+1)] = 
-                (strncmp($website, 'http', 4) == 0 ? '' : 'http://') . $website;
+            $poi->links[] = array("Website" => (strncmp($website, 'http', 4) == 0 ? '' : 'http://') . $website);
         }
         if (isset($entry['twitter_username'])) // twitter account
-            $poi->links["Twitter"] = "http://twitter.com/" . $entry['twitter_username'];
+            $poi->links[] = array("Twitter" => "http://twitter.com/" . $entry['twitter_username']);
 
         
         /**

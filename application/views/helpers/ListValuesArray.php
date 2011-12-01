@@ -29,10 +29,10 @@ class GSAA_View_Helper_ListValuesArray extends Zend_View_Helper_Abstract
                 if ($field == 'links') {
                     $return .= "\t<li>"
                             . $this->view->serviceIcon($type)
-                            . "<a href=\"" . $this->view->escape($value) . "\""
+                            . "<a href=\"" . $this->view->escape(current($value)) . "\""
                             . " class=\"external\""
                             . ">"
-                            . ($escape ? $this->view->escape($value) : $value)
+                            . ($escape ? $this->view->escape(key($value)) : key($value))
                             . "</a>"
                             . "</li>\n";
                 } elseif ($field == 'tips') {
