@@ -20,36 +20,35 @@ class GSAA_View_Helper_ListValuesArray extends Zend_View_Helper_Abstract
     {
         $return = "";
         if (count($valuesArray) < 1) return "";
-        foreach ($valuesArray as $type => $values) {
+        
+        foreach ($valuesArray as $values) {
             if (count($values) < 1) return "";
             
-            if ($field == 'links') {
-                foreach ($values as $arrI => $arrV) {
+            foreach ($values as $type => $value) {
+                if ($field == 'links') {
                     $return .= "\t<li>"
                             . $this->view->serviceIcon($type)
-                            . "<a href=\"" . $this->view->escape($arrV) . "\""
+                            . "<a href=\"" . $this->view->escape($value) . "\""
                             . " class=\"external\""
                             . ">"
-                            . $this->view->escape($arrI)
+                            . $this->view->escape($value)
                             . "</a>"
                             . "</li>\n";
-                }
-            } elseif ($field == 'tips') {
-                foreach ($values as $arrV) {
-                    $date = new Zend_Date($arrV['date']);
+                } elseif ($field == 'tips') {
+                    $date = new Zend_Date($value['date']);
                     $return .= "\t<li>"
                             . $this->view->serviceIcon($type)
-                            . $this->view->escape($arrV['text'])
+                            . $this->view->escape($value['text'])
                             . " ("
                             . $date->get(Zend_Date::DATETIME_MEDIUM)
                             .")"
                             . "</li>\n";
+                } else {
+                    $return .= "\t<li>"
+                            . $this->view->serviceIcon($type)
+                            . $this->view->escape($value)
+                            . "</li>\n";
                 }
-            } else {
-                $return .= "\t<li>"
-                        . $this->view->serviceIcon($type)
-                        . $this->view->escape($values)
-                        . "</li>\n";
             }
         }
         return "<ul>\n" . $return . "</ul>\n";

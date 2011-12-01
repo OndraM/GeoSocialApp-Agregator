@@ -50,15 +50,16 @@ class PoiController extends Zend_Controller_Action
             $this->view->pois = array();
             $i = 0;
             foreach ($pois as $poi) {
-                $this->view->pois[$i]['name']   = $poi->getField('name');
-                $this->view->pois[$i]['id']     = $poi->getField('id');
-                $this->view->pois[$i]['url']    = $poi->getDetailUrl();
-                $this->view->pois[$i]['types']  = $poi->getTypes();
-                $this->view->pois[$i]['lat']    = $poi->getField('lat');
-                $this->view->pois[$i]['lng']    = $poi->getField('lng');
-                $this->view->pois[$i]['distance'] = $poi->getField('distance');
-                $this->view->pois[$i]['address'] = $poi->getField('address', false);
-                $this->view->pois[$i]['pois']   = $poi->getPois();
+                $this->view->pois[$i]['name']       = $poi->getField('name');
+                $this->view->pois[$i]['id']         = $poi->getField('id');
+                $this->view->pois[$i]['url']        = $poi->getDetailUrl();
+                $this->view->pois[$i]['types']      = $poi->getTypes();
+                $this->view->pois[$i]['lat']        = $poi->getField('lat');
+                $this->view->pois[$i]['lng']        = $poi->getField('lng');
+                $this->view->pois[$i]['distance']   = $poi->getField('distance');
+                $this->view->pois[$i]['address']    = $poi->getField('address', false);
+                $this->view->pois[$i]['phone']      = $poi->getField('phone');
+                $this->view->pois[$i]['pois']       = $poi->getPois();
                 $i++;
             }
             
@@ -92,7 +93,6 @@ class PoiController extends Zend_Controller_Action
         $this->view->values['phone']    = $aggregatedPOI->getFieldAll('phone');
         $this->view->values['links']    = $aggregatedPOI->getFieldAll('links');
         $this->view->values['tips']     = $aggregatedPOI->getFieldAll('tips');
-        d($this->view->values);
         $this->view->services = Zend_Registry::get('var')->services;
     }
     

@@ -71,7 +71,7 @@ class GSAA_Model_AggregatedPOI
      * Get all values if specified field.
      * 
      * @param string $field Name of POI field
-     * @return array Array of values, indexed by service from which value origins.
+     * @return array Array of values, values are array indexed by service from which value origins.
      */
     public function getFieldAll($field) {
         $this->_sortPois();
@@ -79,7 +79,13 @@ class GSAA_Model_AggregatedPOI
         $array = array();
         foreach ($this->getPois() as $poi) {
             if (isset($poi->$field) && !empty($poi->$field)) {
-                $array[$poi->type] = $poi->$field;
+                if (is_array($poi->$field)) { // in case value consist of arrays => need to rearrange
+                    foreach ($poi->$field as $fieldArray) {
+                        $array[] = array($poi->type => $fieldArray);
+                    }
+                } else {
+                    $array[] = array($poi->type => $poi->$field);
+                }
             }
         }
         return $array;
