@@ -88,9 +88,9 @@ function initIndex() {
         
         // do the xhr request itself
         xhrRequest = $.ajax({
-          url: getNearbyUrl + '?' + $('#searchform input').serialize(),
-          dataType: 'json',
-          success: function(data) {
+            url: getNearbyUrl + '?' + $('#searchform input').serialize(),
+            dataType: 'json'})
+        .done(function(data) {
             // got result; don't show venues loading anymore
             toggleVenuesLoading(true);
             
@@ -129,7 +129,7 @@ function initIndex() {
                 $('#venues-list').html('<p>Sorry, no matching places nearby.</p><p>Try zooming out the map or redefining name or category filter.</p>');
             }
 
-        }});
+        });
         // move map to values in from (in case they have been changed by user input, not by dragging map)
         setMapCenter( $('#searchform input[name=lat]').val(), $('#searchform input[name=long]').val());
         
