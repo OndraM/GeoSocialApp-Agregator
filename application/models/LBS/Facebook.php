@@ -6,7 +6,7 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
     const PUBLIC_URL = 'https://facebook.com';
     const CLIENT_ID = '110157905740540';
     const CLIENT_SECRET = 'fc86a9bb2486f28f3e3866a5d8ff67ef';
-    const ACCESS_TOKEN = 'AAABkMCLXQvwBABj8w2rr4bo7jLBgvntfZCio1idZCGJbDzFqw8PdpXYdn4JvrYl51rOcpjymGWM4Sd9KACFAsZAR5ZCpT8gZD';
+    const ACCESS_TOKEN = '110157905740540|Pq1zptubbe1gq5L8hAL3aBswvPs';
     const LIMIT = 30;
     const TYPE = 'fb';
     
