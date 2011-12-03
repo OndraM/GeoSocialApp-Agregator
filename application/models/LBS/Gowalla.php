@@ -136,6 +136,38 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
         if (isset($entry['twitter_username'])) // twitter account
             $poi->links[] = array("Twitter" => "http://twitter.com/" . $entry['twitter_username']);
 
+        /*
+         * Categories
+         */
+        foreach ($entry['spot_categories'] as $category) {
+            $tmpCategory = array();
+            $tmpCategory['name']    = $category['name'];
+            $urlExploded            = explode('/',  $category['url']);
+            $tmpCategory['id']      = $urlExploded[2];
+            
+            $clientCategory = $this->_constructClient('/categories/' . $tmpCategory['id']);
+            try {
+                $responseCategory = $clientCategory->request();
+
+                // error in response
+                if ($responseCategory->isError()) return;
+
+                $resultCategory = Zend_Json::decode($responseCategory->getBody());
+                $tmpCategory['icon'] = $resultCategory['small_image_url'];
+            } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
+                // dont add category
+                continue;
+            }
+            $poi->categories[] = $tmpCategory;
+                
+            // TODO: load category icon
+            /*$poi->categories[] = array(
+                'id'    => $category['id'],
+                'name'  => $category['name'],
+                'icon'  => $category['icon']['prefix'] . $category['icon']['sizes'][0] . $category['icon']['name']
+            );*/
+            
+        }
         
         /**
          * Add photos
