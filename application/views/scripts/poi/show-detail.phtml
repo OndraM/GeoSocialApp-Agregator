@@ -37,33 +37,34 @@ echo "</ul>\n";
 ?>
 <h2>Contact</h2>
 <?php
-$address = $this->listValuesArray($this->values['address'], 'address');
-if (!empty($address)) {
+if (count($this->values['address']) > 0) {
     echo "<h3 id=\"venue-address\">Address</h3>\n";
-    echo $address;
+    echo $this->listValuesArray($this->values['address'], 'address');
 }
 ?>
 <?php
-$phone = $this->listValuesArray($this->values['phone'], 'phone');
-if (!empty($phone)) {
+if (count($this->values['phone']) > 0) {
     echo "<h3 id=\"venue-phone\">Phone</h3>\n";
-    echo $phone;
+    echo $this->listValuesArray($this->values['phone'], 'phone');
 }
 ?>
 <?php
-$links = $this->listValuesArray($this->values['links'], 'links');
-if (!empty($links)) {
+if (count($this->values['links']) > 0) {
     echo "<h3 id=\"venue-links\">Links</h3>\n";
-    echo $links;
+    echo $this->listValuesArray($this->values['links'], 'links');
 }
 ?>
 <?php
-$photos = '';
-foreach ($this->values['photos'] as $photoWrapper) {
-    $photo = current($photoWrapper);
-    $type = key($photoWrapper);
-    if (isset($photo["date"])) $photoDate = new Zend_Date($photo['date']);
-    $photos .= "\t<li title=\"Click to show image detail\">"
+if (count($this->values['photos']) > 0) {
+    echo "<h2 id=\"venue-photos\">Photos (" . count($this->values['photos']) . ")</h2>\n";
+    echo "<div id=\"photos-wrapper\">";
+    echo "<ul id=\"photos-carousel\">\n";
+
+    foreach ($this->values['photos'] as $photoWrapper) {
+        $photo = current($photoWrapper);
+        $type = key($photoWrapper);
+        if (isset($photo["date"])) $photoDate = new Zend_Date($photo['date']);
+        echo "\t<li title=\"Click to show image detail\">"
             . "<a href=\"{$photo["url"]}\" data-type=\"" . $type . "\" data-title=\""
             . (isset($photo["title"]) ? $this->escape($photo["title"]) : '')
             . "\" data-date=\""
@@ -71,30 +72,22 @@ foreach ($this->values['photos'] as $photoWrapper) {
             . "\" title=\"Click to show image detail\">"
             . "<img src=\"{$photo["thumbnail"]}\" height=\"100\" />"
             . "</a></li>\n";
-}
-
-if (!empty($photos)) {
-    echo "<h2 id=\"venue-photos\">Photos</h2>\n";
-    echo "<div id=\"photos-wrapper\">";
-    echo "<ul id=\"photos-carousel\">\n";
-    echo $photos;
+    }
     echo "</ul>";
-    echo "</div>\n";   
+    echo "</div>\n";
 }
 ?>
 
 <?php
-$tips = $this->listValuesArray($this->values['tips'], 'tips');
-if (!empty($tips)) {
-    echo "<h2 id=\"venue-tips\">Tips</h2>\n";
-    echo $tips;
+if (count($this->values['tips']) > 0) {
+    echo "<h2 id=\"venue-tips\">Tips (" . count($this->values['tips']) . ")</h2>\n";
+    echo $this->listValuesArray($this->values['tips'], 'tips');
 }
 ?>
 <?php
-$notes = $this->listValuesArray($this->values['notes'], 'notes', false);
-if (!empty($notes)) {
+if (count($this->values['notes']) > 0) {
     echo "<h3 id=\"venue-notes\">Notes</h3>\n";
-    echo $notes;
+    echo $this->listValuesArray($this->values['notes'], 'notes', false);
 }
 ?>
 
