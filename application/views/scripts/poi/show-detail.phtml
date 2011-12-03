@@ -35,8 +35,12 @@ foreach ($this->pois as $poi) {
 }
 echo "</ul>\n";
 ?>
-<h2>Contact</h2>
 <?php
+if (count($this->values['address']) > 0
+    || count($this->values['phone']) > 0
+    || count($this->values['links']) > 0) {
+    echo "<h2>Contact</h2>\n";
+}
 if (count($this->values['address']) > 0) {
     echo "<h3 id=\"venue-address\">Address</h3>\n";
     echo $this->listValuesArray($this->values['address'], 'address');
