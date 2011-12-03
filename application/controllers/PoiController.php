@@ -96,6 +96,12 @@ class PoiController extends Zend_Controller_Action
         $this->view->values['tips']     = $aggregatedPOI->getFieldAll('tips');
         $this->view->values['notes']    = $aggregatedPOI->getFieldAll('notes');
         $this->view->values['categories'] = $aggregatedPOI->getFieldAll('categories');
+        if (count($this->view->values['address']) == 0) {
+            $addressGeocode = $aggregatedPOI->getField('address', true); // geocode address
+            if ($addressGeocode) {
+                $this->view->values['address_geocode']  = $addressGeocode;
+            }
+        }
         $this->view->services = Zend_Registry::get('var')->services;
     }
     

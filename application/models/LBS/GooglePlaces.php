@@ -161,8 +161,7 @@ class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
      * @param array $queryParams 
      * @param array $clientConfig
      * @return Zend_Http_Client
-     */
-    
+     */    
     protected function _constructClient($endpoint, $queryParams = array(), $clientConfig = array()) {
         $client = new Zend_Http_Client();
         

@@ -49,6 +49,7 @@ echo "</ul>\n";
 ?>
 <?php
 if (count($this->values['address']) > 0
+    || count($this->values['address_geocode']) > 0
     || count($this->values['phone']) > 0
     || count($this->values['links']) > 0) {
     echo "<h2>Contact</h2>\n";
@@ -56,6 +57,12 @@ if (count($this->values['address']) > 0
 if (count($this->values['address']) > 0) {
     echo "<h3 id=\"venue-address\">Address</h3>\n";
     echo $this->listValuesArray($this->values['address'], 'address');
+} elseif (count($this->values['address_geocode']) > 0) {
+    echo "<h3 id=\"venue-address\">Address</h3>\n";
+    echo "<ul><li>"
+            . $this->escape($this->values['address_geocode'])
+            . " <abbr title=\"Approximate address found on this coordinates\">(approx.)</abbr>"
+            . "</li></ul>\n";
 }
 ?>
 <?php

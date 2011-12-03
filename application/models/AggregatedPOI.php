@@ -58,7 +58,7 @@ class GSAA_Model_AggregatedPOI
      */
     public function getField($field, $params = null) {
         $this->_sortPois();
-        if ($field == 'address') return $this->_getAddress($params  );
+        if ($field == 'address') return $this->_getAddress($params);
         
         foreach ($this->getPois() as $poi) {
             if (isset($poi->$field)) {
@@ -112,22 +112,21 @@ class GSAA_Model_AggregatedPOI
     }
     
     /**
-     * Get aggregated address (if available), or find address on POI location (TODO!)
+     * Get aggregated address (if available), or find address on POI location.
      
-     * @param bool If none adres found, should we do reverse geocoding and try to found it
-     * @return type 
+     * @param bool Should we do reverse geocoding and try to found address?
+     * @return string Address from POI, or the geocoded one
      */
-    protected function _getAddress($find = false) {
+    protected function _getAddress($geocode = false) {
         $this->_sortPois();
+        if ($geocode) { // should we do reverse geocoding?
+            return $this->_doReverseGeocoding();
+        }
         foreach ($this->getPois() as $poi) {
             if (isset($poi->address) && !empty($poi->address)) {
                 return $poi->address;
             }
-        }
-        // none address found
-        if ($find) {
-            return; // TODO: reverse geocoding (see issue #81)
-        }
+        }        
     }
         
     /**
@@ -151,6 +150,40 @@ class GSAA_Model_AggregatedPOI
         // put pois in array one-by-one, sorted by priority
         foreach($tmp as $poi) $this->_pois[] = $poi;
         $this->_sorted = true;
-    }    
+    }
     
+    /**
+     * Translate location of the POI into a human-readable address.
+     * Lat and Lng of at least one POI must be set.
+     * 
+     * @return string Address, location or geographical name
+     */
+    
+    
+    protected function _doReverseGeocoding() {
+        if (!$this->getField('lat') || !$this->getField('lng')) return;
+        
+        $client = new Zend_Http_Client();
+        $queryParams = array();
+        $queryParams['sensor'] = 'false';
+        $queryParams['latlng'] = $this->getField('lat') . ',' . $this->getField('lng');
+
+        // set client options
+        $client->setUri('https://maps.googleapis.com/maps/api/geocode/json');
+        $client->setParameterGet($queryParams);
+        try {
+            $response = $client->request();
+        } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
+            return;
+        }
+
+        // error in response
+        if ($response->isError()) return;
+
+        $result = Zend_Json::decode($response->getBody());
+        if (isset($result['results']) && isset($result['results'][0]) && $result['results'][0]['formatted_address']) {
+            return $result['results'][0]['formatted_address'];
+        }
+        return;
+    }
 }
