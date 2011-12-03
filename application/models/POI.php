@@ -93,6 +93,18 @@ class GSAA_Model_POI
      */
     public $notes    = array();
     
+    /*
+     *  Array of categories (optional).
+     * Available only in POI detail.
+     * Structure:
+     *      array(
+     *          id,     // catgoery ID
+     *          name,   // category name
+     *          icon    // category icon URL (32x32px preffered)
+     *      )
+     */
+    public $categories    = array();
+    
     /**
      * Get unique priority of the service.
      * Zero is the lowest possible priority.
@@ -107,9 +119,6 @@ class GSAA_Model_POI
     /*
      * TODO: stats
      */
-    
-    /*
-     * TODO: categories
-     */    
+     
     
 }
