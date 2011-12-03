@@ -129,7 +129,6 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
         if ($result['meta']['code'] != 200) return;
         
         $entry = $result['response']['venue'];
-        
         $poi = new GSAA_Model_POI();
         
         $poi->type      = self::TYPE;
@@ -165,6 +164,16 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
         if (isset($entry['contact']['twitter'])) // twitter account
             $poi->links[] = array("Twitter" => "http://twitter.com/" . $entry['contact']['twitter']);
         
+        /*
+         * Categories
+         */
+        foreach ($entry['categories'] as $category) {
+            $poi->categories[] = array(
+                'id'    => $category['id'],
+                'name'  => $category['name'],
+                'icon'  => $category['icon']['prefix'] . $category['icon']['sizes'][0] . $category['icon']['name']
+            );
+        }
 
         /*
          * Add photos
