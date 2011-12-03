@@ -1,9 +1,8 @@
 <?php
 /**
  * Convert string with european accent characters to flat ASCII
- * 
- * @author  Ondřej Machulda <ondrej.machulda@gmail.com>
  *
+ * @license GNU General Public License, version 2 or later (http://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
  */
 
 class GSAA_Filter_ASCII implements Zend_Filter_Interface
@@ -16,7 +15,8 @@ class GSAA_Filter_ASCII implements Zend_Filter_Interface
     }
     
     /**
-     * Convert string in UTF-8 with european accent characters to ASCII equivalent
+     * Convert string in UTF-8 with european accent characters to ASCII equivalent.
+     * Source: WordPress (wp-includes/formatting.php)
      * 
      * @param type $value
      * @return type 
