@@ -178,7 +178,9 @@ function initIndex() {
                 $.each(data.pois, function(key, poi) {
                     var itemContent = '<li id="' + poi.id + '"><a>' + poi.name + '</a>';
                     if (typeof poi.distance !== "undefined")
-                        itemContent  += ' <span>('  + poi.distance + ' m)</span>'
+                        itemContent  += ' <span>(<span class="distance">'  + poi.distance + '</span> m)</span>'
+                    if (typeof poi.relevance !== "undefined") // TODO
+                        itemContent  += ' <span class="hidden relevance">'  + poi.relevance + '</span>'
                     $.each(poi.types, function(i, type) {
                         itemContent  += '<img src="/images/icon-'
                                      + type
