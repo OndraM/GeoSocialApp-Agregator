@@ -61,7 +61,7 @@ class GSAA_Model_AggregatedPOI
         if ($field == 'address') return $this->_getAddress($params  );
         
         foreach ($this->getPois() as $poi) {
-            if (isset($poi->$field) && !is_null($poi->$field)) {
+            if (isset($poi->$field)) {
                 return $poi->$field;
             }
         }
@@ -78,7 +78,7 @@ class GSAA_Model_AggregatedPOI
         
         $array = array();
         foreach ($this->getPois() as $poi) {
-            if (isset($poi->$field) && !is_null($poi->$field)) {
+            if (isset($poi->$field)) {
                 if (is_array($poi->$field)) { // in case value consist of arrays => need to rearrange
                     foreach ($poi->$field as $fieldArray) {
                         $array[] = array($poi->type => $fieldArray);
