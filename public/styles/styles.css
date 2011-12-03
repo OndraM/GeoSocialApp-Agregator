@@ -208,6 +208,10 @@ form#addressform input[name=address] {
     text-align: left;
     padding: 1ex;
 }
+#detail h1 {
+    margin-top: .5em;
+    margin-bottom: .9em;
+}
 
 #detail-map {
     width: 350px;
@@ -220,6 +224,16 @@ form#addressform input[name=address] {
 #detail ul {
     margin-top: 0;
     padding-left: 2em;
+}
+
+#venue-categories {
+    float: right;
+    margin: .5ex 1ex .5ex 1ex;
+    height: 32px;
+}
+
+#venue-categories img {
+    margin-left: 1ex;
 }
 
 /* carousel */

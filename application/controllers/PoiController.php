@@ -95,6 +95,7 @@ class PoiController extends Zend_Controller_Action
         $this->view->values['photos']   = $aggregatedPOI->getFieldAll('photos');
         $this->view->values['tips']     = $aggregatedPOI->getFieldAll('tips');
         $this->view->values['notes']    = $aggregatedPOI->getFieldAll('notes');
+        $this->view->values['categories'] = $aggregatedPOI->getFieldAll('categories');
         $this->view->services = Zend_Registry::get('var')->services;
     }
     

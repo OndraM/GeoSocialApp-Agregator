@@ -1,4 +1,16 @@
 <div id="detail">
+<?php
+if (count($this->values['categories']) > 0) {
+    echo "<div id=\"venue-categories\">\n";
+    foreach ($this->values['categories'] as $categoryWrapper) {
+        $photo = current($categoryWrapper);
+        $type = key($categoryWrapper);
+        echo "<img title=\"{$photo["name"]} ({$this->services[$type]['name']})\" src=\"{$photo["icon"]}\" />";
+        // TODO: image with type and name in title
+    }
+    echo "</div>\n";
+}
+?>
 <h1><?=$this->escape($this->title);?></h1>
 <div id="detail-map"></div>
 <strong id="venue-source">Sources of venue data:</strong>
