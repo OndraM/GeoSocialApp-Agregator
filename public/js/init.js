@@ -175,8 +175,9 @@ function initIndex() {
                     && data.pois.length > 0) {
                 var listItems = [];
                 var mapItems = [];
+                var order = 0;
                 $.each(data.pois, function(key, poi) {
-                    var itemContent = '<li id="' + poi.id + '"><a>' + poi.name + '</a>';
+                    var itemContent = '<li id="' + poi.id + '"><a data-order="' + order++ + '">' + poi.name + '</a>';
                     if (typeof poi.distance !== "undefined")
                         itemContent  += ' <span>(<span class="distance">'  + poi.distance + '</span> m)</span>'
                     if (typeof poi.relevance !== "undefined") // TODO
@@ -198,6 +199,53 @@ function initIndex() {
                         html: listItems.join('')
                     })
                 );
+                $('#venues-list').prepend('<p id="sorter"><strong>Sort by:</strong> <a id="sort-services" class="active">default</a> &ndash; <a id="sort-distance">distance</a> &ndash; <a id="sort-alpha">alphabetically</a></p>');
+                
+                $('#sorter a').click(function() {
+                    var sortOpts = {};
+                    switch ($(this).attr('id')) {
+                        case 'sort-services':
+                            sortOpts = {
+                                sort_by: 'a',
+                                item: 'li',
+                                order: 'asc',
+                                sort_by_attr: true,
+                                attr_name: 'data-order',
+                                is_num: true
+                            };
+                            break;
+                        case 'sort-distance':
+                            sortOpts = {
+                                sort_by: 'span span',
+                                item: 'li',
+                                order: 'asc',
+                                is_num: true
+                            };
+                            break;
+                        case 'sort-alpha':
+                            sortOpts = {
+                                sort_by: 'a',
+                                item: 'li',
+                                order: 'asc'
+                            };
+                            break;
+                    }
+                    $("#venues-list ul").jSort(sortOpts);
+                    //$(this).removeAttr('href');
+                    $(this).addClass('active');
+                    
+                    $('#sorter a').not(this).removeClass('active');
+                    //$('#sorter a').not(this).attr('href', '#');
+                    
+                    /*$.each($("#venues-list ul li span"), function(i, type) {
+                        console.log(i);
+                        console.log($(this).attr('id'));
+                    })*/
+                    
+                   return false; 
+                });
+                
+                
                 addPoisOnMap(mapItems);
             } else {  // no pois found
                 // clear the previous ones

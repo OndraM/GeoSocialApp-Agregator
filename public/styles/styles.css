@@ -14,10 +14,10 @@ a:link, a:visited {
 	color: #00f;
 }
 a:hover {
-	color: #00a;
+	color: #00a !important;
 }
 a:active {
-	color: #008;
+	color: #008 !important;
 }
 
 a.external {
@@ -151,6 +151,19 @@ img.left {
 
 #venues-list p {
     padding-left: 2em;
+}
+
+#venues-list p#sorter {
+    margin-bottom: .5em; 
+}
+#venues-list p#sorter a {
+    color: #00f;
+    cursor: pointer;
+}
+
+#venues-list #sorter .active {
+    /*font-weight: bold;*/
+    color: #000;
 }
 
 /* Forms */
