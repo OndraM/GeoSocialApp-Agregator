@@ -3,9 +3,15 @@ if ($this->status) {
 ?>
 <script type="text/javascript">
     //<![CDATA[
-    window.close();
+    //window.close();
     //]]>
 </script>
-<?
+<?php
+} else {
+?>
+<p>Error ocured during authentication - maybe you denied access?</p>
+    
+<p>Close this window (or tab) and try again.</p>
+<?php
 }
 ?>

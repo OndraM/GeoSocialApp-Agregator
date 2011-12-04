@@ -261,6 +261,44 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
         
         return $poi;
     }
+    /**
+     * Request OAuth access token.
+     * 
+     * @param string $code OAuth code we got from service.
+     * @return string Token, or null if we dodn't obtain a proper token
+     */
+    
+    public function requestToken($code) {
+        $client = new Zend_Http_Client();
+        $queryParams = array(
+            'client_id'     => self::CLIENT_ID,
+            'client_secret' => self::CLIENT_SECRET,
+            'grant_type'    => 'authorization_code',
+            'redirect_uri'  => rawurldecode('http://gsaa.local/oauth/callback/service/' . self::TYPE), // TODO: get absolute url dynamically
+            'code'          => $code
+        );
+        $client->setUri(self::OAUTH_CALLBACK);
+        $client->setParameterGet($queryParams);
+
+        try {
+            $response = $client->request();
+        } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
+            return;
+        }   
+
+        // error in response
+        if ($response->isError()) {
+            return;
+        }
+
+        $result = Zend_Json::decode($response->getBody());
+
+        if (isset($result['access_token'])) {
+            $token = $result['access_token'];
+            return $token;
+        }
+        return;
+    }
     
     /**
      * Construct Zend_Http_Client object.

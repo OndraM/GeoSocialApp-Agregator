@@ -410,7 +410,6 @@ function initIndex() {
             $.getJSON('/oauth/is-authenticated/service/fq', function(response) {
                 
                 if (typeof response.status !== "undefined" && response.status == true) {
-                    console.log('Authenticated to foursquare!');
                     clearInterval(authLoop);
                     //$('#fq-connect img').remove();
                     $('#fq-connect').html('Connected to Foursquare!');
@@ -418,6 +417,7 @@ function initIndex() {
                 // TODO: omezit maximalni dobu cekani?
             });
         }, 1500);
+        
         
         return false;
     });

@@ -17,7 +17,7 @@ class OauthController extends Zend_Controller_Action
 
     public function callbackAction()
     {
-        $this->_helper->layout->disableLayout();
+        //$this->_helper->layout->disableLayout();
         //$this->_helper->viewRenderer->setNoRender();
         
         $services = Zend_Registry::get('var')->services;
@@ -26,49 +26,44 @@ class OauthController extends Zend_Controller_Action
         $code = $this->_getParam('code');        
         
         if (array_key_exists($service, $services)) {
-            $client = new Zend_Http_Client();
-            $queryParams = array(
-                'client_id'     => $services[$service]['model']::CLIENT_ID,
-                'client_secret' => $services[$service]['model']::CLIENT_SECRET,
-                'grant_type'    => 'authorization_code',
-                'redirect_uri'  => rawurldecode('http://gsaa.local/oauth/callback/service/' . $service),
-                'code'          => $code
-            );
-            $client->setUri($services[$service]['model']::OAUTH_CALLBACK);
-            $client->setParameterGet($queryParams);
+            $model = new $services[$service]['model']();
             
-            try {
-                $response = $client->request();
-            } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
-                return;
-            }   
-
-            // error in response
-            if ($response->isError()) {
-                // TODO: error handling!
-                return;
+            $token = $model->requestToken($code);
+            
+            if ($token) {            
+                $this->session->services[$service] = $token;
+                $this->view->status = true;
+            } else { // token not obtained
+                $this->view->status = false;
             }
-            
-            $result = Zend_Json::decode($response->getBody());
-            
-            $token = $result['access_token'];
-            $this->session->services[$service] = $token;
-            $this->view->status = true;
-           
-
         }
     }
     
     public function isAuthenticatedAction()
     {
-        /*$this->_helper->layout->disableLayout();
-        $this->_helper->viewRenderer->setNoRender();*/
+        
+        $services = Zend_Registry::get('var')->services;
         
         $service = $this->_getParam('service');
         $this->view->status = false;
         if (isset($this->session->services[$service])) {
-            // TODO: check token is stil valid
-            $this->view->status = true;
+            $client = new Zend_Http_Client();
+            $queryParams = array(
+                'oauth_token'   => $this->session->services[$service],
+            );
+            $client->setUri($services[$service]['model']::SERVICE_URL . '/users/self/checkins');
+            $client->setParameterGet($queryParams);
+            
+            try {
+                $response = $client->request();
+            } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
+                // $this->view->status = false; // false by default
+                return;
+            }   
+            if ($response->isSuccessful()) {
+                $this->view->status = true;                
+            }
+            
         }
     }
     
