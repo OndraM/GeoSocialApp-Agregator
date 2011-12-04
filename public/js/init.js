@@ -402,19 +402,31 @@ function initIndex() {
     initIndexMap();
     //doGeolocate(); // commented just for testing purposes // TODO uncomment
     
-    $('#oauth-wrapper #fq-connect').click(function() {
+    // When clicked on connect buttons    
+    $('#oauth-wrapper #fq-connect a').live('click', function() {
+        var origHtml = $('#oauth-wrapper #fq-connect').html();
         $('img', this).attr('src', '../images/spinner.gif');
         var authWindow = window.open(this.href);
+        if (window.focus) {
+            authWindow.focus();
+        }
         
+        var loopCounter = 0;
         var authLoop = setInterval(function() {
+            // TODO: check if request is already running and skip
             $.getJSON('/oauth/is-authenticated/service/fq', function(response) {
-                
                 if (typeof response.status !== "undefined" && response.status == true) {
                     clearInterval(authLoop);
-                    //$('#fq-connect img').remove();
-                    $('#fq-connect').html('Connected to Foursquare!');
+                    $('#fq-connect').html('<img src="../images/icon-fq.png" class="icon-left" /> connected');
                 }
-                // TODO: omezit maximalni dobu cekani?
+                if (typeof authWindow === "undefined" || authWindow.closed // window has been closed
+                    || loopCounter > 50)  // to many loops, dont't wait anymore
+                {
+                    clearInterval(authLoop);
+                    $('#oauth-wrapper #fq-connect').html(origHtml);
+                }
+                console.log(loopCounter);
+                loopCounter++;
             });
         }, 1500);
         

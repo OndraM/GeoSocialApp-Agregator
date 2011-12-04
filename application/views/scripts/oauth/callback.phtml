@@ -1,17 +1,16 @@
 <?php
 if ($this->status) {
-?>
-<script type="text/javascript">
-    //<![CDATA[
-    //window.close();
-    //]]>
-</script>
-<?php
+    $this->script('window.close();');
 } else {
 ?>
 <p>Error ocured during authentication - maybe you denied access?</p>
     
-<p>Close this window (or tab) and try again.</p>
+<p><a href="#" class="close">Close</a> this window (or tab) and try again.</p>
 <?php
+$this->script("
+$('.close').click(function() {
+    window.close();
+});
+");
 }
 ?>
