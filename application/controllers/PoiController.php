@@ -16,8 +16,7 @@ class PoiController extends Zend_Controller_Action
             $this->_serviceModels[$serviceId] = new $classname();
         }
         
-        $ajaxContext = $this->_helper->getHelper('AjaxContext');
-        
+        $ajaxContext = $this->_helper->getHelper('AjaxContext');        
         $ajaxContext->addActionContext('get-nearby', 'json')
                     ->initContext();
     }

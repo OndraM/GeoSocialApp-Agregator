@@ -167,6 +167,17 @@ img.left {
     color: #000 !important;
 }
 
+#oauth-wrapper {
+    clear: both;
+    margin: 1ex 0;
+    height: 25px;
+}
+#oauth-wrapper a {
+    display: inline-block;
+    width: 160px;
+    text-align: center;
+}
+
 /* Forms */
 form fieldset {
     border: 1px solid #ccc;

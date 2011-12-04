@@ -4,6 +4,8 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
 {
     const SERVICE_URL = 'https://api.foursquare.com/v2';
     const PUBLIC_URL = 'https://foursquare.com';
+    const OAUTH_URL = 'https://foursquare.com/oauth2/authenticate';
+    const OAUTH_CALLBACK = 'https://foursquare.com/oauth2/access_token';
     const CLIENT_ID = 'QJ52TX1UJUBCPJ3DMOWS52I5MK5WJTDD3ZGCDFFWHWISUQ3K';
     const CLIENT_SECRET = 'XFCVWF3HNGWVQWZJQC32ZMYBUHTGNKFR4IKJUHMYJNE2ZFDW';
     const LIMIT = 30;
