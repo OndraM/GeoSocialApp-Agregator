@@ -3,7 +3,7 @@
             <legend>Search nearby venues</legend>
             <label>Latitude: <input type="text" name="lat" value="<?=Zend_Registry::get('var')->defaultLat;?>" /></label>
             <label>Longitude: <input type="text" name="long" value="<?=Zend_Registry::get('var')->defaultLong;?>" /></label>
-            <label title="Average radius of venue search.">Radius: <input type="text" name="radius" value="<?=Zend_Registry::get('var')->defaultRadius;?>" /></label>
+            <label title="Average radius of venue search.">Radius [m]: <input type="text" name="radius" value="<?=Zend_Registry::get('var')->defaultRadius;?>" /></label>
             <div id="search-services" title="Select services, which you want to include in venue search.">
                 Search in: 
 <?php
@@ -40,7 +40,6 @@ foreach(Zend_Registry::get('var')->services as $serviceId => $service) {
         <div id="venues-list">
         </div>
     </div>
-    <!-- TODO: load by ajax, verify whether user is already signed in -->
     <div id="oauth-wrapper">
         <div id="fq-connect">
             <a href="<?="https://foursquare.com/oauth2/authenticate?client_id=" . GSAA_Model_LBS_Foursquare::CLIENT_ID . "&response_type=code&redirect_uri=" . rawurldecode('http://gsaa.local/oauth/callback/service/fq');?>" title="Sign in to Foursquare">

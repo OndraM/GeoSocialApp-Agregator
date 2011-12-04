@@ -125,12 +125,13 @@ img.left {
 }
 #venues-map {
     border: 1px solid black;
-    width: 550px;
+    width: 548px;
     height: 450px;
     float: left;
 }
 
 #venues-list {
+    width: 450px;
     margin-left: 550px;
     height: 450px;
     overflow: auto;
@@ -187,10 +188,11 @@ img.left {
 /* Forms */
 form fieldset {
     border: 1px solid #ccc;
+    padding: 3px 5px 6px;
 }
 
 form#searchform, form#addressform {
-    height: 9em;
+    /*height: 9em;*/
 }
 form#searchform {
     width: 63%;
@@ -198,8 +200,8 @@ form#searchform {
 }
 
 form#searchform input[name=lat], form#searchform input[name=long] {
-    width: 11ex;
-    margin-right: .75ex;
+    width: 10ex;
+    margin-right: .65ex;
 }
 form#searchform input[name=radius] {
     width: 6ex;
@@ -252,6 +254,8 @@ form#addressform input[name=address] {
 
 #venue-categories img {
     margin-left: 1ex;
+    max-width: 32px;
+    max-height: 32px;
 }
 
 /* carousel */
@@ -335,11 +339,15 @@ ul#photos-carousel {
 
 form#searchform #search-services .ui-button-text {
     line-height: .9;
-    padding: .2em .5em;
+    padding: .2em .35em;
 }
 input.ui-button {
     padding: 0.15em 1em;
     background-image: none;
+}
+
+.ui-buttonset {
+    margin-right: 5px;
 }
 
 /* Google Maps CSS overrides */
