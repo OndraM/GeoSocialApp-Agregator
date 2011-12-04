@@ -39,6 +39,10 @@ class OauthController extends Zend_Controller_Action
         }
     }
     
+    /**
+     * Check whether user is authenticated and token is valid
+     */
+    
     public function isAuthenticatedAction()
     {
         $services = Zend_Registry::get('var')->services;
@@ -46,23 +50,8 @@ class OauthController extends Zend_Controller_Action
         $service = $this->_getParam('service');
         $this->view->status = false;
         if (isset($this->session->services[$service])) {
-            $client = new Zend_Http_Client();
-            $queryParams = array(
-                'oauth_token'   => $this->session->services[$service],
-            );
-            $client->setUri($services[$service]['model']::SERVICE_URL . '/users/self/checkins');
-            $client->setParameterGet($queryParams);
-            
-            try {
-                $response = $client->request();
-            } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
-                // $this->view->status = false; // false by default
-                return;
-            }   
-            if ($response->isSuccessful()) {
-                $this->view->status = true;                
-            }
-            
+            $model = new $services[$service]['model']();
+            $this->view->status = $model->checkToken($this->session->services[$service]);
         }
     }
     

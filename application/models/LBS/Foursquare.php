@@ -6,6 +6,7 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
     const PUBLIC_URL = 'https://foursquare.com';
     const OAUTH_URL = 'https://foursquare.com/oauth2/authenticate';
     const OAUTH_CALLBACK = 'https://foursquare.com/oauth2/access_token';
+    const OAUTH_CHECK = 'https://api.foursquare.com/v2/users/self/checkins';
     const CLIENT_ID = 'QJ52TX1UJUBCPJ3DMOWS52I5MK5WJTDD3ZGCDFFWHWISUQ3K';
     const CLIENT_SECRET = 'XFCVWF3HNGWVQWZJQC32ZMYBUHTGNKFR4IKJUHMYJNE2ZFDW';
     const LIMIT = 30;
@@ -261,13 +262,13 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
         
         return $poi;
     }
+    
     /**
      * Request OAuth access token.
      * 
      * @param string $code OAuth code we got from service.
      * @return string Token, or null if we dodn't obtain a proper token
-     */
-    
+     */    
     public function requestToken($code) {
         $client = new Zend_Http_Client();
         $queryParams = array(
@@ -298,6 +299,31 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
             return $token;
         }
         return;
+    }
+    
+    /**
+     *  Check if token is still valid in service
+     * 
+     * @param string $token OAuth token
+     * @return bool Whether token is still valid in service
+     */    
+    public function checkToken($token) {
+        $client = new Zend_Http_Client();
+        $queryParams = array(
+            'oauth_token'   => $token,
+        );
+        $client->setUri(self::OAUTH_CHECK); // TODO: url do konstanty?
+        $client->setParameterGet($queryParams);
+
+        try {
+            $response = $client->request();
+        } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
+            return false;
+        }   
+        if ($response->isSuccessful()) {
+            return true;
+        }
+        return false;
     }
     
     /**
