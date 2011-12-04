@@ -113,10 +113,15 @@ if (count($this->values['notes']) > 0) {
     echo $this->listValuesArray($this->values['notes'], 'notes', false);
 }
 ?>
-
-    <div id="footer">
-        This website uses the foursquare® application programming interface but is not endorsed or certified by Foursquare Labs, Inc. All of the foursquare® logos (including all badges) and trademarks displayed on this website are the property of Foursquare Labs, Inc.
-    </div>
+<?php
+if (in_array('fq', $this->serviceParams)) {
+?>
+<div id="footer">
+    This website uses the foursquare® application programming interface but is not endorsed or certified by Foursquare Labs, Inc. All of the foursquare® logos (including all badges) and trademarks displayed on this website are the property of Foursquare Labs, Inc.
+</div>
+<?php
+}
+?>
 
 </div>
 <?php
