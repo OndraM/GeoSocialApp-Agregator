@@ -110,12 +110,13 @@ img.left {
     clear: both;
     margin-top: 2em;
     color: #aaa;
-    display: none; /* Don't display in testing environment */
+    font-size: 90%;
 }
 
 
 #content {
     padding: 0 1em;
+    width: 100%;
 }
 
 #venues-wrapper {
