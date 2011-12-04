@@ -41,7 +41,6 @@ class OauthController extends Zend_Controller_Action
     
     public function isAuthenticatedAction()
     {
-        
         $services = Zend_Registry::get('var')->services;
         
         $service = $this->_getParam('service');

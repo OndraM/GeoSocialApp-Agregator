@@ -232,7 +232,8 @@ var mapCenterImage = './images/pointer-small.png';
 var mapCenterTimeout;
 var getNearbyUrl = '/poi/get-nearby';
 var infoWindow;
-var xhrRequest;
+var xhrVenues;
+var xhrConnect = [];
 
 /*
  * Init main page:
@@ -242,14 +243,14 @@ var xhrRequest;
  */
 function initIndex() {
     $.ajaxSetup({
-        "error": function(jqXHR, textStatus, errorThrown) {
+        /*"error": function(jqXHR, textStatus, errorThrown) {
             if (textStatus == 'abort') { // don't throw error when xhr request aborted from client side
                return;
             }
             toggleVenuesLoading(true);
             // show error message
             $('#venues-list').html('<p>Sorry, there was an error loading your request :-(.</p>');
-        },
+        },*/
             timeout: 60000 // set timeout to 60 seconds
     });
 
@@ -262,14 +263,22 @@ function initIndex() {
         $('#searchform input[type=submit]').stop().css({backgroundColor: "#F6F6F6"});
         
         // check whether xhrRequest isn't already running
-        if (xhrRequest && xhrRequest.readyState != 4){
-            xhrRequest.abort(); // if so, abort it first
+        if (xhrVenues && xhrVenues.readyState != 4){
+            xhrVenues.abort(); // if so, abort it first
         }
         
         // do the xhr request itself
-        xhrRequest = $.ajax({
+        xhrVenues = $.ajax({
             url: getNearbyUrl + '?' + $('#searchform input').serialize(),
             dataType: 'json'})
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            if (textStatus == 'abort') { // don't throw error when xhr request aborted from client side
+               return;
+            }
+            toggleVenuesLoading(true);
+            // show error message
+            $('#venues-list').html('<p>Sorry, there was an error loading your request :-(.</p>');
+        })
         .done(function(data) {
             // got result; don't show venues loading anymore
             toggleVenuesLoading(true);
@@ -413,19 +422,28 @@ function initIndex() {
         
         var loopCounter = 0;
         var authLoop = setInterval(function() {
-            // TODO: check if request is already running and skip
-            $.getJSON('/oauth/is-authenticated/service/fq', function(response) {
+            // check whether xhrRequest isn't already running
+            if (xhrConnect['fq'] && xhrConnect['fq'].readyState != 4){
+                console.log('Already running xhrConnect')
+                return; // dont't execute another one!
+            }
+            xhrConnect['fq'] = $.ajax({
+                url: '/oauth/is-authenticated/service/fq',
+                dataType: 'json'})
+            .fail(function() {
+                clearInterval(authLoop);
+                $('#oauth-wrapper #fq-connect').html(origHtml);
+            })
+            .done(function(response) {
                 if (typeof response.status !== "undefined" && response.status == true) {
                     clearInterval(authLoop);
                     $('#fq-connect').html('<img src="../images/icon-fq.png" class="icon-left" /> connected');
-                }
-                if (typeof authWindow === "undefined" || authWindow.closed // window has been closed
+                } else if (typeof authWindow === "undefined" || authWindow.closed // window has been closed
                     || loopCounter > 50)  // to many loops, dont't wait anymore
                 {
                     clearInterval(authLoop);
                     $('#oauth-wrapper #fq-connect').html(origHtml);
                 }
-                console.log(loopCounter);
                 loopCounter++;
             });
         }, 1500);
