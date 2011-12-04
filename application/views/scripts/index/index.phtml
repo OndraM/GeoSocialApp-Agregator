@@ -11,7 +11,7 @@ foreach(Zend_Registry::get('var')->services as $serviceId => $service) {
 ?>
                 <input type="checkbox" name="<?=$serviceId;?>" id="service-<?=$serviceId;?>" checked />
                 <label for="service-<?=$serviceId;?>" title="Include <?=$service['name'];?> in search results">
-                        <img src="<?=$this->baseUrl();?>/images/icon-<?=$serviceId;?>.png" alt="fq"/>
+                        <img src="<?=$this->baseUrl();?>/images/icon-<?=$serviceId;?>.png" alt="<?=$serviceId;?>"/>
                         <img src="<?=$this->baseUrl();?>/images/icon-<?=$serviceId;?>-disabled.png" class="hidden" alt="<?=$serviceId;?>"/>
                 </label>
 <?

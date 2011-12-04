@@ -170,12 +170,13 @@ img.left {
 #oauth-wrapper {
     clear: both;
     margin: 1ex 0;
-    height: 25px;
+    height: 24px;
 }
 #oauth-wrapper div {
-    display: inline-block;
+    float: left;
     width: 160px;
     text-align: center;
+    line-height: 24px;
 }
 #oauth-wrapper a {
     display: inline-block;
