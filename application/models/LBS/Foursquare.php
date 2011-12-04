@@ -19,7 +19,6 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
     
     public function init() {
         // TODO: set client properties?
-        ;
     }
 
     /**
@@ -342,6 +341,7 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
         $queryParams['client_id'] = self::CLIENT_ID;
         $queryParams['client_secret'] = self::CLIENT_SECRET;
         $queryParams['v'] = self::DATEVERIFIED;
+        if (!empty($this->_oauthToken)) $queryParams['oauth_token'] = $this->_oauthToken;
         
         // set client options
         $client->setUri(self::SERVICE_URL . $endpoint);
