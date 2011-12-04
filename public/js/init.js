@@ -411,6 +411,10 @@ function initIndex() {
     initIndexMap();
     //doGeolocate(); // commented just for testing purposes // TODO uncomment
     
+    // Initial check of already connected services (with delay, to lower server load)
+    setTimeout('initConnectionsCheck()', 1000);
+    
+    
     // When clicked on connect buttons    
     $('#oauth-wrapper #fq-connect a').live('click', function() {
         var origHtml = $('#oauth-wrapper #fq-connect').html();
@@ -424,7 +428,6 @@ function initIndex() {
         var authLoop = setInterval(function() {
             // check whether xhrRequest isn't already running
             if (xhrConnect['fq'] && xhrConnect['fq'].readyState != 4){
-                console.log('Already running xhrConnect')
                 return; // dont't execute another one!
             }
             xhrConnect['fq'] = $.ajax({
@@ -450,6 +453,31 @@ function initIndex() {
         
         
         return false;
+    });
+}
+
+/**
+ * Initial check fore services, which are already connected and don need
+ * to ask user for connection
+ */
+function initConnectionsCheck() {
+    var origHtml = $('#oauth-wrapper #fq-connect').html();
+    $('#oauth-wrapper #fq-connect img').attr('src', '../images/spinner.gif');
+    /*if (xhrConnect['fq'] && xhrConnect['fq'].readyState != 4){
+        return; // dont't execute another one!
+    }*/
+    $.ajax({
+        url: '/oauth/is-authenticated/service/fq',
+        dataType: 'json'})
+    .fail(function() {
+        $('#oauth-wrapper #fq-connect').html(origHtml);
+    })
+    .done(function(response) {
+        if (typeof response.status !== "undefined" && response.status == true) {
+            $('#fq-connect').html('<img src="../images/icon-fq.png" class="icon-left" /> connected');
+        } else {
+            $('#oauth-wrapper #fq-connect').html(origHtml);            
+        }
     });
 }
 

@@ -40,7 +40,7 @@ class OauthController extends Zend_Controller_Action
     }
     
     /**
-     * Check whether user is authenticated and token is valid
+     * Check whether user is authenticated and token is valid.
      */
     
     public function isAuthenticatedAction()
@@ -52,9 +52,11 @@ class OauthController extends Zend_Controller_Action
         if (isset($this->session->services[$service])) {
             $model = new $services[$service]['model']();
             $this->view->status = $model->checkToken($this->session->services[$service]);
+            if (!$this->view->status) { // clear token from session, as it is not valid
+                unset($this->session->services[$service]);
+            }
         }
-    }
-    
+    }    
     
     /**
      * Destroy session
