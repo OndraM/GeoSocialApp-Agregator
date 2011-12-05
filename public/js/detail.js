@@ -54,7 +54,7 @@ function initDetail(markers) {
         return false;
     });
     // hide tooltip photo on mouse leave
-    $('#photos-carousel li a').mouseleave(function() {
+    $('#photos-carousel li a').mouseout(function() {
         $(this).tipsy('hide');
     });
     

@@ -302,6 +302,7 @@ ul#photos-carousel {
 }
 .photo-tooltip-image img {
     height: 210px;
+    max-width: 320px;
 }
 .photo-tooltip-title {
     position: absolute;
