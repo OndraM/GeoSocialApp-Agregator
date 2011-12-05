@@ -24,10 +24,9 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
      * @param double $long Longitude
      * @param int    $radius Radius to search
      * @param string $term Search term
-     * @param string $category Category id (TODO)
      * @return array Array of GSAA_Model_POI
      */
-    public function getNearbyVenues($lat, $long, $radius, $term = null, $category = null) {
+    public function getNearbyVenues($lat, $long, $radius, $term = null) {
         $endpoint = '/spots';
         if ($radius > self::RADIUS_MAX) {
             $radius = self::RADIUS_MAX;
@@ -41,7 +40,6 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
                                         array(  'lat'            => $lat,
                                                 'lng'           => $long,
                                                 'q'              => $term,
-                                                // 'categoryId'    => $category // TODO category mapping
                                                 'radius'        => ($radius > 0 ? $radius : self::RADIUS)
                                             ));
         try {
@@ -274,7 +272,6 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
         }
 
         $result = Zend_Json::decode($response->getBody());
-        d($result);
         if (isset($result['access_token'])) {
             $token = $result['access_token'];
             return $token;

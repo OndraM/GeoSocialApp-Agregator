@@ -79,10 +79,9 @@ abstract class GSAA_Model_LBS_Abstract
      * @param double $long Longitude
      * @param int    $radius Radius to search
      * @param string $term Search term
-     * @param string $category Category id
      * @return array Array of GSAA_Model_POI
      */
-    abstract public function getNearbyVenues($x, $y, $radius, $term = null, $category = null);
+    abstract public function getNearbyVenues($x, $y, $radius, $term = null);
     
     
     /**

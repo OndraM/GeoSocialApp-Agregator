@@ -157,9 +157,7 @@ class GSAA_Model_AggregatedPOI
      * Lat and Lng of at least one POI must be set.
      * 
      * @return string Address, location or geographical name
-     */
-    
-    
+     */    
     protected function _doReverseGeocoding() {
         if (!$this->getField('lat') || !$this->getField('lng')) return;
         

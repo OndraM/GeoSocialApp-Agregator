@@ -87,14 +87,14 @@ class GSAA_Model_POI
     public $photos    = array();
     
     /*
-     *  Array of notes (optional).
+     * Array of notes (optional).
      * Structure:
      *      array[] = note
      */
     public $notes    = array();
     
     /*
-     *  Array of categories (optional).
+     * Array of categories (optional).
      * Available only in POI detail.
      * Structure:
      *      array(

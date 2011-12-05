@@ -28,10 +28,9 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
      * @param double $long Longitude
      * @param int    $radius Radius to search
      * @param string $term Search term
-     * @param string $category Category id (TODO)
      * @return array Array of GSAA_Model_POI
      */
-    public function getNearbyVenues($lat, $long, $radius, $term = null, $category = null) {
+    public function getNearbyVenues($lat, $long, $radius, $term = null) {
         $endpoint = '/venues/search';
         if ($radius > self::RADIUS_MAX) {
             $radius = self::RADIUS_MAX;
@@ -44,7 +43,7 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
         $client = $this->_constructClient($endpoint,
                                         array(  'll'            => "$lat,$long",
                                                 'query'         => $term,
-                                                // 'categoryId'    => $category // TODO category mapping
+                                                'intent'        => 'checkin', // other possible values: browse, match
                                                 'limit'         => $limit,
                                                 'radius'        => ($radius > 0 ? $radius : self::RADIUS)
                                             ));
@@ -291,7 +290,6 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
         }
 
         $result = Zend_Json::decode($response->getBody());
-
         if (isset($result['access_token'])) {
             $token = $result['access_token'];
             return $token;

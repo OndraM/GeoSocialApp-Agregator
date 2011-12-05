@@ -22,10 +22,9 @@ class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
      * @param double $long Longitude
      * @param int    $radius Radius to search
      * @param string $term Search term
-     * @param string $category Category id (TODO)
      * @return array Array of GSAA_Model_POI
      */
-    public function getNearbyVenues($lat, $long, $radius, $term = null, $category = null) {
+    public function getNearbyVenues($lat, $long, $radius, $term = null) {
         $endpoint = '/place/search/json';
         if ($radius > self::RADIUS_MAX) {
             $radius = self::RADIUS_MAX;
@@ -38,7 +37,6 @@ class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
         $client = $this->_constructClient($endpoint,
                                         array(  'location'      => "$lat,$long",
                                                 'name'          => $term,
-                                                // 'categoryId'    => $category // TODO category mapping
                                                 'types'         => 'establishment',
                                                 'radius'        => (($radius > 0 ? $radius : self::RADIUS)*2/3) // get only 2/3 of radius, to get better results
                                             ));
