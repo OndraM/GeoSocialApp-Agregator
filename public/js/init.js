@@ -416,8 +416,10 @@ function initIndex() {
     
     
     // When clicked on connect buttons    
-    $('#oauth-wrapper #fq-connect a').live('click', function() {
-        var origHtml = $('#oauth-wrapper #fq-connect').html();
+    $('#oauth-wrapper a').live('click', function() {
+        var type =  $(this).parent().attr('id').substr(0, 2);
+        var parent = $(this).parent();
+        var origHtml = parent.html();
         $('img', this).attr('src', '../images/spinner.gif');
         var authWindow = window.open(this.href);
         if (window.focus) {
@@ -427,25 +429,25 @@ function initIndex() {
         var loopCounter = 0;
         var authLoop = setInterval(function() {
             // check whether xhrRequest isn't already running
-            if (xhrConnect['fq'] && xhrConnect['fq'].readyState != 4){
+            if (xhrConnect[type] && xhrConnect[type].readyState != 4){
                 return; // dont't execute another one!
             }
-            xhrConnect['fq'] = $.ajax({
-                url: '/oauth/is-authenticated/service/fq',
+            xhrConnect[type] = $.ajax({
+                url: '/oauth/is-authenticated/service/' + type,
                 dataType: 'json'})
             .fail(function() {
                 clearInterval(authLoop);
-                $('#oauth-wrapper #fq-connect').html(origHtml);
+                parent.html(origHtml);
             })
             .done(function(response) {
                 if (typeof response.status !== "undefined" && response.status == true) {
                     clearInterval(authLoop);
-                    $('#fq-connect').html('<img src="../images/icon-fq.png" class="icon-left" /> connected');
+                    parent.html('<img src="../images/icon-' + type + '.png" alt="' + type + '" class="icon-left" /> connected');
                 } else if (typeof authWindow === "undefined" || authWindow.closed // window has been closed
                     || loopCounter > 50)  // to many loops, dont't wait anymore
                 {
                     clearInterval(authLoop);
-                    $('#oauth-wrapper #fq-connect').html(origHtml);
+                    parent.html(origHtml);
                 }
                 loopCounter++;
             });
@@ -461,23 +463,24 @@ function initIndex() {
  * to ask user for connection
  */
 function initConnectionsCheck() {
-    var origHtml = $('#oauth-wrapper #fq-connect').html();
-    $('#oauth-wrapper #fq-connect img').attr('src', '../images/spinner.gif');
-    /*if (xhrConnect['fq'] && xhrConnect['fq'].readyState != 4){
-        return; // dont't execute another one!
-    }*/
-    $.ajax({
-        url: '/oauth/is-authenticated/service/fq',
-        dataType: 'json'})
-    .fail(function() {
-        $('#oauth-wrapper #fq-connect').html(origHtml);
-    })
-    .done(function(response) {
-        if (typeof response.status !== "undefined" && response.status == true) {
-            $('#fq-connect').html('<img src="../images/icon-fq.png" class="icon-left" /> connected');
-        } else {
-            $('#oauth-wrapper #fq-connect').html(origHtml);            
-        }
+    $('#oauth-wrapper div[id$="connect"]').each(function() {
+        var type =  $(this).attr('id').substr(0, 2);
+        var element = $(this);
+        var origHtml = $(this).html();
+        $('img', this).attr('src', '../images/spinner.gif');
+        $.ajax({
+            url: '/oauth/is-authenticated/service/' + type,
+            dataType: 'json'})
+        .fail(function() {
+            element.html(origHtml);
+        })
+        .done(function(response) {
+            if (typeof response.status !== "undefined" && response.status == true) {                
+                element.html('<img src="../images/icon-fq.png" class="icon-left" /> connected');
+            } else {
+                element.html(origHtml);            
+            }
+        });
     });
 }
 
