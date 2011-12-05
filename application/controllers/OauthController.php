@@ -27,13 +27,13 @@ class OauthController extends Zend_Controller_Action
         
         if (array_key_exists($service, $services)) {
             $model = new $services[$service]['model']();
+            $this->view->serviceName = $services[$service]['name'];
             
-            $token = $model->requestToken($code);
-            
+            $token = $model->requestToken($code);            
             if ($token) {            
                 $this->session->services[$service] = $token;
                 $this->view->status = true;
-                //$this->_helper->layout->disableLayout(); // TODO: set layout to simple
+                $this->_helper->layout->setLayout('simple');
             } else { // token not obtained
                 $this->view->status = false;
             }

@@ -1,16 +1,25 @@
 <?php
 if ($this->status) {
-    $this->script('window.close();');
+?>
+<p>You have been successfully authenticated to <?=$this->serviceName;?>.</p>
+
+<p>You can now close this window, if this hasn't been done automatically.</p>
+<script type="text/javascript">
+	//<![CDATA[
+    window.close();
+	//]]>
+</script>
+<?php
 } else {
 ?>
-<p>Error occurred during authentication - maybe you denied access?</p>
+<p>Error occurred during authentication to <?=$this->serviceName;?> - maybe you denied access?</p>
     
 <p><a href="#" class="close">Close</a> this window (or tab) and try again.</p>
 <?php
-$this->script("
-$('.close').click(function() {
-    window.close();
-});
-");
+    $this->script("
+    $('.close').click(function() {
+        window.close();
+    });
+    ");
 }
 ?>

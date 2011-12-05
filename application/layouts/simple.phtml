@@ -1,0 +1,24 @@
+<?php echo $this->doctype() . "\n"?>
+<html>
+    <head>
+
+<?php
+    $this->headMeta()
+		->setCharset('utf-8');
+    
+    echo $this->headMeta() . "\n\n";
+    echo $this->headLink() . "\n\n";
+    echo $this->headScript() . "\n\n";
+    
+?>
+    <title><?php echo Zend_Registry::isRegistered('var') ? Zend_Registry::get('var')->sitename : "";?></title>
+
+    </head>
+    <body>
+
+        
+<?php echo $this->layout()->content; ?>
+
+        
+    </body>
+</html>
