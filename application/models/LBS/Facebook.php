@@ -181,6 +181,35 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
     }
     
     /**
+     * Request OAuth access token.
+     * 
+     * @param string $code OAuth code we got from service.
+     * @return string Token, or null if we didn't obtain a proper token
+     */    
+    public function requestToken($code) {
+        // TODO
+    }
+    
+    /**
+     *  Check if token is still valid in service
+     * 
+     * @param string $token OAuth token
+     * @return bool Whether token is still valid in service
+     */    
+    public function checkToken($token) {
+        // TODO
+    }
+    
+    /**
+     * Get details of signed in user.
+     * 
+     * @return array Array of user details
+     */    
+    public function getUserInfo() {
+        // TODO
+    }
+    
+    /**
      * Construct Zend_Http_Client object.
      * 
      * @param string $endpoint
