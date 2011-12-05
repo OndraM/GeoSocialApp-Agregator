@@ -90,8 +90,12 @@ function initDetailMap(markers) {
     var mapOptions = {
         zoom: 16,
         center: latlng,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-        // TODO: hide some control elements?
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        mapTypeControlOptions: {
+            // disable terrain map:
+            mapTypeIds: [google.maps.MapTypeId.ROADMAP, google.maps.MapTypeId.SATELLITE]
+
+        }
     };
     var map = new google.maps.Map(
         document.getElementById('detail-map'),
