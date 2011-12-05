@@ -243,18 +243,13 @@ var xhrConnect = [];
  */
 function initIndex() {
     $.ajaxSetup({
-        /*"error": function(jqXHR, textStatus, errorThrown) {
-            if (textStatus == 'abort') { // don't throw error when xhr request aborted from client side
-               return;
-            }
-            toggleVenuesLoading(true);
-            // show error message
-            $('#venues-list').html('<p>Sorry, there was an error loading your request :-(.</p>');
-        },*/
             timeout: 60000 // set timeout to 60 seconds
     });
 
+    // Init index forms, bind events except submit ones
+    initIndexForm();
 
+    // Bind sumit event to POI search form
     $('#searchform').submit(function() {
         // show ajax spinner
         toggleVenuesLoading();
@@ -376,17 +371,8 @@ function initIndex() {
         
         return false;
     });
-    
-    // when any text value is changed by manual user input, highlight submit button
-    $('#searchform input[type=text]').change(function() {
-        $('#searchform input[type=submit]').animate({backgroundColor: "#ffe45c"}, 500);
-    });
-    
-    // also when any checbox is clicked, highlight submit button
-    $('#searchform input[type=checkbox]').click(function() {
-        $('#searchform input[type=submit]').animate({backgroundColor: "#ffe45c"}, 500);
-    });    
-    
+
+    // Bind sumit event to address/loaction search form
     $('#addressform').submit(function() {
         geocoder.geocode({"address": $('#addressform input[name=address]').val()}, function(results, status) {
 			if (status == google.maps.GeocoderStatus.OK) {
@@ -406,14 +392,12 @@ function initIndex() {
 		});
         return false;
     });
-    
     $('#searchform').submit();
     initIndexMap();
     //doGeolocate(); // commented just for testing purposes // TODO uncomment
     
     // Initial check of already connected services (with delay, to lower server load)
-    setTimeout('initConnectionsCheck()', 1000);
-    
+    setTimeout('initConnectionsCheck()', 1000);    
     
     // When clicked on connect buttons    
     $('#oauth-wrapper a').live('click', function() {
@@ -451,10 +435,50 @@ function initIndex() {
                 }
                 loopCounter++;
             });
-        }, 1500);
-        
-        
+        }, 1500);        
         return false;
+    });
+}
+
+/**
+ * Reset state of search services buttons according to their UI state
+ */
+function resetSearchServicesState(element) {
+    if (element.hasClass('ui-state-active')) {
+        $('img:eq(0)', element).show();
+        $('img:eq(1)', element).hide();
+    } else {
+        $('img:eq(0)', element).hide();
+        $('img:eq(1)', element).show();
+    }
+}
+
+/**
+ * Initialize forms on index page, bind click etc. functions
+ */
+
+function initIndexForm() {
+    $('#search-services').buttonset();
+    $('form [type=submit]').button();
+
+    // when any text value is changed by manual user input, highlight submit button
+    $('#searchform input[type=text]').change(function() {
+        $('#searchform input[type=submit]').animate({backgroundColor: "#ffe45c"}, 500);
+    });
+
+    // also when any checbox is clicked, highlight submit button
+    $('#searchform input[type=checkbox]').click(function() {
+        $('#searchform input[type=submit]').animate({backgroundColor: "#ffe45c"}, 500);
+    });    
+
+    // toggle image on checbox checked
+    $('#search-services label').click(function(){
+        resetSearchServicesState($(this));
+    });
+
+    // initial state check? See issue #85.
+    $('#search-services label').each(function() {
+        resetSearchServicesState($(this))
     });
 }
 
@@ -475,10 +499,10 @@ function initConnectionsCheck() {
             element.html(origHtml);
         })
         .done(function(response) {
-            if (typeof response.status !== "undefined" && response.status == true) {                
+            if (typeof response.status !== "undefined" && response.status == true) {
                 element.html('<img src="../images/icon-' + type + '.png" alt="' + type + '" class="icon-left" alt /> connected');
             } else {
-                element.html(origHtml);            
+                element.html(origHtml);
             }
         });
     });
