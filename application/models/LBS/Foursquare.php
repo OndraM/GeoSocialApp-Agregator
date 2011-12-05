@@ -346,7 +346,6 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
         if ($result['meta']['code'] != 200) return;
         
         $entry = $result['response']['user'];
-        d($entry);
         $user = array(
             'name'      => $entry['firstName'] . ' ' . $entry['lastName'],
             'id'        => $entry['id'],
@@ -356,7 +355,7 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
     }
     
     public function getFriendsActivity() {
-        
+        // TODO
     }
     
     /**
