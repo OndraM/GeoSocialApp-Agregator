@@ -105,7 +105,7 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
         }
         return $pois;
     }
-    
+
     /**
      * Get full detail of venue.
      * 
@@ -258,6 +258,21 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
         }
         
         return $poi;
+    }
+
+    /**
+     * Get URL to OAuth authorize page for this service
+     *
+     * @return string Url to OAuth authorize page
+     */
+    public static function getAuthUrl() {
+        $queryString = http_build_query(
+            array(  'client_id'     => self::CLIENT_ID,
+                    'response_type' => 'code',
+                    'redirect_uri'  => 'http://gsaa.local/oauth/callback/service/' . self::TYPE // TODO: variable path?
+        ));
+        $url = self::OAUTH_URL . '?' . $queryString;
+        return $url;
     }
     
     /**

@@ -4,7 +4,7 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
 {
     const SERVICE_URL = 'https://graph.facebook.com';
     const PUBLIC_URL = 'https://facebook.com';
-    const OAUTH_URL = 'ttps://www.facebook.com/dialog/oauth';
+    const OAUTH_URL = 'https://www.facebook.com/dialog/oauth';
     const OAUTH_CALLBACK = 'https://graph.facebook.com/oauth/access_token';
     const OAUTH_CHECK = 'https://graph.facebook.com/me/';
     const CLIENT_ID = '110157905740540';
@@ -180,6 +180,22 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
         }
         
         return $poi;
+    }
+
+    /**
+     * Get URL to OAuth authorize page for this service
+     *
+     * @return string Url to OAuth authorize page
+     */
+    public static function getAuthUrl() {
+        $queryString = http_build_query(
+            array(  'client_id'     => self::CLIENT_ID,
+                    'response_type' => 'code',
+                    'redirect_uri'  => 'http://gsaa.local/oauth/callback/service/' . self::TYPE, // TODO: variable path?
+                    'scope'         => 'user_about_me,user_checkins,friends_checkins,publish_checkins,offline_access'
+        ));
+        $url = self::OAUTH_URL . '?' . $queryString;
+        return $url;
     }
     
     /**
