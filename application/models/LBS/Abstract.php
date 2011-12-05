@@ -3,13 +3,25 @@
 abstract class GSAA_Model_LBS_Abstract
 {
     /**
+     * Two-letter service shortcut (like "fq" for foursquare etc)
+     */
+    const TYPE = null;
+    /**
      * Url of service itself
      */
     const SERVICE_URL = null;
     /**
-     * Two-letter service shortcut (like "fq" for foursquare etc)
+     * URL of user access confirmation
      */
-    const TYPE = null;
+    const OAUTH_URL = null;
+    /**
+     * URL of OAuth callback to get access token
+     */
+    const OAUTH_CALLBACK = null;
+    /**
+     * URL where to check token is still valid
+     */
+    const OAUTH_CHECK = null;
     /**
      * Default radius for requesting venues if none set
      */
@@ -80,6 +92,29 @@ abstract class GSAA_Model_LBS_Abstract
      * @return array Array
      */
     abstract public function getDetail($id);
+    
+    /**
+     * Abstract funtion to request OAuth access token.
+     * 
+     * @param string $code OAuth code we got from service.
+     * @return string Token, or null if we didn't obtain a proper token
+     */    
+    abstract public function requestToken($code);
+    
+    /**
+     *  Abstract funtion to check if token is still valid in service.
+     * 
+     * @param string $token OAuth token
+     * @return bool Whether token is still valid in service
+     */    
+    abstract public function checkToken($token);
+    
+    /**
+     * Abstract funtion to get details of signed in user.
+     * 
+     * @return array Array of user details
+     */    
+    abstract public function getUserInfo();
     
     /**
      * Calculate distance between two coordinates. 
