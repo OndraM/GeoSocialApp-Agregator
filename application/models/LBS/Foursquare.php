@@ -36,14 +36,14 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
             $radius = self::RADIUS_MAX;
         }
         $limit = self::LIMIT_WITHOUT_FILTER;
-        if ($term || $category) {
+        if ($term) {
             $limit = self::LIMIT;
         }
 
         $client = $this->_constructClient($endpoint,
                                         array(  'll'            => "$lat,$long",
                                                 'query'         => $term,
-                                                'intent'        => 'checkin', // other possible values: browse, match
+                                                'intent'        => 'checkin', // other possible LIMIT_WITHOUT_FILTERvalues: browse, match
                                                 'limit'         => $limit,
                                                 'radius'        => ($radius > 0 ? $radius : self::RADIUS)
                                             ));
@@ -320,12 +320,12 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
         }
         return false;
     }
-    
+
     /**
      * Get details of signed in user.
-     * 
+     *
      * @return array Array of user details
-     */    
+     */
     public function getUserInfo() {
         $endpoint = '/users';
         $client = $this->_constructClient($endpoint . '/self');
@@ -350,7 +350,7 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
         );
         return $user;
     }
-    
+
     public function getFriendsActivity() {
         // TODO
     }

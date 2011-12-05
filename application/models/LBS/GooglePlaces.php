@@ -30,7 +30,7 @@ class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
             $radius = self::RADIUS_MAX;
         }
         $limit = self::LIMIT_WITHOUT_FILTER;
-        if ($term || $category) {
+        if ($term) {
             $limit = self::LIMIT;
         }
         

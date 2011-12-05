@@ -37,7 +37,7 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
             $radius = self::RADIUS_MAX;
         }
         $limit = self::LIMIT_WITHOUT_FILTER;
-        if ($term || $category) {
+        if ($term) {
             $limit = self::LIMIT;
         }
         
@@ -203,7 +203,7 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
             $response = $client->request('POST');
         } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
             return;
-        }   
+        }
 
         // error in response
         if ($response->isError()) {
@@ -229,14 +229,14 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
         $queryParams = array(
             'oauth_token'   => $token,
         );
-        $client->setUri(self::OAUTH_CHECK); 
+        $client->setUri(self::OAUTH_CHECK);
         $client->setParameterGet($queryParams);
 
         try {
             $response = $client->request();
         } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
             return false;
-        }   
+        }
         if ($response->isSuccessful()) {
             return true;
         }
@@ -254,11 +254,11 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
             $response = $client->request();
         } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
             return;
-        }        
+        }
         // error in response
         if ($response->isError()) return;
-        
-        $entry = Zend_Json::decode($response->getBody());     
+
+        $entry = Zend_Json::decode($response->getBody());
         $user = array(
             'name'      => $entry['name'],
             'id'        => $entry['id'],
@@ -278,7 +278,7 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
     
     protected function _constructClient($endpoint, $queryParams = array(), $clientConfig = array()) {
         $client = new Zend_Http_Client();
-        
+
         // when no ouath_token is set, and user has his own, try to use it
         if (!empty($this->_oauthToken) && !isset($queryParams['oauth_token'])) {
             $queryParams['oauth_token'] = $this->_oauthToken;
