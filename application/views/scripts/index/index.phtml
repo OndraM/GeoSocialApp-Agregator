@@ -31,7 +31,6 @@ foreach(Zend_Registry::get('var')->services as $serviceId => $service) {
             <input type="submit" value="Submit" />
         </fieldset>
     </form>
-    
 
     <div id="venues-wrapper">
         <div id="venues-map">
@@ -50,6 +49,12 @@ foreach(Zend_Registry::get('var')->services as $serviceId => $service) {
         <div id="gw-connect">
             <a href="<?="https://gowalla.com/api/oauth/new?client_id=" . GSAA_Model_LBS_Gowalla::CLIENT_ID . "&redirect_uri=http://gsaa.local/oauth/callback/service/gw";?>" title="Sign in to Gowalla">
                 <img src="<?=$this->baseUrl();?>/images/connect-gw.png" alt="Connect to Gowalla" />
+            </a>
+        </div>
+        
+        <div id="fb-connect">
+            <a href="<?="https://www.facebook.com/dialog/oauth?client_id=" . GSAA_Model_LBS_Facebook::CLIENT_ID . "&redirect_uri=http://gsaa.local/oauth/callback/service/fb";?>&scope=user_about_me,user_checkins,friends_checkins,publish_checkins,offline_access" title="Sign in to Facebook">
+                <img src="<?=$this->baseUrl();?>/images/connect-fb.png" alt="Connect to Facebook" />
             </a>
         </div>
     </div>
@@ -71,7 +76,5 @@ $('#search-services label').click(function() {
         $('img:eq(1)', this).show();
     }
 });
-
 ")
 ?>
-

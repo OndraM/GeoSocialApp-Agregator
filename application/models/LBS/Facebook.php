@@ -4,6 +4,9 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
 {
     const SERVICE_URL = 'https://graph.facebook.com';
     const PUBLIC_URL = 'https://facebook.com';
+    const OAUTH_URL = 'ttps://www.facebook.com/dialog/oauth';
+    const OAUTH_CALLBACK = 'https://graph.facebook.com/oauth/access_token';
+    const OAUTH_CHECK = 'https://graph.facebook.com/me/';
     const CLIENT_ID = '110157905740540';
     const CLIENT_SECRET = 'fc86a9bb2486f28f3e3866a5d8ff67ef';
     const ACCESS_TOKEN = '110157905740540|Pq1zptubbe1gq5L8hAL3aBswvPs';
@@ -41,9 +44,9 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
         
         $queryParams = array('type'     => 'place',
                              'center'   => "$lat,$long",                            
-                             // 'categoryId'    => $category // TODO category mapping
                              'limit'    => $limit,
-                             'distance' => ($radius > 0 ? $radius : self::RADIUS)
+                             'distance' => ($radius > 0 ? $radius : self::RADIUS),
+                             'access_token' => self::ACCESS_TOKEN // even if user has his own token, overwrite it with the app token here
                              );
         if ($term) {
             $queryParams['q'] = Zend_Filter::filterStatic($term, 'ASCII', array(), array('GSAA_Filter'));
@@ -187,7 +190,33 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
      * @return string Token, or null if we didn't obtain a proper token
      */    
     public function requestToken($code) {
-        // TODO
+        $client = new Zend_Http_Client();
+        $queryParams = array(
+            'client_id'     => self::CLIENT_ID,
+            'client_secret' => self::CLIENT_SECRET,
+            'redirect_uri'  => rawurldecode('http://gsaa.local/oauth/callback/service/' . self::TYPE), // TODO: get absolute url dynamically
+            'code'          => $code
+        );
+        $client->setUri(self::OAUTH_CALLBACK);
+        $client->setParameterGet($queryParams);
+
+        try {
+            $response = $client->request('POST');
+        } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
+            return;
+        }   
+
+        // error in response
+        if ($response->isError()) {
+            return;
+        }
+
+        parse_str($response->getBody(), $result);
+        if (isset($result['access_token'])) {
+            $token = $result['access_token'];
+            return $token;
+        }
+        return;
     }
     
     /**
@@ -197,7 +226,22 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
      * @return bool Whether token is still valid in service
      */    
     public function checkToken($token) {
-        // TODO
+        $client = new Zend_Http_Client();
+        $queryParams = array(
+            'oauth_token'   => $token,
+        );
+        $client->setUri(self::OAUTH_CHECK); 
+        $client->setParameterGet($queryParams);
+
+        try {
+            $response = $client->request();
+        } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
+            return false;
+        }   
+        if ($response->isSuccessful()) {
+            return true;
+        }
+        return false;
     }
     
     /**
@@ -206,7 +250,22 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
      * @return array Array of user details
      */    
     public function getUserInfo() {
-        // TODO
+        $client = $this->_constructClient('/me');
+        try {
+            $response = $client->request();
+        } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
+            return;
+        }        
+        // error in response
+        if ($response->isError()) return;
+        
+        $entry = Zend_Json::decode($response->getBody());     
+        $user = array(
+            'name'      => $entry['name'],
+            'id'        => $entry['id'],
+            'avatar'    => self::SERVICE_URL . '/' . $entry['username'] . '/picture'
+        );
+        return $user;
     }
     
     /**
@@ -221,8 +280,12 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
     protected function _constructClient($endpoint, $queryParams = array(), $clientConfig = array()) {
         $client = new Zend_Http_Client();
         
-        // add predefined params
-        $queryParams['access_token'] = self::ACCESS_TOKEN;
+        // when no ouath_token is set, and user has his own, try to use it
+        if (!empty($this->_oauthToken) && !isset($queryParams['oauth_token'])) {
+            $queryParams['oauth_token'] = $this->_oauthToken;
+        } else { // otherwise use APP token
+            $queryParams['access_token'] = self::ACCESS_TOKEN;
+        }
         
         // set client options
         $client->setUri(self::SERVICE_URL . $endpoint);

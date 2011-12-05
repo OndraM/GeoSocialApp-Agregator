@@ -70,4 +70,3 @@ class OauthController extends Zend_Controller_Action
 
 
 }
-
