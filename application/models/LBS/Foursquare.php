@@ -257,7 +257,6 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
         } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
             // keep tips empty
         }
-
         
         return $poi;
     }
@@ -266,7 +265,7 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
      * Request OAuth access token.
      * 
      * @param string $code OAuth code we got from service.
-     * @return string Token, or null if we dodn't obtain a proper token
+     * @return string Token, or null if we didn't obtain a proper token
      */    
     public function requestToken($code) {
         $client = new Zend_Http_Client();
@@ -323,6 +322,41 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
             return true;
         }
         return false;
+    }
+    
+    /**
+     * Get details of signed in user.
+     * 
+     * @return array Array of user details
+     */    
+    public function getUserInfo() {
+        $endpoint = '/users';
+        $client = $this->_constructClient($endpoint . '/self');
+        try {
+            $response = $client->request();
+        } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
+            return;
+        }
+        
+        // error in response
+        if ($response->isError()) return;
+        
+        $result = Zend_Json::decode($response->getBody());
+        // foursquare returned an error
+        if ($result['meta']['code'] != 200) return;
+        
+        $entry = $result['response']['user'];
+        d($entry);
+        $user = array(
+            'name'      => $entry['firstName'] . ' ' . $entry['lastName'],
+            'id'        => $entry['id'],
+            'avatar'    => $entry['photo']
+        );
+        return $user;
+    }
+    
+    public function getFriendsActivity() {
+        
     }
     
     /**
