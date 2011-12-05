@@ -149,32 +149,32 @@ class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
     }
     
     /**
-     * Request OAuth access token.
+     * Request OAuth access token. (not implemented)
      * 
      * @param string $code OAuth code we got from service.
      * @return string Token, or null if we didn't obtain a proper token
      */    
     public function requestToken($code) {
-        // TODO
+        return;
     }
     
     /**
-     *  Check if token is still valid in service
+     *  Check if token is still valid in service. (not implemented)
      * 
      * @param string $token OAuth token
      * @return bool Whether token is still valid in service
      */    
     public function checkToken($token) {
-        // TODO
+        return;
     }
     
     /**
-     * Get details of signed in user.
+     * Get details of signed in user. (not implemented)
      * 
      * @return array Array of user details
      */    
     public function getUserInfo() {
-        // TODO
+        return;
     }
     
     /**
