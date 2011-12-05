@@ -476,7 +476,7 @@ function initConnectionsCheck() {
         })
         .done(function(response) {
             if (typeof response.status !== "undefined" && response.status == true) {                
-                element.html('<img src="../images/icon-fq.png" class="icon-left" /> connected');
+                element.html('<img src="../images/icon-' + type + '.png" alt="' + type + '" class="icon-left" alt /> connected');
             } else {
                 element.html(origHtml);            
             }

@@ -6,7 +6,7 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
     const PUBLIC_URL = 'https://foursquare.com';
     const OAUTH_URL = 'https://foursquare.com/oauth2/authenticate';
     const OAUTH_CALLBACK = 'https://foursquare.com/oauth2/access_token';
-    const OAUTH_CHECK = 'https://api.foursquare.com/v2/users/self/checkins';
+    const OAUTH_CHECK = 'https://api.foursquare.com/v2/users/self';
     const CLIENT_ID = 'QJ52TX1UJUBCPJ3DMOWS52I5MK5WJTDD3ZGCDFFWHWISUQ3K';
     const CLIENT_SECRET = 'XFCVWF3HNGWVQWZJQC32ZMYBUHTGNKFR4IKJUHMYJNE2ZFDW';
     const LIMIT = 30;
@@ -310,9 +310,8 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
         $queryParams = array(
             'oauth_token'   => $token,
         );
-        $client->setUri(self::OAUTH_CHECK); // TODO: url do konstanty?
+        $client->setUri(self::OAUTH_CHECK); 
         $client->setParameterGet($queryParams);
-
         try {
             $response = $client->request();
         } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible

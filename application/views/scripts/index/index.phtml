@@ -48,7 +48,7 @@ foreach(Zend_Registry::get('var')->services as $serviceId => $service) {
         </div>
         
         <div id="gw-connect">
-            <a href="<?="https://FIXME?client_id=" . GSAA_Model_LBS_Gowalla::CLIENT_ID . "&response_type=code&redirect_uri=http://gsaa.local/oauth/callback/service/fq";?>" title="Sign in to Gowalla">
+            <a href="<?="https://gowalla.com/api/oauth/new?client_id=" . GSAA_Model_LBS_Gowalla::CLIENT_ID . "&redirect_uri=http://gsaa.local/oauth/callback/service/gw";?>" title="Sign in to Gowalla">
                 <img src="<?=$this->baseUrl();?>/images/connect-gw.png" alt="Connect to Gowalla" />
             </a>
         </div>

@@ -4,6 +4,9 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
 {
     const SERVICE_URL = 'http://api.gowalla.com';
     const PUBLIC_URL = 'https://gowalla.com';
+    const OAUTH_URL = 'https://gowalla.com/api/oauth/new';
+    const OAUTH_CALLBACK = 'https://gowalla.com/api/oauth/token';
+    const OAUTH_CHECK = 'http://api.gowalla.com/users/me';
     const CLIENT_ID = '6f695b01d109467b9515c1d7457377bc';
     const CLIENT_SECRET = 'b31113a8961d41b19040a2d4b4fc01a1';
     const LIMIT = 30;
@@ -248,7 +251,35 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
      * @return string Token, or null if we didn't obtain a proper token
      */    
     public function requestToken($code) {
-        // TODO
+        $client = new Zend_Http_Client();
+        $queryParams = array(
+            'client_id'     => self::CLIENT_ID,
+            'client_secret' => self::CLIENT_SECRET,
+            'grant_type'    => 'authorization_code',
+            'redirect_uri'  => rawurldecode('http://gsaa.local/oauth/callback/service/' . self::TYPE), // TODO: get absolute url dynamically
+            'code'          => $code
+        );
+        $client->setUri(self::OAUTH_CALLBACK);
+        $client->setParameterGet($queryParams);
+
+        try {
+            $response = $client->request('POST');
+        } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
+            return;
+        }   
+
+        // error in response
+        if ($response->isError()) {
+            return;
+        }
+
+        $result = Zend_Json::decode($response->getBody());
+        d($result);
+        if (isset($result['access_token'])) {
+            $token = $result['access_token'];
+            return $token;
+        }
+        return;
     }
     
     /**
@@ -258,7 +289,22 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
      * @return bool Whether token is still valid in service
      */    
     public function checkToken($token) {
-        // TODO
+        $client = new Zend_Http_Client();
+        $queryParams = array(
+            'oauth_token'   => $token,
+        );
+        $client->setUri(self::OAUTH_CHECK); 
+        $client->setParameterGet($queryParams);
+
+        try {
+            $response = $client->request('HEAD');
+        } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
+            return false;
+        }   
+        if ($response->isSuccessful()) {
+            return true;
+        }
+        return false;
     }
     
     /**

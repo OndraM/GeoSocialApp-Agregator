@@ -23,7 +23,7 @@ class OauthController extends Zend_Controller_Action
         $services = Zend_Registry::get('var')->services;
         
         $service = $this->_getParam('service');
-        $code = $this->_getParam('code');        
+        $code = $this->_getParam('code');
         
         if (array_key_exists($service, $services)) {
             $model = new $services[$service]['model']();
@@ -33,6 +33,7 @@ class OauthController extends Zend_Controller_Action
             if ($token) {            
                 $this->session->services[$service] = $token;
                 $this->view->status = true;
+                //$this->_helper->layout->disableLayout(); // TODO: set layout to simple
             } else { // token not obtained
                 $this->view->status = false;
             }
@@ -41,8 +42,7 @@ class OauthController extends Zend_Controller_Action
     
     /**
      * Check whether user is authenticated and token is valid.
-     */
-    
+     */    
     public function isAuthenticatedAction()
     {
         $services = Zend_Registry::get('var')->services;
