@@ -313,7 +313,26 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
      * @return array Array of user details
      */    
     public function getUserInfo() {
-        // TODO
+        $endpoint = '/users';
+        $client = $this->_constructClient($endpoint . '/me');
+        try {
+            $response = $client->request();
+        } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
+            return;
+        }
+        
+        // error in response
+        if ($response->isError()) return;
+        
+        $entry = Zend_Json::decode($response->getBody());
+        //$entry = $result['response']['user'];
+        $urlExploded    = explode('/',  $entry['url']);
+        $user = array(
+            'name'      => $entry['first_name'] . ' ' . $entry['last_name'],
+            'id'        => $urlExploded[2],
+            'avatar'    => $entry['image_url']
+        );
+        return $user;
     }
     
     /**
@@ -328,9 +347,11 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
     protected function _constructClient($endpoint, $queryParams = array(), $clientConfig = array()) {
         $client = new Zend_Http_Client();
                 
+        if (!empty($this->_oauthToken)) $queryParams['oauth_token'] = $this->_oauthToken;
+        
         // set client options
         $client->setUri(self::SERVICE_URL . $endpoint);
-        $client->setParameterGet($queryParams);
+        $client->setParameterGet($queryParams);        
         $client->setConfig($clientConfig);
         $client->setHeaders(array(
                     'X-Gowalla-API-Key' => self::CLIENT_ID,
