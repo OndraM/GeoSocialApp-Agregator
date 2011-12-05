@@ -175,9 +175,18 @@ img.left {
 }
 #oauth-wrapper div {
     float: left;
-    width: 160px;
     text-align: center;
     line-height: 24px;
+    margin-right: 2ex;
+}
+#oauth-wrapper div#fq-connect {
+    width: 150px;
+}
+#oauth-wrapper div#gw-connect {
+    width: 156px;
+}
+#oauth-wrapper div#fb-connect {
+    width: 95px;
 }
 #oauth-wrapper a {
     display: inline-block;
