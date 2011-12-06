@@ -372,35 +372,52 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
         $entry = $result['users'];
 
         foreach ($entry as $friend) {
-            $urlExploded    = explode('/',  $friend['url']);
-            $clientFriend = $this->_constructClient('/users/' . $urlExploded[2]);
-            try {
-                $responseFriend = $clientFriend->request();
-            } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
-                continue;
-            }
-            // error in response
-            if ($responseFriend->isError()) continue;
+            // request friend details
+                $urlExploded    = explode('/',  $friend['url']);
+                $clientFriend = $this->_constructClient('/users/' . $urlExploded[2]);
+                try {
+                    $responseFriend = $clientFriend->request();
+                } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
+                    continue;
+                }
+                // error in response
+                if ($responseFriend->isError()) continue;
 
-            $resultFriend = Zend_Json::decode($responseFriend->getBody());
-            $resultFriend = current($resultFriend['last_checkins']);
-            if (!isset($resultFriend)) continue;
-            if (!isset($resultFriend['spot'])) continue;
-            if ($resultFriend['type'] != 'checkin') continue;
-            $tmpDate = new Zend_Date(substr($resultFriend['created_at'], 0, -1) . '+00:00', Zend_Date::W3C);
-            $friendsActivity[] = array(
-                'name'      => (isset($friend['first_name']) ? $friend['first_name'] : '')
-                               . (isset($friend['last_name']) ? ' ' . $friend['last_name'] : ''),
-                'avatar'    => $friend['image_url'],
-                'date'      => $tmpDate->get(Zend_Date::TIMESTAMP),
-                'poiName'   => $resultFriend['spot']['name'],
-                //'lat'       => $friend['venue']['location']['lat'], // TODO!
-                //'lng'       => $friend['venue']['location']['lat'], // TODO!
-                'comment'   => (isset($resultFriend['message']) ? $resultFriend['message'] : ''),
-                'type'      => self::TYPE
-            );
+                $resultFriend = Zend_Json::decode($responseFriend->getBody());
+                $resultFriend = current($resultFriend['last_checkins']);
+                if (!isset($resultFriend)) continue;
+                if (!isset($resultFriend['spot'])) continue;
+                if ($resultFriend['type'] != 'checkin') continue;
+                $tmpDate = new Zend_Date(substr($resultFriend['created_at'], 0, -1) . '+00:00', Zend_Date::W3C);
+
+            // request checkin details
+                $clientCheckin = $this->_constructClient($resultFriend['url']);
+                try {
+                    $responseCheckin = $clientCheckin->request();
+                } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
+                    continue;
+                }
+                // error in response
+                if ($responseCheckin->isError()) continue;
+
+                $resultCheckin = Zend_Json::decode($responseCheckin->getBody());
+                if (!isset($resultCheckin)) continue;
+                if (!isset($resultCheckin['spot'])) continue;
+                if ($resultCheckin['type'] != 'checkin') continue;
+
+            // fill array
+                $friendsActivity[] = array(
+                    'name'      => (isset($friend['first_name']) ? $friend['first_name'] : '')
+                                   . (isset($friend['last_name']) ? ' ' . $friend['last_name'] : ''),
+                    'avatar'    => $friend['image_url'],
+                    'date'      => $tmpDate->get(Zend_Date::TIMESTAMP),
+                    'poiName'   => $resultFriend['spot']['name'],
+                    'lat'       => $resultCheckin['spot']['lat'],
+                    'lng'       => $resultCheckin['spot']['lng'],
+                    'comment'   => (isset($resultFriend['message']) ? $resultFriend['message'] : ''),
+                    'type'      => self::TYPE
+                );
         }
-        d($friendsActivity);
         return $friendsActivity;
     }
     

@@ -49,10 +49,12 @@ class UserController extends Zend_Controller_Action
         $this->_helper->viewRenderer->setNoRender();
         $this->_helper->layout->disableLayout();
         
-        foreach($this->_serviceModels as $model) {
+        /*foreach($this->_serviceModels as $model) {
             $user = $model->getUserInfo();
             d($user, $model::TYPE);
-        }
+        }*/
+        $model = $this->_serviceModels['gw'];
+        d($model->getFriendsActivity());
         
     }
 
