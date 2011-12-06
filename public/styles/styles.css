@@ -188,10 +188,14 @@ img.left {
 #oauth-wrapper div#fb-connect {
     width: 95px;
 }
-#oauth-wrapper a {
+#oauth-wrapper div a {
     display: inline-block;
     width: 100%;
     text-align: center;
+}
+#oauth-wrapper a {
+    line-height: 24px;
+    text-decoration: none;
 }
 
 /* Forms */
@@ -327,7 +331,7 @@ ul#photos-carousel {
 
 /* Friends activity window */
 #friends-map {
-    width: 800px;
+    width: 730px;
     height: 400px;
     border: 1px solid black;
     margin: 1ex auto;
