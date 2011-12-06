@@ -282,7 +282,47 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
         );
         return $user;
     }
-    
+
+    /**
+     * Get latest checkins of my friends
+     *
+     * @return array Array of friends latest checkins
+     */
+    public function getFriendsActivity() {
+        $client = $this->_constructClient('/search', array('type' => 'checkin'));
+        try {
+            $response = $client->request();
+        } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
+            return array();
+        }
+
+        // error in response
+        if ($response->isError()) return array();
+
+        $result = Zend_Json::decode($response->getBody());
+
+        $friendsActivity = array();
+        $entry = $result['data'];
+
+        foreach ($entry as $friend) {
+            if (!isset($friend['place'])) continue;
+
+            $tmpDate = new Zend_Date(substr($friend['created_time'], 0, -2) . ':' . substr($friend['created_time'], -2), Zend_Date::W3C);
+
+            $friendsActivity[] = array(
+                'name'      => $friend['from']['name'],
+                'avatar'    => self::SERVICE_URL . '/' . $friend['from']['id'] . '/picture',
+                'date'      => $tmpDate->get(Zend_Date::TIMESTAMP),
+                'poiName'   => $friend['place']['name'],
+                'lat'       => $friend['place']['location']['latitude'],
+                'lng'       => $friend['place']['location']['longitude'],
+                'comment'   => (isset($friend['message']) ? $friend['message'] : ''),
+                'type'      => self::TYPE
+            );
+        }
+        return $friendsActivity;
+    }
+
     /**
      * Construct Zend_Http_Client object.
      * 
