@@ -127,7 +127,11 @@ if (in_array('fq', $this->serviceParams)) {
 <?php
 $script = "var markers = [];";
 foreach ($this->pois as $poi) {
-    $script .= "markers.push([new google.maps.LatLng(" . $poi->lat . ", " . $poi->lng . "), 'Venue location by " . $this->services[$poi->type]['name'] . "']);";
+    $script .= "markers.push({
+        lat: '{$poi->lat}',
+        lng: '{$poi->lng}',
+        serviceName: '{$this->services[$poi->type]['name']}'
+        });";
 }
 $script .= "
     initDetail(markers);

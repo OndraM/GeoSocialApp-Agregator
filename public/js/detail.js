@@ -85,7 +85,7 @@ function initDetail(markers) {
 }
 
 function initDetailMap(markers) {
-    //var latlng = new google.maps.LatLng(" . $this->pois[0]->lat . "," . $this->pois[0]->lng . ");
+    //var latlng = new google.maps.LatLng(markers[0],);
     
     var mapOptions = {
         zoom: 16,
@@ -103,13 +103,14 @@ function initDetailMap(markers) {
     );    
     
     var bounds = new google.maps.LatLngBounds();
-    $.each(markers, function(i, marker) {    
+    $.each(markers, function(i, marker) {
+        var markerLatLng = new google.maps.LatLng(marker.lat, marker.lng);
         new google.maps.Marker({
-            position: marker[0],
+            position: markerLatLng,
             map: map,
-            title: marker[1]
+            title: 'Venue location on ' + marker.serviceName
         });
-        bounds.extend(marker[0]);
+        bounds.extend(markerLatLng);
     });    
     var boundsInitListener = google.maps.event.addListener(map, 'bounds_changed', function() { // limit maximum zoom after fit bounds 
         google.maps.event.removeListener(boundsInitListener); // do it only once
