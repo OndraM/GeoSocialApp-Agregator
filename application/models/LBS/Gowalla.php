@@ -325,8 +325,7 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
      * @return array Array of user details
      */    
     public function getUserInfo() {
-        $endpoint = '/users';
-        $client = $this->_constructClient($endpoint . '/me');
+        $client = $this->_constructClient('/users/me');
         try {
             $response = $client->request();
         } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
@@ -345,6 +344,64 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
             'avatar'    => $entry['image_url']
         );
         return $user;
+    }
+
+    /**
+     * Get latest checkins of my friends
+     *
+     * @return array Array of friends latest checkins
+     */
+    public function getFriendsActivity() {
+        $user = $this->getUserInfo();
+        if (!$user) {
+            return array();
+        }
+        $client = $this->_constructClient('/users/' . $user['id'] .'/friends');
+        try {
+            $response = $client->request();
+        } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
+            return array();
+        }
+
+        // error in response
+        if ($response->isError()) return array();
+
+        $result = Zend_Json::decode($response->getBody());
+
+        $friendsActivity = array();
+        $entry = $result['users'];
+
+        foreach ($entry as $friend) {
+            $urlExploded    = explode('/',  $friend['url']);
+            $clientFriend = $this->_constructClient('/users/' . $urlExploded[2]);
+            try {
+                $responseFriend = $clientFriend->request();
+            } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
+                continue;
+            }
+            // error in response
+            if ($responseFriend->isError()) continue;
+
+            $resultFriend = Zend_Json::decode($responseFriend->getBody());
+            $resultFriend = current($resultFriend['last_checkins']);
+            if (!isset($resultFriend)) continue;
+            if (!isset($resultFriend['spot'])) continue;
+            if ($resultFriend['type'] != 'checkin') continue;
+            $tmpDate = new Zend_Date(substr($resultFriend['created_at'], 0, -1) . '+00:00', Zend_Date::W3C);
+            $friendsActivity[] = array(
+                'name'      => (isset($friend['first_name']) ? $friend['first_name'] : '')
+                               . (isset($friend['last_name']) ? ' ' . $friend['last_name'] : ''),
+                'avatar'    => $friend['image_url'],
+                'date'      => $tmpDate->get(Zend_Date::TIMESTAMP),
+                'poiName'   => $resultFriend['spot']['name'],
+                //'lat'       => $friend['venue']['location']['lat'], // TODO!
+                //'lng'       => $friend['venue']['location']['lat'], // TODO!
+                'comment'   => (isset($resultFriend['message']) ? $resultFriend['message'] : ''),
+                'type'      => self::TYPE
+            );
+        }
+        d($friendsActivity);
+        return $friendsActivity;
     }
     
     /**

@@ -34,7 +34,7 @@ class UserController extends Zend_Controller_Action
                     $model->getFriendsActivity());
             }
         }
-        d($friends_raw);
+        //d($friends_raw);
 
         // TODO: merge friends
         // TODO: put in view variables

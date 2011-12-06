@@ -366,6 +366,11 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
         return $user;
     }
 
+    /**
+     * Get latest checkins of my friends
+     *
+     * @return array Array of friends latest checkins
+     */
     public function getFriendsActivity() {
         $client = $this->_constructClient('/checkins/recent');
         try {
