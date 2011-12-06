@@ -193,9 +193,10 @@ img.left {
     width: 100%;
     text-align: center;
 }
-#oauth-wrapper a {
+#oauth-wrapper a#openFriendsWindow {
     line-height: 24px;
     text-decoration: none;
+    cursor: help;
 }
 
 /* Forms */

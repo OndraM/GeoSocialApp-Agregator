@@ -55,7 +55,7 @@ foreach(Zend_Registry::get('var')->services as $serviceId => $service) {
 <?php
 }
 ?>
-        <a href="<?=$this->url(array('controller' => 'user', 'action' => 'friends'), null, true);?>" class="popUp fancybox.ajax" title="Show location of my friends on map" id="">&raquo; show my friends</a>
+        <a data-href="<?=$this->url(array('controller' => 'user', 'action' => 'friends'), null, true);?>" data-title="Show location of my friends on map" title="Please connect to at least one service first!" id="openFriendsWindow">&raquo; show my friends</a>
     </div>
 
 <?php

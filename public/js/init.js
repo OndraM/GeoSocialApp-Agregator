@@ -123,12 +123,13 @@ $(document).ready(function() {
 	});
     
     // Fancybox init
-    $(".fancybox").fancybox();
+    //$(".fancybox").fancybox();
     
     // Fancubox popUp windows
-    $(".popUp").fancybox({
+    // Common options
+    var fancyboxOpts = {
         minWidth    : 750,
-        maxWidth	: 800,        
+        maxWidth	: 800,
         /*maxHeight	: 600,*/
         fitToView	: false,
         width		: '90%',
@@ -140,7 +141,12 @@ $(document).ready(function() {
         helpers:  {
             title : null
         }
-    });
+    }
+    $(".popUp").fancybox(fancyboxOpts);
+    // Specific options
+    fancyboxOpts.maxHeight = 550;
+    $('.popUpFixed').fancybox(fancyboxOpts);
+
     
     /*
      * jSort - jQury sorting plugin
@@ -400,7 +406,7 @@ function initIndex() {
     setTimeout('initConnectionsCheck()', 1000);    
     
     // When clicked on connect buttons    
-    $('#oauth-wrapper a').live('click', function() {
+    $('#oauth-wrapper div a').live('click', function() {
         var type =  $(this).parent().attr('id').substr(0, 2);
         var parent = $(this).parent();
         var origHtml = parent.html();
@@ -427,6 +433,7 @@ function initIndex() {
                 if (typeof response.status !== "undefined" && response.status == true) {
                     clearInterval(authLoop);
                     parent.html('<img src="../images/icon-' + type + '.png" alt="' + type + '" class="icon-left" /> connected');
+                    enableFriendsWindow();
                 } else if (typeof authWindow === "undefined" || authWindow.closed // window has been closed
                     || loopCounter > 50)  // to many loops, dont't wait anymore
                 {
@@ -487,7 +494,6 @@ function initIndexForm() {
  * to ask user for connection
  */
 function initConnectionsCheck() {
-    return;
     $('#oauth-wrapper div[id$="connect"]').each(function() {
         var type =  $(this).attr('id').substr(0, 2);
         var element = $(this);
@@ -502,11 +508,19 @@ function initConnectionsCheck() {
         .done(function(response) {
             if (typeof response.status !== "undefined" && response.status == true) {
                 element.html('<img src="../images/icon-' + type + '.png" alt="' + type + '" class="icon-left" alt /> connected');
+                enableFriendsWindow();
             } else {
                 element.html(origHtml);
             }
         });
     });
+}
+
+function enableFriendsWindow() {
+    $('#oauth-wrapper a#openFriendsWindow').attr('href', $('#oauth-wrapper a#openFriendsWindow').attr('data-href'));
+    $('#oauth-wrapper a#openFriendsWindow').attr('title', $('#oauth-wrapper a#openFriendsWindow').attr('data-title'));
+    $('#oauth-wrapper a#openFriendsWindow').css('cursor', 'pointer');
+    $('#oauth-wrapper a#openFriendsWindow').addClass('popUpFixed fancybox.ajax');
 }
 
 /*
