@@ -40,10 +40,14 @@ abstract class GSAA_Model_LBS_Abstract
     const LIMIT_WITHOUT_FILTER = 10;
     
     /*
-     * 
+     * OAuth token of this service
      */
-
     protected $_oauthToken;
+
+    /*
+     * Array of available services
+     */
+    protected $_services;
     /**
      * Constructor.
      * 
@@ -57,7 +61,8 @@ abstract class GSAA_Model_LBS_Abstract
             if ($this->checkToken($session->services[static::TYPE])) {
                 $this->_oauthToken = $session->services[static::TYPE];
             }
-        }       
+        }
+        $this->_services = Zend_Registry::get('var')->services;
         $this->init();
     }
     

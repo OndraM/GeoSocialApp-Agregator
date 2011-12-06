@@ -3,21 +3,9 @@
 <div id="friends-map"></div>
 
 <?php
-$script = "var friends = [];";
-foreach ($this->friends as $friend) {
-    $script .= "friends.push({
-        location: new google.maps.LatLng(" . $friend['lat'] . ", " . $friend['lng'] . "),
-        name    : '{$friend['name']}',
-        poiName : '{$friend['poiName']}',
-        type    : '{$friend['type']}',
-        service : '{$this->services[$friend['type']]['name']}',
-        date    : {$friend['date']},
-        avatar  : '{$friend['avatar']}'
-    });";
-}
+$script = "var friends = " . Zend_Json::encode($this->friends);
 $script .= "
-    initFriends(friends);
-";
+initFriends(friends);";
 echo $this->script($script, true);
 ?>
 </div>

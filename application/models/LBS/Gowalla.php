@@ -415,7 +415,8 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
                     'lat'       => $resultCheckin['spot']['lat'],
                     'lng'       => $resultCheckin['spot']['lng'],
                     'comment'   => (isset($resultFriend['message']) ? $resultFriend['message'] : ''),
-                    'type'      => self::TYPE
+                    'type'      => self::TYPE,
+                    'serviceName' => $this->_services[self::TYPE]['name']
                 );
         }
         return $friendsActivity;

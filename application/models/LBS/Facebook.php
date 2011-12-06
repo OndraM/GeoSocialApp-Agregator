@@ -317,7 +317,8 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
                 'lat'       => $friend['place']['location']['latitude'],
                 'lng'       => $friend['place']['location']['longitude'],
                 'comment'   => (isset($friend['message']) ? $friend['message'] : ''),
-                'type'      => self::TYPE
+                'type'      => self::TYPE,
+                'serviceName' => $this->_services[self::TYPE]['name']
             );
         }
         return $friendsActivity;

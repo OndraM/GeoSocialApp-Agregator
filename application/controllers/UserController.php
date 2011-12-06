@@ -39,6 +39,7 @@ class UserController extends Zend_Controller_Action
         // Only checkins in last - XX days?
         $this->view->friends = $friends_raw;
         $this->view->services = Zend_Registry::get('var')->services;
+
     }
     
     public function checkinAction() {

@@ -21,14 +21,16 @@ function initFriendsMap(friends) {
     );
 
     var bounds = new google.maps.LatLngBounds();
-    $.each(friends, function(i, marker) {
+    $.each(friends, function(i, friend) {
+        var friendLatLng = new google.maps.LatLng(friend.lat, friend.lng);
         new google.maps.Marker({
-            position: marker.location,
+            position: friendLatLng,
             map: map,
-            title: marker.name + ' at ' + marker.poiName + ' (on ' + marker.service + ')'
+            title: friend.name + ' at ' + friend.poiName + ' (on ' + friend.serviceName + ')'
         });
-        bounds.extend(marker.location);
+        bounds.extend(friendLatLng);
     });
+    
     var boundsInitListener = google.maps.event.addListener(map, 'bounds_changed', function() { // limit maximum zoom after fit bounds
         google.maps.event.removeListener(boundsInitListener); // do it only once
         if (map.getZoom() > 17) {

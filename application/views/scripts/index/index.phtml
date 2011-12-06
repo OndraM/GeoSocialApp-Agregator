@@ -19,7 +19,7 @@ foreach(Zend_Registry::get('var')->services as $serviceId => $service) {
 ?>
             </div>
             <br />
-            <label title="Though you can filter venues by name, please prefer category filter to get better results.">Filter name: <input type="text" name="term" value="" /></label>
+            <label title="Be careful when specifing name filter, since venues not containg this string will not be displayed in search results at all.">Filter name: <input type="text" name="term" value="" /></label>
             <input type="submit" value="Submit" />
         </fieldset>
     </form>
