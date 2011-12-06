@@ -367,7 +367,39 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
     }
 
     public function getFriendsActivity() {
-        // TODO
+        $client = $this->_constructClient('/checkins/recent');
+        try {
+            $response = $client->request();
+        } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
+            return array();
+        }
+
+        // error in response
+        if ($response->isError()) return array();
+
+        $result = Zend_Json::decode($response->getBody());
+        // foursquare returned an error
+        if ($result['meta']['code'] != 200) return array();
+
+        $friendsActivity = array();
+        $entry = $result['response']['recent'];
+
+        foreach ($entry as $friend) {
+            if (!isset($friend['venue'])) continue; // may be shout without venue -> skip than
+            if ($friend['user']['relationship'] != 'friend') continue; // skip follwings
+            $friendsActivity[] = array(
+                'name'      => (isset($friend['user']['firstName']) ? $friend['user']['firstName'] : '')
+                               . (isset($friend['user']['lastName']) ? ' ' . $friend['user']['lastName'] : ''),
+                'avatar'    => $friend['user']['photo'],
+                'date'      => $friend['createdAt'],
+                'poiName'   => $friend['venue']['name'],
+                'lat'       => $friend['venue']['location']['lat'],
+                'lng'       => $friend['venue']['location']['lat'],
+                'comment'   => (isset($friend['shout']) ? $friend['shout'] : ''),
+                'type'      => self::TYPE
+            );            
+        }
+        return $friendsActivity;
     }
     
     /**

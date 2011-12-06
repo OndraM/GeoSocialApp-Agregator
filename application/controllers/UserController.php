@@ -18,13 +18,26 @@ class UserController extends Zend_Controller_Action
         }
         
         $ajaxContext = $this->_helper->getHelper('AjaxContext');        
-        $ajaxContext->addActionContext('FIXME', 'json')
+        $ajaxContext->addActionContext('FIXME', 'json') // TODO: puut friends action here
                     ->initContext();
     }
     
     public function friendsAction() {
-        // TODO load friends list and last checkins from each service
-        // TODO: check if function exists in model first (as not all will implement this)
+        $this->_helper->viewRenderer->setNoRender();
+        $this->_helper->layout->disableLayout();
+
+        $friends_raw = array();
+        
+        foreach($this->_serviceModels as $model) {
+            if (method_exists($model, 'getFriendsActivity')) {
+                $friends_raw = array_merge($friends_raw,
+                    $model->getFriendsActivity());
+            }
+        }
+        d($friends_raw);
+
+        // TODO: merge friends
+        // TODO: put in view variables
     }
     
     public function checkinAction() {
