@@ -399,7 +399,7 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
                 'date'      => $friend['createdAt'],
                 'poiName'   => $friend['venue']['name'],
                 'lat'       => $friend['venue']['location']['lat'],
-                'lng'       => $friend['venue']['location']['lat'],
+                'lng'       => $friend['venue']['location']['lng'],
                 'comment'   => (isset($friend['shout']) ? $friend['shout'] : ''),
                 'type'      => self::TYPE
             );            
