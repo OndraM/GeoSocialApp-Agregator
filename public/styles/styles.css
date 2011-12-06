@@ -233,11 +233,11 @@ form#addressform input[name=address] {
 }
 
 /* POI detail window */
-#detail {
+#detail, #friends {
     text-align: left;
     padding: 1ex;
 }
-#detail h1 {
+#detail h1, #friends h1 {
     margin-top: .5em;
     margin-bottom: .9em;
 }
@@ -323,6 +323,14 @@ ul#photos-carousel {
     text-overflow: ellipsis;    
     text-align: left;
     text-shadow:  0 0 .3em #000, 0 0 .2em #000, 0 0 .1em #000;
+}
+
+/* Friends activity window */
+#friends-map {
+    width: 800px;
+    height: 400px;
+    border: 1px solid black;
+    margin: 1ex auto;
 }
 
 /* jQuery UI CSS overrides */

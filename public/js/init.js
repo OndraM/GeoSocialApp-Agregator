@@ -487,6 +487,7 @@ function initIndexForm() {
  * to ask user for connection
  */
 function initConnectionsCheck() {
+    return;
     $('#oauth-wrapper div[id$="connect"]').each(function() {
         var type =  $(this).attr('id').substr(0, 2);
         var element = $(this);

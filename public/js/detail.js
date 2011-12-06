@@ -85,11 +85,11 @@ function initDetail(markers) {
 }
 
 function initDetailMap(markers) {
-    var latlng = new google.maps.LatLng(" . $this->pois[0]->lat . "," . $this->pois[0]->lng . ");
+    //var latlng = new google.maps.LatLng(" . $this->pois[0]->lat . "," . $this->pois[0]->lng . ");
     
     var mapOptions = {
         zoom: 16,
-        center: latlng,
+      //  center: latlng,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         mapTypeControlOptions: {
             // disable terrain map:
@@ -102,14 +102,14 @@ function initDetailMap(markers) {
         mapOptions
     );    
     
-    var bounds = new google.maps.LatLngBounds ();
+    var bounds = new google.maps.LatLngBounds();
     $.each(markers, function(i, marker) {    
         new google.maps.Marker({
             position: marker[0],
             map: map,
             title: marker[1]
         });
-      bounds.extend(marker[0]);
+        bounds.extend(marker[0]);
     });    
     var boundsInitListener = google.maps.event.addListener(map, 'bounds_changed', function() { // limit maximum zoom after fit bounds 
         google.maps.event.removeListener(boundsInitListener); // do it only once

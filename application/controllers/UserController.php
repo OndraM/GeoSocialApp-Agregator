@@ -23,8 +23,9 @@ class UserController extends Zend_Controller_Action
     }
     
     public function friendsAction() {
-        $this->_helper->viewRenderer->setNoRender();
-        $this->_helper->layout->disableLayout();
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+        } 
 
         $friends_raw = array();
         
@@ -34,10 +35,10 @@ class UserController extends Zend_Controller_Action
                     $model->getFriendsActivity());
             }
         }
-        //d($friends_raw);
-
-        // TODO: merge friends
-        // TODO: put in view variables
+        // TODO: merge friends (when same user found, get only latest chckin)
+        // Only checkins in last - XX days?
+        $this->view->friends = $friends_raw;
+        $this->view->services = Zend_Registry::get('var')->services;
     }
     
     public function checkinAction() {
@@ -53,7 +54,7 @@ class UserController extends Zend_Controller_Action
             $user = $model->getUserInfo();
             d($user, $model::TYPE);
         }*/
-        $model = $this->_serviceModels['gw'];
+        $model = $this->_serviceModels['fb'];
         d($model->getFriendsActivity());
         
     }

@@ -1,0 +1,17 @@
+<div id="friends">
+<h1>Friends last checkins</h1>
+<div id="friends-map"></div>
+
+<?php
+?>
+<?php
+$script = "var markers = [];";
+foreach ($this->friends as $friend) {
+    $script .= "markers.push([new google.maps.LatLng(" . $friend['lat'] . ", " . $friend['lng'] . "), '" . $friend['name'] . " at " . $friend['poiName'] . " (on " . $this->services[$friend['type']]['name'] . ")']);";
+}
+$script .= "
+    initFriends(markers);
+";
+echo $this->script($script, true);
+?>
+</div>
