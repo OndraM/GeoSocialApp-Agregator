@@ -1,8 +1,8 @@
-function initFriends(markers) {
-    initFriendsMap(markers);
+function initFriends(friends) {
+    initFriendsMap(friends);
 }
 
-function initFriendsMap(markers) {
+function initFriendsMap(friends) {
     //var latlng = new google.maps.LatLng(" . $this->pois[0]->lat . "," . $this->pois[0]->lng . ");
 
     var mapOptions = {
@@ -21,13 +21,13 @@ function initFriendsMap(markers) {
     );
 
     var bounds = new google.maps.LatLngBounds();
-    $.each(markers, function(i, marker) {
+    $.each(friends, function(i, marker) {
         new google.maps.Marker({
-            position: marker[0],
+            position: marker.location,
             map: map,
-            title: marker[1]
+            title: marker.name + ' at ' + marker.poiName + ' (on ' + marker.service + ')'
         });
-        bounds.extend(marker[0]);
+        bounds.extend(marker.location);
     });
     var boundsInitListener = google.maps.event.addListener(map, 'bounds_changed', function() { // limit maximum zoom after fit bounds
         google.maps.event.removeListener(boundsInitListener); // do it only once

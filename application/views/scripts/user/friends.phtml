@@ -3,12 +3,20 @@
 <div id="friends-map"></div>
 
 <?php
-$script = "var markers = [];";
+$script = "var friends = [];";
 foreach ($this->friends as $friend) {
-    $script .= "markers.push([new google.maps.LatLng(" . $friend['lat'] . ", " . $friend['lng'] . "), '" . $friend['name'] . " at " . $friend['poiName'] . " (on " . $this->services[$friend['type']]['name'] . ")']);";
+    $script .= "friends.push({
+        location: new google.maps.LatLng(" . $friend['lat'] . ", " . $friend['lng'] . "),
+        name    : '{$friend['name']}',
+        poiName : '{$friend['poiName']}',
+        type    : '{$friend['type']}',
+        service : '{$this->services[$friend['type']]['name']}',
+        date    : {$friend['date']},
+        avatar  : '{$friend['avatar']}'
+    });";
 }
 $script .= "
-    initFriends(markers);
+    initFriends(friends);
 ";
 echo $this->script($script, true);
 ?>
