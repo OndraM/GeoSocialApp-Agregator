@@ -115,8 +115,11 @@ function initFriendsMap() {
                 + friend.serviceName
                 + '" class="icon-right" />';
         content += ' </div>';
-        content += '<div><em>' + friend.poiName + '</em></div>';
+        content += '<div>' + friend.poiName + '</div>';
         content += '<div>' + friend.dateFormatted + '</div>';
+        if (friend.comment != '') {
+            content += '<div><i>' + friend.comment + '</i></div>';
+        }
         content += '</div></div>';
         friendMarkers[friend.id] = marker;
         google.maps.event.addListener(marker, 'click', function() {
