@@ -174,19 +174,20 @@ class PoiController extends Zend_Controller_Action
                                 $pois_raw[$x]->lng,
                                 $pois_raw[$y]->lat,
                                 $pois_raw[$y]->lng);
-                
+
                 /*echo "&nbsp;&nbsp;&nbsp;&nbsp;" . $y . ": " . $pois_raw[$y]->name . " | "
-                        . 'similar_text: ' . round($similar_percent, 1) . " | "
+                        . 'similar_text_basic: ' . round($similar_percent_basic, 1) . " | "
+                        . 'similar_text_alpha: ' . round($similar_percent_alpha, 1) . " | "
                         . 'distance: '
                         . $distance
                         . "<br />\n";*/
                 if (($similar_percent_basic > 75
-                         || $similar_percent_alpha > 80)
+                         || $similar_percent_alpha > 82.5)
                     && $distance < 150) { // Merge objects
                     
                     $agPoi->addPoi($pois_raw[$y]); // copy entire POI
                     $pois_raw[$y] = null; // remove content from array, so that the POI wont be merged again
-                    // TODO: is it wise, just tu find similarities between the first one? Maybe find all pairs and sorty by similarity?
+                    // TODO: is it wise, just to find similarities between the first one? Would by better to find all similar pairs and sorty similarity
                 } 
             }
             $pois[] = $agPoi;

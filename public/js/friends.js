@@ -12,7 +12,7 @@ var bounds = new google.maps.LatLngBounds();
 function initFriends(f) {
     friends = f;
     // init map
-    initFriendsMap(friends);
+    initFriendsMap();
 
     // init buttons
     $('#friends-time-filter').buttonset();
@@ -100,15 +100,15 @@ function initFriendsMap() {
 		var marker = new MarkerWithLabel({
             position      : friendLatLng,
             map           : map,
-            title         : friend.name + ' at ' + friend.poiName,
+            title         : friend.userName + ' at ' + friend.poiName,
             labelClass    : 'friend-marker',
             labelAnchor   : new google.maps.Point(18, 44),
             labelContent  : friendAvatar,
             icon          : bgMarker
         });
         var content = '<div id="infoWindow"><div class="infoWindow-wrapper">'
-        content += '<img src="' + friend.avatar + '" alt="' + friend.name + '" class="avatar" style="width: 64px; height: 64px;" width="64" height="64" />'
-                + '<div><strong>' + friend.name + ' </strong>';
+        content += '<img src="' + friend.avatar + '" alt="' + friend.userName + '" class="avatar" style="width: 64px; height: 64px;" width="64" height="64" />'
+                + '<div><strong>' + friend.userName + ' </strong>';
         content += '<img src="/images/icon-'
                 + friend.type
                 + '.png" alt="'
