@@ -390,3 +390,15 @@ input.ui-button {
     margin: 1ex 0;
     padding-left: 1.5em;
 }
+
+#infoWindow img.avatar {
+    width: 64px;
+    height: 64px;
+    float: left;
+	margin: .5ex 1.5ex 1ex 0;
+}
+.infoWindow-wrapper {
+    min-width: 250px;
+    height: 75px;
+    overflow: auto;
+}

@@ -17,9 +17,11 @@ class UserController extends Zend_Controller_Action
             $this->_serviceModels[$serviceId] = new $classname();
         }
         
-        $ajaxContext = $this->_helper->getHelper('AjaxContext');        
-        $ajaxContext->addActionContext('FIXME', 'json') // TODO: puut friends action here
+        /*$ajaxContext = $this->_helper->getHelper('AjaxContext');
+        $ajaxContext->addActionContext('FIXME', 'json')
                     ->initContext();
+         * 
+         */
     }
     
     public function friendsAction() {
@@ -36,8 +38,11 @@ class UserController extends Zend_Controller_Action
                     $model->getFriendsActivity());
             }
         }
+        foreach ($friends_raw as &$friend) {
+            $date = new Zend_Date($friend['date']);
+            $friend['dateFormatted'] = $date->get(Zend_Date::DATETIME_MEDIUM);
+        }
         // TODO: merge friends (when same user found, get only latest chckin)
-        // Only checkins in last - XX days?
         $this->view->friends = $friends_raw;
         $this->view->services = Zend_Registry::get('var')->services;
 

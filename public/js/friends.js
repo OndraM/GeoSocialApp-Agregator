@@ -1,7 +1,16 @@
+/* Global variables */
+var infoWindow;
+
+/**
+ * Init friends scripts
+ */
 function initFriends(friends) {
     initFriendsMap(friends);
 }
 
+/**
+ * Init friends map
+ */
 function initFriendsMap(friends) {
     var centerLatLng;
     if ( $('#friends-map').attr('data-cLat') != ''
@@ -18,18 +27,21 @@ function initFriendsMap(friends) {
         mapTypeControlOptions: {
             // disable terrain map:
             mapTypeIds: [google.maps.MapTypeId.ROADMAP, google.maps.MapTypeId.SATELLITE]
-
         }
     };
     var map = new google.maps.Map(
         document.getElementById('friends-map'),
         mapOptions
     );
+    infoWindow = new google.maps.InfoWindow({
+        maxWidth: 400
+    });
 
     var bounds = new google.maps.LatLngBounds();
     var bgMarker;
     $.each(friends, function(i, friend) {
         var friendLatLng = new google.maps.LatLng(friend.lat, friend.lng);
+        bounds.extend(friendLatLng);
         bgMarker = new google.maps.MarkerImage(
                 'https://chart.googleapis.com/chart?chst=d_bubble_texts_big&chld=edge_bc|000|000|.',
                 new google.maps.Size(27, 26),   // size
@@ -40,15 +52,31 @@ function initFriendsMap(friends) {
      	friendAvatar.src = friend.avatar;
      	friendAvatar.width = 32;
 		var marker = new MarkerWithLabel({
-              position      : friendLatLng,
-			  map           : map,		      
-		      title         : friend.name + ' at ' + friend.poiName,
-		      labelClass    : 'friend-marker',
-		      labelAnchor   : new google.maps.Point(18, 44),
-		      labelContent  : friendAvatar,
-              icon          : bgMarker
-		});
-        bounds.extend(friendLatLng);
+            position      : friendLatLng,
+            map           : map,
+            title         : friend.name + ' at ' + friend.poiName,
+            labelClass    : 'friend-marker',
+            labelAnchor   : new google.maps.Point(18, 44),
+            labelContent  : friendAvatar,
+            icon          : bgMarker
+        });
+        var content = '<div id="infoWindow"><div class="infoWindow-wrapper">'
+        content += '<img src="' + friend.avatar + '" alt="' + friend.name + '" class="avatar" style="width: 64px; height: 64px;" width="64" height="64" />'
+                + '<div><strong>' + friend.name + ' </strong>';
+        content += '<img src="/images/icon-'
+                + friend.type
+                + '.png" alt="'
+                + friend.serviceName
+                + '" class="icon-right" />';
+        content += ' </div>';
+        content += '<div><em>' + friend.poiName + '</em></div>';
+        content += '<div>' + friend.dateFormatted + '</div>';
+        content += '</div></div>';
+        google.maps.event.addListener(marker, 'click', function() {
+            infoWindow.setContent(content);
+            infoWindow.open(map, this);
+        });
+        
     });
 
     // Limit maximum and minimum zoom after fit bounds.
