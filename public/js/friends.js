@@ -8,13 +8,12 @@ function initFriendsMap(friends) {
         && $('#friends-map').attr('data-cLng') != '' ) { // if set, get location from form values
         centerLatLng = new google.maps.LatLng($('#friends-map').attr('data-cLat'),
                                 $('#friends-map').attr('data-cLng'));
-    } else { // otherwise use default location
-        centerLatLng = new google.maps.LatLng(50.087811, 14.42046);
+    } else { // otherwise keep unset - center will by automatic from bounds
+        //centerLatLng = new google.maps.LatLng(50.087811, 14.42046);
     }
-    console.log(centerLatLng);
     var mapOptions = {
-        zoom: 16,
-        center: centerLatLng,
+        zoom: 11,
+        // center: centerLatLng, // center is either automatic (when friends fits map) or according to main map (when friends don't fit)
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         mapTypeControlOptions: {
             // disable terrain map:
@@ -37,13 +36,21 @@ function initFriendsMap(friends) {
         });
         bounds.extend(friendLatLng);
     });
-    
-    var boundsInitListener = google.maps.event.addListener(map, 'bounds_changed', function() { // limit maximum zoom after fit bounds
+
+    // Limit maximum and minimum zoom after fit bounds.
+    // Why use listener? It is way how to ensure is is called after map init.
+    var boundsInitListener = google.maps.event.addListener(map, 'bounds_changed', function() {
         google.maps.event.removeListener(boundsInitListener); // do it only once
-        if (map.getZoom() > 17) {
-            map.setZoom(17);
+        // zoom is too big, leave it at 16
+        if (map.getZoom() > 16) {
+            map.setZoom(16);
+        } else if (map.getZoom() < 7    // friends did't fit map even at zoom 7 => center it to main map position and zoom to center
+            && centerLatLng)            // if centerLatLng not set, leave it automatic
+        {
+            map.setZoom(7);
+            map.setCenter(centerLatLng);
         }
-        // Why use listener? It is way how to ensure is is called after map init.
+        // else do nothing, map center is adjusted automatically from bounds
     });
     map.fitBounds(bounds);
 }
