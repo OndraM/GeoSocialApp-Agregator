@@ -1,17 +1,56 @@
 /* Global variables */
+var map;
 var infoWindow;
+var friends;
+var friendMarkers = [];
 
 /**
  * Init friends scripts
  */
-function initFriends(friends) {
+function initFriends(f) {
+    friends = f;
+    // init map
     initFriendsMap(friends);
+
+    // init buttons
+    $('#friends-time-filter').buttonset();
+
+    // execute filter when clicked
+    $('#friends-time-filter label').click(function(){
+        filterMarkers($('#' + $(this).attr('for')).val());
+    });
+}
+
+function filterMarkers(time) {
+    var limit;
+    var d = new Date();
+    switch (time) {
+        case '1':
+        case '12':
+        case '24':
+            limit = time * 60 * 60;
+            break;
+        default:
+            limit = 0;
+            break;
+    }
+    $.each(friends, function(i, friend) {
+        // limit is all or it has nat yet passed
+        if (limit == 0 || (d.getTime()/1000) - limit < friend.date) {
+            if (!friendMarkers[friend.id].getMap()) { // marker not present on the map right now
+                friendMarkers[friend.id].setMap(map); // put it here
+            }
+        } else { // remove marker
+            friendMarkers[friend.id].setMap(null);
+        }
+        
+    })
 }
 
 /**
  * Init friends map
  */
-function initFriendsMap(friends) {
+function initFriendsMap() {
     var centerLatLng;
     if ( $('#friends-map').attr('data-cLat') != ''
         && $('#friends-map').attr('data-cLng') != '' ) { // if set, get location from form values
@@ -29,7 +68,7 @@ function initFriendsMap(friends) {
             mapTypeIds: [google.maps.MapTypeId.ROADMAP, google.maps.MapTypeId.SATELLITE]
         }
     };
-    var map = new google.maps.Map(
+    map = new google.maps.Map(
         document.getElementById('friends-map'),
         mapOptions
     );
@@ -72,6 +111,7 @@ function initFriendsMap(friends) {
         content += '<div><em>' + friend.poiName + '</em></div>';
         content += '<div>' + friend.dateFormatted + '</div>';
         content += '</div></div>';
+        friendMarkers[friend.id] = marker;
         google.maps.event.addListener(marker, 'click', function() {
             infoWindow.setContent(content);
             infoWindow.open(map, this);

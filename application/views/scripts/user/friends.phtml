@@ -3,12 +3,21 @@
 <?php
 if (count($this->friends) > 0) {
 ?>
+<div id="friends-time-filter">
+    Show checkins from last: 
+    <input type="radio" name="time-filter" id="time-filter-1" value="1" /><label for="time-filter-1">1 hour</label>
+    <input type="radio" name="time-filter" id="time-filter-12" value="12" /><label for="time-filter-12">12 hours</label>
+    <input type="radio" name="time-filter" id="time-filter-24" value="24" /><label for="time-filter-24">24 hours</label>
+    <input type="radio" name="time-filter" id="time-filter-all" value="all" checked="checked" /><label for="time-filter-all">all</label>
+</div>
+
 <div id="friends-map" data-clat="<?=$this->escape($this->cLat);?>" data-clng="<?=$this->escape($this->cLng);?>"></div>
 
 <?php
     $script = "var friends = " . Zend_Json::encode($this->friends);
     $script .= "
-initFriends(friends);";
+initFriends(friends);
+";
     echo $this->script($script, true);
 ?>
 </div>
