@@ -1,11 +1,24 @@
 <div id="friends">
 <h1>Friends last checkins</h1>
+<?php
+if (count($this->friends) > 0) {
+?>
 <div id="friends-map" data-clat="<?=$this->escape($this->cLat);?>" data-clng="<?=$this->escape($this->cLng);?>"></div>
 
 <?php
-$script = "var friends = " . Zend_Json::encode($this->friends);
-$script .= "
+    $script = "var friends = " . Zend_Json::encode($this->friends);
+    $script .= "
 initFriends(friends);";
-echo $this->script($script, true);
+    echo $this->script($script, true);
 ?>
 </div>
+<?php
+} else {
+?>
+<p>
+Error loading recent checkins of your friends - you are either not connected to any of your
+account, or no one of your friends has done checkin recently.
+</p>
+<?php
+}
+?>
