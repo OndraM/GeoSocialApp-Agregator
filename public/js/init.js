@@ -125,29 +125,6 @@ $(document).ready(function() {
     // Fancybox init
     //$(".fancybox").fancybox();
     
-    // Fancubox popUp windows
-    // Common options
-    var fancyboxOpts = {
-        minWidth    : 750,
-        maxWidth	: 800,
-        /*maxHeight	: 600,*/
-        fitToView	: false,
-        width		: '90%',
-        height		: '95%',
-        autoSize	: false,
-        closeClick	: false,
-        openEffect	: 'none',
-        closeEffect	: 'none',
-        helpers:  {
-            title : null
-        }
-    }
-    $(".popUp").fancybox(fancyboxOpts);
-    // Specific options
-    fancyboxOpts.maxHeight = 550;
-    $('.popUpFixed').fancybox(fancyboxOpts);
-
-    
     /*
      * jSort - jQury sorting plugin
      * http://do-web.com/jsort/overview
@@ -237,6 +214,7 @@ var mapCenterPoiner;
 var mapCenterImage = './images/pointer-small.png';
 var mapCenterTimeout;
 var getNearbyUrl = '/poi/get-nearby';
+var friendsWindowsUrl = '/user/friends';
 var infoWindow;
 var xhrVenues;
 var xhrConnect = [];
@@ -445,6 +423,40 @@ function initIndex() {
         }, 1500);        
         return false;
     });
+
+    // Init fancybox popUp windows
+    // Common options
+    var fancyboxOpts = {
+        minWidth    : 750,
+        maxWidth	: 800,
+        /*maxHeight	: 600,*/
+        fitToView	: false,
+        width		: '90%',
+        height		: '95%',
+        autoSize	: false,
+        closeClick	: false,
+        openEffect	: 'none',
+        closeEffect	: 'none',
+        helpers:  {
+            title : null
+        }
+    }
+    // Init venue details PopUp
+    $(".popUp").fancybox(fancyboxOpts);
+    // Specific options
+    fancyboxOpts.maxHeight = 550;
+    fancyboxOpts.beforeLoad = function() {
+        $('#oauth-wrapper a#openFriendsWindow').attr('href', friendsWindowsUrl
+            + '/cLat/'
+            + $('#searchform input[name=lat]').val()
+            + '/cLng/'
+            + $('#searchform input[name=long]').val()
+        )
+    };
+    // Init friends PopUp
+    $('.popUpFixed').fancybox(fancyboxOpts);
+
+
 }
 
 /**
@@ -517,7 +529,7 @@ function initConnectionsCheck() {
 }
 
 function enableFriendsWindow() {
-    $('#oauth-wrapper a#openFriendsWindow').attr('href', $('#oauth-wrapper a#openFriendsWindow').attr('data-href'));
+    $('#oauth-wrapper a#openFriendsWindow').attr('href', friendsWindowsUrl);
     $('#oauth-wrapper a#openFriendsWindow').attr('title', $('#oauth-wrapper a#openFriendsWindow').attr('data-title'));
     $('#oauth-wrapper a#openFriendsWindow').css('cursor', 'pointer');
     $('#oauth-wrapper a#openFriendsWindow').addClass('popUpFixed fancybox.ajax');
@@ -567,7 +579,6 @@ function initIndexMap() {
         
     google.maps.event.addListener(map, 'dragend', function() {
 		var latlng = map.getCenter();
-        //console.log(latlng.toUrlValue());
         $('#searchform input[name=lat]').val(latlng.lat().toFixed(6));
         $('#searchform input[name=long]').val(latlng.lng().toFixed(6));
         $('#searchform').submit();

@@ -29,7 +29,7 @@ class PoiController extends Zend_Controller_Action
         $term = (string) $this->_getParam('term');
         
         // lat and long params are mandatory
-        if (empty($lat) || empty($long) || !is_numeric($lat) || !is_numeric($long)) {
+        if (!is_numeric($lat) || !is_numeric($long)) {
             return;
         }
         

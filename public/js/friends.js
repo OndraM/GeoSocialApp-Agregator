@@ -3,11 +3,18 @@ function initFriends(friends) {
 }
 
 function initFriendsMap(friends) {
-    //var latlng = new google.maps.LatLng(" . $this->pois[0]->lat . "," . $this->pois[0]->lng . ");
-
+    var centerLatLng;
+    if ( $('#friends-map').attr('data-cLat') != ''
+        && $('#friends-map').attr('data-cLng') != '' ) { // if set, get location from form values
+        centerLatLng = new google.maps.LatLng($('#friends-map').attr('data-cLat'),
+                                $('#friends-map').attr('data-cLng'));
+    } else { // otherwise use default location
+        centerLatLng = new google.maps.LatLng(50.087811, 14.42046);
+    }
+    console.log(centerLatLng);
     var mapOptions = {
         zoom: 16,
-        //center: latlng,
+        center: centerLatLng,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         mapTypeControlOptions: {
             // disable terrain map:

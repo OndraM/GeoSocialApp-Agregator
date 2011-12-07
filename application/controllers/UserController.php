@@ -25,8 +25,9 @@ class UserController extends Zend_Controller_Action
     public function friendsAction() {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->layout->disableLayout();
-        } 
-
+        }
+        $this->view->cLat = $this->_getParam('cLat');
+        $this->view->cLng = $this->_getParam('cLng');
         $friends_raw = array();
         
         foreach($this->_serviceModels as $model) {

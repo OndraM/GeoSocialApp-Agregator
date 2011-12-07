@@ -1,6 +1,6 @@
 <div id="friends">
 <h1>Friends last checkins</h1>
-<div id="friends-map"></div>
+<div id="friends-map" data-clat="<?=$this->escape($this->cLat);?>" data-clng="<?=$this->escape($this->cLng);?>"></div>
 
 <?php
 $script = "var friends = " . Zend_Json::encode($this->friends);

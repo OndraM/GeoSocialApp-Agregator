@@ -85,11 +85,10 @@ function initDetail(markers) {
 }
 
 function initDetailMap(markers) {
-    //var latlng = new google.maps.LatLng(markers[0],);
-    
+    var centerLatLng = new google.maps.LatLng(markers[0].lat, markers[0].lng);
     var mapOptions = {
         zoom: 16,
-      //  center: latlng,
+        center: centerLatLng,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         mapTypeControlOptions: {
             // disable terrain map:
