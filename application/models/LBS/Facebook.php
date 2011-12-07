@@ -310,10 +310,9 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
             $tmpDate = new Zend_Date(substr($friend['created_time'], 0, -2) . ':' . substr($friend['created_time'], -2), Zend_Date::W3C);
 
             // fill GSAA_Model_Checkin
-                $checkin = new GSAA_Model_Checkin(self::TYPE);
+                $checkin = new GSAA_Model_Checkin(self::TYPE, $tmpDate->get(Zend_Date::TIMESTAMP));
                 $checkin->userName  = $friend['from']['name'];
                 $checkin->avatar    = self::SERVICE_URL . '/' . $friend['from']['id'] . '/picture';
-                $checkin->date      = $tmpDate->get(Zend_Date::TIMESTAMP);
                 $checkin->poiName   = $friend['place']['name'];
                 $checkin->lat       = $friend['place']['location']['latitude'];
                 $checkin->lng       = $friend['place']['location']['longitude'];

@@ -406,11 +406,10 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
                 if ($resultCheckin['type'] != 'checkin') continue;
 
             // fill GSAA_Model_Checkin
-                $checkin = new GSAA_Model_Checkin(self::TYPE);
+                $checkin = new GSAA_Model_Checkin(self::TYPE, $tmpDate->get(Zend_Date::TIMESTAMP));
                 $checkin->userName  = (isset($friend['first_name']) ? $friend['first_name'] : '')
                                         . (isset($friend['last_name']) ? ' ' . $friend['last_name'] : '');
                 $checkin->avatar    = $friend['image_url'];
-                $checkin->date      = $tmpDate->get(Zend_Date::TIMESTAMP);
                 $checkin->poiName   = $resultFriend['spot']['name'];
                 $checkin->lat       = $resultCheckin['spot']['lat'];
                 $checkin->lng       = $resultCheckin['spot']['lng'];

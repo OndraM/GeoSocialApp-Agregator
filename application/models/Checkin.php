@@ -3,7 +3,7 @@
 class GSAA_Model_Checkin
 {
     /**
-     * Type of POI {fq, gw, gg, fb}
+     * Type of POI {fq, gw, gg, fb, ...}
      */
     public $type    = null;
     
@@ -38,6 +38,11 @@ class GSAA_Model_Checkin
     public $date = null;
 
     /**
+     * Formatted date string
+     */
+    public $dateFormatted = null;
+
+    /**
      * Name of checkin POI
      */
     public $poiName = null;
@@ -52,9 +57,19 @@ class GSAA_Model_Checkin
      */
     public $serviceName = null;
 
-    public function __construct($type) {
+    /**
+     * Class constructor
+     * @param string $type Service type shortcut
+     * @param int $timestamp Checkin timestamp
+     */
+    public function __construct($type, $timestamp) {
         $services = Zend_Registry::get('var')->services;
         if (!isset($services[$type])) throw new Exception('Checkin service not found');
+        if (!is_numeric($timestamp) || (int) $timestamp != $timestamp )
+            throw new Exception('Incorrect checkin timestamp');
+        $date = new Zend_Date($timestamp);
+        $this->date = $timestamp;
+        $this->dateFormatted = $date->get(Zend_Date::DATETIME_MEDIUM);
         
         $this->type = $type;
         $this->serviceName = $services[$type]['name'];        

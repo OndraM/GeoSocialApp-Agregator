@@ -394,11 +394,10 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
             if ($friend['user']['relationship'] != 'friend') continue; // skip follwings
             
             // fill GSAA_Model_Checkin
-                $checkin = new GSAA_Model_Checkin(self::TYPE);
+                $checkin = new GSAA_Model_Checkin(self::TYPE, $friend['createdAt']);
                 $checkin->userName  = (isset($friend['user']['firstName']) ? $friend['user']['firstName'] : '')
                                       . (isset($friend['user']['lastName']) ? ' ' . $friend['user']['lastName'] : '');
                 $checkin->avatar    = $friend['user']['photo'];
-                $checkin->date      = $friend['createdAt'];
                 $checkin->poiName   = $friend['venue']['name'];
                 $checkin->lat       = $friend['venue']['location']['lat'];
                 $checkin->lng       = $friend['venue']['location']['lng'];

@@ -3,7 +3,7 @@
 class GSAA_Model_POI
 {
     /**
-     * Type of POI {fq, gw, gg, fb}
+     * Type of POI {fq, gw, gg, fb, ...}
      */
     public $type    = null;
     
