@@ -349,7 +349,7 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
     /**
      * Get latest checkins of my friends
      *
-     * @return array Array of friends latest checkins
+     * @return array Array of friends latest checkins in GSAA_Model_Checkin
      */
     public function getFriendsActivity() {
         $user = $this->getUserInfo();
@@ -405,19 +405,19 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
                 if (!isset($resultCheckin['spot'])) continue;
                 if ($resultCheckin['type'] != 'checkin') continue;
 
-            // fill array
-                $friendsActivity[] = array(
-                    'name'      => (isset($friend['first_name']) ? $friend['first_name'] : '')
-                                   . (isset($friend['last_name']) ? ' ' . $friend['last_name'] : ''),
-                    'avatar'    => $friend['image_url'],
-                    'date'      => $tmpDate->get(Zend_Date::TIMESTAMP),
-                    'poiName'   => $resultFriend['spot']['name'],
-                    'lat'       => $resultCheckin['spot']['lat'],
-                    'lng'       => $resultCheckin['spot']['lng'],
-                    'comment'   => (isset($resultFriend['message']) ? $resultFriend['message'] : ''),
-                    'type'      => self::TYPE,
-                    'serviceName' => $this->_services[self::TYPE]['name']
-                );
+            // fill GSAA_Model_Checkin
+                $checkin = new GSAA_Model_Checkin(self::TYPE);
+                $checkin->userName  = (isset($friend['first_name']) ? $friend['first_name'] : '')
+                                        . (isset($friend['last_name']) ? ' ' . $friend['last_name'] : '');
+                $checkin->avatar    = $friend['image_url'];
+                $checkin->date      = $tmpDate->get(Zend_Date::TIMESTAMP);
+                $checkin->poiName   = $resultFriend['spot']['name'];
+                $checkin->lat       = $resultCheckin['spot']['lat'];
+                $checkin->lng       = $resultCheckin['spot']['lng'];
+                $checkin->comment   = (isset($resultFriend['message']) ? $resultFriend['message'] : '');
+                $checkin->id        = 'id-' . substr(md5(uniqid()), 0, 8);
+
+                $friendsActivity[] = $checkin;
         }
         return $friendsActivity;
     }

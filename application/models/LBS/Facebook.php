@@ -286,7 +286,7 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
     /**
      * Get latest checkins of my friends
      *
-     * @return array Array of friends latest checkins
+     * @return array Array of friends latest checkins in GSAA_Model_Checkin
      */
     public function getFriendsActivity() {
         $client = $this->_constructClient('/search', array('type' => 'checkin'));
@@ -309,17 +309,18 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
 
             $tmpDate = new Zend_Date(substr($friend['created_time'], 0, -2) . ':' . substr($friend['created_time'], -2), Zend_Date::W3C);
 
-            $friendsActivity[] = array(
-                'name'      => $friend['from']['name'],
-                'avatar'    => self::SERVICE_URL . '/' . $friend['from']['id'] . '/picture',
-                'date'      => $tmpDate->get(Zend_Date::TIMESTAMP),
-                'poiName'   => $friend['place']['name'],
-                'lat'       => $friend['place']['location']['latitude'],
-                'lng'       => $friend['place']['location']['longitude'],
-                'comment'   => (isset($friend['message']) ? $friend['message'] : ''),
-                'type'      => self::TYPE,
-                'serviceName' => $this->_services[self::TYPE]['name']
-            );
+            // fill GSAA_Model_Checkin
+                $checkin = new GSAA_Model_Checkin(self::TYPE);
+                $checkin->userName  = $friend['from']['name'];
+                $checkin->avatar    = self::SERVICE_URL . '/' . $friend['from']['id'] . '/picture';
+                $checkin->date      = $tmpDate->get(Zend_Date::TIMESTAMP);
+                $checkin->poiName   = $friend['place']['name'];
+                $checkin->lat       = $friend['place']['location']['latitude'];
+                $checkin->lng       = $friend['place']['location']['longitude'];
+                $checkin->comment   = (isset($friend['message']) ? $friend['message'] : '');
+                $checkin->id        = 'id-' . substr(md5(uniqid()), 0, 8);
+
+                $friendsActivity[] = $checkin;
         }
         return $friendsActivity;
     }

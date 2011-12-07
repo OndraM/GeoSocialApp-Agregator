@@ -2,55 +2,55 @@
 
 class GSAA_Model_POI
 {
-    /* 
+    /**
      * Type of POI {fq, gw, gg, fb}
      */
     public $type    = null;
     
-    /*
+    /**
      * Unique id of POI 
      */
     public $id      = null;
     
-    /*
+    /**
      * Name of POI
      */
     public $name    = null;
     
-    /*
+    /**
      * Latitude
      */
     public $lat     = null;
     
-    /*
+    /**
      * Longitude
      */
     public $lng     = null;
     
-    /*
+    /**
      * Distance in meters from search coords (optional).
      * Not available in POI detail.
      */
     public $distance = null;
     
-    /*
+    /**
      * Address (optional).
      */
     public $address = null;
     
-    /*
+    /**
      * Full URL of POI detail in its service (optional).
      * May not be available in compact POI.
      */
     public $url     = null;
     
-    /*
+    /**
      * Phone (optional).
      * Available only in POI detail.
      */
     public $phone = null;
     
-    /*
+    /**
      * Associative array of links (optional).
      * Available only in POI detail.
      * Key - Description
@@ -58,7 +58,7 @@ class GSAA_Model_POI
      */
     public $links    = array();
     
-    /*
+    /**
      * Array of POI tips (optional).
      * Available only in POI detail.
      * Structure:
@@ -71,7 +71,7 @@ class GSAA_Model_POI
      */
     public $tips    = array();
     
-    /*
+    /**
      * Array of POI photos array (optional).
      * Available only in POI detail.
      * Structure:
@@ -86,14 +86,14 @@ class GSAA_Model_POI
      */
     public $photos    = array();
     
-    /*
+    /**
      * Array of notes (optional).
      * Structure:
      *      array[] = note
      */
     public $notes    = array();
     
-    /*
+    /**
      * Array of categories (optional).
      * Available only in POI detail.
      * Structure:

@@ -369,7 +369,7 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
     /**
      * Get latest checkins of my friends
      *
-     * @return array Array of friends latest checkins
+     * @return array Array of friends latest checkins in GSAA_Model_Checkin
      */
     public function getFriendsActivity() {
         $client = $this->_constructClient('/checkins/recent');
@@ -392,18 +392,20 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
         foreach ($entry as $friend) {
             if (!isset($friend['venue'])) continue; // may be shout without venue -> skip than
             if ($friend['user']['relationship'] != 'friend') continue; // skip follwings
-            $friendsActivity[] = array(
-                'name'      => (isset($friend['user']['firstName']) ? $friend['user']['firstName'] : '')
-                               . (isset($friend['user']['lastName']) ? ' ' . $friend['user']['lastName'] : ''),
-                'avatar'    => $friend['user']['photo'],
-                'date'      => $friend['createdAt'],
-                'poiName'   => $friend['venue']['name'],
-                'lat'       => $friend['venue']['location']['lat'],
-                'lng'       => $friend['venue']['location']['lng'],
-                'comment'   => (isset($friend['shout']) ? $friend['shout'] : ''),
-                'type'      => self::TYPE,
-                'serviceName' => $this->_services[self::TYPE]['name']
-            );            
+            
+            // fill GSAA_Model_Checkin
+                $checkin = new GSAA_Model_Checkin(self::TYPE);
+                $checkin->userName  = (isset($friend['user']['firstName']) ? $friend['user']['firstName'] : '')
+                                      . (isset($friend['user']['lastName']) ? ' ' . $friend['user']['lastName'] : '');
+                $checkin->avatar    = $friend['user']['photo'];
+                $checkin->date      = $friend['createdAt'];
+                $checkin->poiName   = $friend['venue']['name'];
+                $checkin->lat       = $friend['venue']['location']['lat'];
+                $checkin->lng       = $friend['venue']['location']['lng'];
+                $checkin->comment   = (isset($friend['shout']) ? $friend['shout'] : '');
+                $checkin->id        = 'id-' . substr(md5(uniqid()), 0, 8);
+                
+                $friendsActivity[]  = $checkin;
         }
         return $friendsActivity;
     }
