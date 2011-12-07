@@ -73,7 +73,6 @@ class UserController extends Zend_Controller_Action
                 $friendsCheckins[] = $friends_raw[$x];
             }            
         }
-        d($friendsCheckins);
         $this->view->friends = $friendsCheckins;
         $this->view->services = Zend_Registry::get('var')->services;
 
