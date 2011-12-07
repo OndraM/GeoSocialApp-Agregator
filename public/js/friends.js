@@ -27,13 +27,27 @@ function initFriendsMap(friends) {
     );
 
     var bounds = new google.maps.LatLngBounds();
+    var bgMarker;
     $.each(friends, function(i, friend) {
         var friendLatLng = new google.maps.LatLng(friend.lat, friend.lng);
-        new google.maps.Marker({
-            position: friendLatLng,
-            map: map,
-            title: friend.name + ' at ' + friend.poiName + ' (on ' + friend.serviceName + ')'
-        });
+        bgMarker = new google.maps.MarkerImage(
+                'https://chart.googleapis.com/chart?chst=d_bubble_texts_big&chld=edge_bc|000|000|.',
+                new google.maps.Size(27, 26),   // size
+                new google.maps.Point(0, 0),    // origin coordinates in image
+                new google.maps.Point(14, 26),  // anchor coordinates
+                new google.maps.Size(27, 26));  // size after resize
+        var friendAvatar = document.createElement('img');
+     	friendAvatar.src = friend.avatar;
+     	friendAvatar.width = 32;
+		var marker = new MarkerWithLabel({
+              position      : friendLatLng,
+			  map           : map,		      
+		      title         : friend.name + ' at ' + friend.poiName,
+		      labelClass    : 'friend-marker',
+		      labelAnchor   : new google.maps.Point(18, 44),
+		      labelContent  : friendAvatar,
+              icon          : bgMarker
+		});
         bounds.extend(friendLatLng);
     });
 

@@ -338,6 +338,13 @@ ul#photos-carousel {
     margin: 1ex auto;
 }
 
+.friend-marker img {
+    border: 2px solid #000;
+    border-radius: 4px;
+    width: 32px;
+    height: 32px;
+}
+
 /* jQuery UI CSS overrides */
 .ui-state-focus {
     border: 1px solid #cccccc;
