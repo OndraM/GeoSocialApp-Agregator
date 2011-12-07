@@ -336,13 +336,17 @@ ul#photos-carousel {
     height: 400px;
     border: 1px solid black;
     margin: 1ex auto;
+    clear: both;
 }
-
 .friend-marker img {
     border: 2px solid #000;
     border-radius: 4px;
     width: 32px;
     height: 32px;
+}
+#friends-time-filter {
+    float: left;
+    margin-right: 2em;
 }
 
 /* jQuery UI CSS overrides */

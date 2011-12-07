@@ -11,6 +11,9 @@ if (count($this->friends) > 0) {
     <input type="radio" name="time-filter" id="time-filter-all" value="all" checked="checked" /><label for="time-filter-all">all</label>
 </div>
 
+<button id ="friend-fitbouds" title="Not all friends may be shown on the map - click to fit them all to map">Fit map to show all friends</button>
+
+
 <div id="friends-map" data-clat="<?=$this->escape($this->cLat);?>" data-clng="<?=$this->escape($this->cLng);?>"></div>
 
 <?php

@@ -40,7 +40,7 @@ class UserController extends Zend_Controller_Action
         }
         foreach ($friends_raw as &$friend) {
             $date = new Zend_Date($friend['date']);
-            $friend['id'] = 'id-' + substr(md5(uniqid()), 0, 8);
+            $friend['id'] = 'id-' . substr(md5(uniqid()), 0, 8);
             $friend['dateFormatted'] = $date->get(Zend_Date::DATETIME_MEDIUM);
         }
         // TODO: merge friends (when same user found, get only latest chckin)

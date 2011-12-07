@@ -3,6 +3,8 @@ var map;
 var infoWindow;
 var friends;
 var friendMarkers = [];
+var isFit;
+var bounds = new google.maps.LatLngBounds();
 
 /**
  * Init friends scripts
@@ -14,10 +16,16 @@ function initFriends(f) {
 
     // init buttons
     $('#friends-time-filter').buttonset();
+    $('#friend-fitbouds').button();
 
     // execute filter when clicked
     $('#friends-time-filter label').click(function(){
         filterMarkers($('#' + $(this).attr('for')).val());
+    });
+
+    $('#friend-fitbouds').click(function() {
+        map.fitBounds(bounds);
+        return false;
     });
 }
 
@@ -76,7 +84,6 @@ function initFriendsMap() {
         maxWidth: 400
     });
 
-    var bounds = new google.maps.LatLngBounds();
     var bgMarker;
     $.each(friends, function(i, friend) {
         var friendLatLng = new google.maps.LatLng(friend.lat, friend.lng);
