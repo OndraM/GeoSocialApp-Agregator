@@ -270,7 +270,7 @@ function initIndex() {
                 var mapItems = [];
                 var order = 0;
                 $.each(data.pois, function(key, poi) {
-                    var itemContent = '<li id="' + poi.id + '"><a data-order="' + order++ + '" data-flat="' + removeDiacritics(poi.name) + '">' + poi.name + '</a>';
+                    var itemContent = '<li id="' + poi.id + '"><a data-order="' + order++ + '" data-flat="' + removeDiacritics(poi.name) + '" data-quality="' + poi.quality + '">' + poi.name + '</a>';
                     if (typeof poi.distance !== "undefined")
                         itemContent  += ' <span>(<span class="distance">'  + poi.distance + '</span> m)</span>'
                     if (typeof poi.relevance !== "undefined") // TODO
@@ -292,7 +292,7 @@ function initIndex() {
                         html: listItems.join('')
                     })
                 );
-                $('#venues-list').prepend('<p id="sorter"><strong>Sort by:</strong> <a id="sort-services" class="active">default</a> &ndash; <a id="sort-distance">distance</a> &ndash; <a id="sort-alpha">alphabetically</a></p>');
+                $('#venues-list').prepend('<p id="sorter"><strong>Sort by:</strong> <a id="sort-services" class="active">default</a> &ndash; <a id="sort-distance">distance</a> &ndash; <a id="sort-alpha">alphabetically</a> &ndash; <a id="sort-quality">quality</a></p>');
                 
                 $('#sorter a').click(function() {
                     var sortOpts = {};
@@ -322,6 +322,16 @@ function initIndex() {
                                 order: 'asc',
                                 sort_by_attr: true,
                                 attr_name: 'data-flat'
+                            };
+                            break;
+                        case 'sort-quality':
+                            sortOpts = {
+                                sort_by: 'a',
+                                item: 'li',
+                                order: 'desc',
+                                is_num: true,
+                                sort_by_attr: true,
+                                attr_name: 'data-quality'
                             };
                             break;
                     }

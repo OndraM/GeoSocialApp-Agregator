@@ -58,6 +58,7 @@ class PoiController extends Zend_Controller_Action
                 $this->view->pois[$i]['distance']   = $poi->getField('distance');
                 $this->view->pois[$i]['address']    = $poi->getField('address', false);
                 $this->view->pois[$i]['phone']      = $poi->getField('phone');
+                $this->view->pois[$i]['quality']   = $poi->getField('quality');
                 $this->view->pois[$i]['pois']       = $poi->getPois();
                 $i++;
             }
