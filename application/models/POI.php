@@ -107,10 +107,10 @@ class GSAA_Model_POI
 
     /**
      * Relevance (quality) of POI.
-     * @var double Quality of POI, 0.0 is worst, 10.0 is best
+     * @var double Quality of POI, -5.0 is worst, 5.0 is best. 0 is default.
      */
 
-    public $quality    = null;
+    public $quality    = 0;
     
     /**
      * Get unique priority of the service.
