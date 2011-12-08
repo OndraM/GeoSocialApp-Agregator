@@ -84,10 +84,8 @@ class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
             }
             $poi->distance = $this->getDistance($lat, $long, $poi->lat, $poi->lng);
 
-            if (isset($entry['rating'])) { // if rating is set, ronvert it to quality
-                $poi->quality = $entry['rating']*2 - 5;
-            } // otherwise leave it at default value
-
+            $poi->quality = $this->_calculateQuality($poi, isset($entry['rating']) ? $entry['rating'] : null);
+            
             $pois[] = $poi;
         }
         
@@ -203,5 +201,21 @@ class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
         
         
         return $client;
+    }
+
+    /**
+     * Calculate POI quality
+     *
+     * @param GSAA_Model_POI $poi POI which quality should be calculated
+     * @param double $rating POI rating
+     * @return double Quality of POI (-5.0 - 5.0)
+     */
+    protected function _calculateQuality($poi, $rating) {
+        if (isset($rating)) { // if rating is set, convert it to quality
+            $return = $rating*2 - 5;
+        } else {
+            $return = $poi->quality; // return default quality
+        }
+        return $return;
     }
 }

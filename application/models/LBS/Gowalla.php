@@ -469,6 +469,6 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
         if ($return > 5) {
             $return = 5;
         }
-        return $return;
+        return round($return, 2);
     }
 }

@@ -107,13 +107,8 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
             //if (isset($entry['location']['country']))
             //    $poi->country = $entry['location']['country'];
 
-            // usersCount   >= TOP_QUALITY_USERSCOUNT_SCALE => quality = 5;
-            // usescount    = 0 => quality = -5
-            // Values between are lineary distributed.
-            $poi->quality = (($entry['stats']['usersCount'] / self::TOP_QUALITY_USERSCOUNT_SCALE) * 10) - 5;
-            if ($poi->quality > 5) {
-                $poi->quality = 5;
-            }
+            $poi->quality = $this->_calculateQuality($poi, $entry['stats']['usersCount']);
+            
             $pois[] = $poi;
         }
         return $pois;
@@ -447,5 +442,23 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
         
         
         return $client;
+    }
+    
+    /**
+     * Calculate POI quality
+     * 
+     * @param GSAA_Model_POI $poi POI which quality should be calculated
+     * @param int $usersCount
+     * @return double Quality of POI (-5.0 - 5.0)
+     */
+    protected function _calculateQuality($poi, $usersCount) {
+        // usersCount   >= TOP_QUALITY_USERSCOUNT_SCALE => quality = 5;
+        // usescount    = 0 => quality = -5
+        // Values between are lineary distributed.
+        $return = (($usersCount / self::TOP_QUALITY_USERSCOUNT_SCALE) * 10) - 5;
+        if ($return > 5) {
+            $return = 5;
+        }
+        return round($return, 2);
     }
 }
