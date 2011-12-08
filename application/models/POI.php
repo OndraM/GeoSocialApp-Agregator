@@ -104,6 +104,13 @@ class GSAA_Model_POI
      *      )
      */
     public $categories    = array();
+
+    /**
+     * Relevance (quality) of POI.
+     * @var double Quality of POI, 0.0 is worst, 10.0 is best
+     */
+
+    public $quality    = null;
     
     /**
      * Get unique priority of the service.
@@ -113,12 +120,6 @@ class GSAA_Model_POI
      */    
     public function getPriority() {
         return Zend_Registry::get('var')->services[$this->type]['priority'];
-    }
-
-        
-    /*
-     * TODO: stats
-     */
-     
+    }    
     
 }
