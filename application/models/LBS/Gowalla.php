@@ -11,10 +11,15 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
     const CLIENT_SECRET = 'b31113a8961d41b19040a2d4b4fc01a1';
     const LIMIT = 30;
     const TYPE = 'gw';
+
+    /**
+     * Number of usersCount, when POI is considered as "top quality" (quality = 5).
+     * May increase in time (depending on increase of foursquare users).
+     */
+    const TOP_QUALITY_USERSCOUNT_SCALE = 50;
         
     public function init() {
         // TODO: set client properties?
-        ;
     }
 
     /**
@@ -82,6 +87,8 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
                 $poi->address    = $entry['address']['locality'];
             
             $poi->distance = $this->getDistance($lat, $long, $poi->lat, $poi->lng);
+
+            $poi->quality = $this->_calculateQuality($poi, $entry['users_count']);
             
             $pois[] = $poi;
         }
@@ -446,5 +453,22 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
         
         
         return $client;
+    }
+    /**
+     * Calculate POI quality
+     *
+     * @param GSAA_Model_POI $poi POI which quality should be calculated
+     * @param int $usersCount
+     * @return double Quality of POI (-5.0 - 5.0)
+     */
+    protected function _calculateQuality($poi, $usersCount) {
+        // usersCount   >= TOP_QUALITY_USERSCOUNT_SCALE => quality = 5;
+        // usescount    = 0 => quality = -5
+        // Values between are lineary distributed.
+        $return = (($usersCount / self::TOP_QUALITY_USERSCOUNT_SCALE) * 10) - 5;
+        if ($return > 5) {
+            $return = 5;
+        }
+        return $return;
     }
 }
