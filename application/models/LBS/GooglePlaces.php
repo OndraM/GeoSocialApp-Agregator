@@ -211,7 +211,7 @@ class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
      * @return double Quality of POI (-5.0 - 5.0)
      */
     protected function _calculateQuality($poi, $rating) {
-        if (isset($rating)) { // if rating is set, convert it to quality
+        if (!is_null($rating)) { // if rating is set, convert it to quality
             $return = $rating*2 - 5;
         } else {
             $return = $poi->quality; // return default quality

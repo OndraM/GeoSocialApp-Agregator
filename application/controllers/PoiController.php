@@ -130,7 +130,7 @@ class PoiController extends Zend_Controller_Action
         
         $pois = $this->_mergePois($pois_raw);
                 
-        //print_r($pois);
+        print_r($pois);
     }
     
     

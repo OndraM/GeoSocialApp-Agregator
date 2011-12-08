@@ -59,6 +59,7 @@ class GSAA_Model_AggregatedPOI
     public function getField($field, $params = null) {
         $this->_sortPois();
         if ($field == 'address') return $this->_getAddress($params);
+        if ($field == 'quality') return $this->_getQuality();
         
         foreach ($this->getPois() as $poi) {
             if (isset($poi->$field)) {
@@ -127,6 +128,20 @@ class GSAA_Model_AggregatedPOI
                 return $poi->address;
             }
         }        
+    }
+
+    /**
+     * Get average quality of POI
+
+     * @return double POI average quality
+     */
+    protected function _getQuality() {
+        $quality_array = $this->getFieldAll('quality');
+        $total = 0;
+        foreach ($quality_array as $value) {
+            $total += current($value);
+        }
+        return round(($total / count($quality_array)), 2);
     }
         
     /**
