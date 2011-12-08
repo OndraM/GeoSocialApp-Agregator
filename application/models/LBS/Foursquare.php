@@ -13,8 +13,14 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
     const RADIUS_MAX = 100000;
     const TYPE = 'fq';
     
-    
-    // Date of 4SQ API is verified to be up-to-date.
+    /**
+     * Number of usersCount, when POI is considered as "top quality" (quality = 5).
+     * May increase in time (depending on increase of foursquare users).
+     */
+    const TOP_QUALITY_USERSCOUNT_SCALE = 250;
+    /**
+     *  Date of 4SQ API is verified to be up-to-date.
+     */
     const DATEVERIFIED = '20111027';
     
     public function init() {
@@ -100,7 +106,14 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
                             . $entry['location']['city'];
             //if (isset($entry['location']['country']))
             //    $poi->country = $entry['location']['country'];
-            
+
+            // usersCount   >= TOP_QUALITY_USERSCOUNT_SCALE => quality = 5;
+            // usescount    = 0 => quality = -5
+            // Values between are lineary distributed.
+            $poi->quality = (($entry['stats']['usersCount'] / self::TOP_QUALITY_USERSCOUNT_SCALE) * 10) - 5;
+            if ($poi->quality > 5) {
+                $poi->quality = 5;
+            }
             $pois[] = $poi;
         }
         return $pois;
