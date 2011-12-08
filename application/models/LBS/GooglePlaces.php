@@ -83,7 +83,11 @@ class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
                 $poi->address = $entry['vicinity'];
             }
             $poi->distance = $this->getDistance($lat, $long, $poi->lat, $poi->lng);
-            
+
+            if (isset($entry['rating'])) { // if rating is set, ronvert it to quality
+                $poi->quality = $entry['rating']*2 - 5;
+            } // otherwise leave it at default value
+
             $pois[] = $poi;
         }
         
