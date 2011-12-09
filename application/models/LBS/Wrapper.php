@@ -22,22 +22,28 @@ class GSAA_Model_LBS_Wrapper
     /**
      * Load nearby POIs from all services into one array
      *
+     * @param array  $services Array of services to search in form ($serviceType = on)
      * @param double $lat Latitude
      * @param double $long Longitude
      * @param int    $radius Radius to search
      * @param string $term Search term
      * @return array Array of all nearby POIs
      */
-    public static function loadNearbyPois($lat, $long, $radius, $term) {
+    public static function loadNearbyPois($services, $lat, $long, $radius, $term) {
         $serviceModels = self::_initServiceModel();
         $pois = array();
 
-        foreach ($serviceModels as $modelId => $model) {    // iterate through availabe LBS models
-            if ((boolean) $this->_getParam($modelId)) {     // use service
-                $pois = array_merge(
-                        $pois,
-                        $model->getNearbyVenues($lat, $long, $radius, $term));
+        foreach ($services as $serviceType => $serviceState) {      // iterate through all params
+            if (array_key_exists($serviceType, $serviceModels)) {   // only parameters representing POIs
+                if ($serviceState) {                                // use service
+                    $pois = array_merge(
+                            $pois,
+                            $serviceModels[$serviceType]->getNearbyVenues($lat, $long, $radius, $term));
+                }
             }
+        }
+        foreach ($serviceModels as $modelId => $model) {    // iterate through availabe LBS models
+
         }
         return $pois;
     }
@@ -53,9 +59,9 @@ class GSAA_Model_LBS_Wrapper
         $serviceModels = self::_initServiceModel();
         $aggregatedPOI = new GSAA_Model_AggregatedPOI();
 
-        foreach ($pois as $index => $value) {                   // iterate through all params
-            if (array_key_exists($value, $serviceModels)) {     // only parameters representing POIs
-                $poi = $serviceModels[$value]->getDetail($index);
+        foreach ($pois as $poiId => $poiType) {                   // iterate through all params
+            if (array_key_exists($poiType, $serviceModels)) {     // only parameters representing POIs
+                $poi = $serviceModels[$poiType]->getDetail($poiId);
                 if (!$poi) continue;
                 $aggregatedPOI->addPoi($poi);
             }

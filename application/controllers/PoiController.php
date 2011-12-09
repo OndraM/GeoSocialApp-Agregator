@@ -29,7 +29,7 @@ class PoiController extends Zend_Controller_Action
             return; // no proper lat & lng set => we can't search for venues
         }
 
-        $poisRaw = GSAA_Model_LBS_Wrapper::loadNearbyPois($lat, $long, $radius, $term);
+        $poisRaw = GSAA_Model_LBS_Wrapper::loadNearbyPois($this->_request->getParams(), $lat, $long, $radius, $term);
 
         // Fill view->pois variable with JSON structure.
         if (count($poisRaw) > 0) {
