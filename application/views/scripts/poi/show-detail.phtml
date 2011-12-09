@@ -48,17 +48,11 @@ foreach ($this->pois as $poi) {
 echo "</ul>\n";
 ?>
 <?php
-if (count($this->values['address']) > 0
-    || isset($this->values['address_geocode'])
-    || count($this->values['phone']) > 0
-    || count($this->values['links']) > 0) {
-    echo "<h2>Contact</h2>\n";
-}
 if (count($this->values['address']) > 0) {
-    echo "<h3 id=\"venue-address\">Address</h3>\n";
+    echo "<h2 id=\"venue-address\">Address</h3>\n";
     echo $this->listValuesArray($this->values['address'], 'address');
 } elseif (isset($this->values['address_geocode'])) {
-    echo "<h3 id=\"venue-address\">Address</h3>\n";
+    echo "<h2 id=\"venue-address\">Address</h3>\n";
     echo "<ul><li>"
             . $this->escape($this->values['address_geocode'])
             . " <abbr title=\"Approximate address found on this coordinates\">(approx.)</abbr>"
@@ -67,13 +61,13 @@ if (count($this->values['address']) > 0) {
 ?>
 <?php
 if (count($this->values['phone']) > 0) {
-    echo "<h3 id=\"venue-phone\">Phone</h3>\n";
+    echo "<h2 id=\"venue-phone\">Phone</h3>\n";
     echo $this->listValuesArray($this->values['phone'], 'phone');
 }
 ?>
 <?php
 if (count($this->values['links']) > 0) {
-    echo "<h3 id=\"venue-links\">Links</h3>\n";
+    echo "<h2 id=\"venue-links\">Links</h3>\n";
     echo $this->listValuesArray($this->values['links'], 'links');
 }
 ?>
