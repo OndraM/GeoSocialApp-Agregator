@@ -30,17 +30,17 @@ class UserController extends Zend_Controller_Action
         }
         $this->view->cLat = $this->_getParam('cLat');
         $this->view->cLng = $this->_getParam('cLng');
-        $friends_raw = array();
+        $friendsRaw = array();
         
         foreach($this->_serviceModels as $model) {
             if (method_exists($model, 'getFriendsActivity')) {
-                $friends_raw = array_merge($friends_raw,
+                $friendsRaw = array_merge($friendsRaw,
                     $model->getFriendsActivity());
             }
         }
 
-        if (count($friends_raw) > 0) {
-            $friendsCheckins = $this->_mergeFriendsCheckins($friends_raw);
+        if (count($friendsRaw) > 0) {
+            $friendsCheckins = $this->_mergeFriendsCheckins($friendsRaw);
         }
 
         $this->view->friends = $friendsCheckins;
@@ -69,36 +69,36 @@ class UserController extends Zend_Controller_Action
     /**
      * Merge checkins from the same friends and get only the most recent for each unique friend.
      *
-     * @param array $friends_raw Array of GSAA_Model_Checkin
+     * @param array $friendsRaw Array of GSAA_Model_Checkin
      * @return array Array of GSAA_Model_Checkin, with only the most recent checkin of each friend
      */
 
-    protected function _mergeFriendsCheckins($friends_raw) {
+    protected function _mergeFriendsCheckins($friendsRaw) {
         $friendsCheckins = array();
-        for ($x = 0; $x < count($friends_raw); $x++) {
+        for ($x = 0; $x < count($friendsRaw); $x++) {
             $sameFriendCheckins = array(); // array for checkins of the same friend
-            if (is_null($friends_raw[$x])) continue; // skip already merged friends
+            if (is_null($friendsRaw[$x])) continue; // skip already merged friends
 
-            $friendXName = Zend_Filter::filterStatic($friends_raw[$x]->userName, 'StringToLower');
+            $friendXName = Zend_Filter::filterStatic($friendsRaw[$x]->userName, 'StringToLower');
             $friendXName = Zend_Filter::filterStatic($friendXName, 'ASCII', array(), array('GSAA_Filter'));
-            for ($y = 0; $y < count($friends_raw); $y++) {
-                if (is_null($friends_raw[$y])) continue; // skip already merged items
+            for ($y = 0; $y < count($friendsRaw); $y++) {
+                if (is_null($friendsRaw[$y])) continue; // skip already merged items
                 if ($x == $y) continue; // skip the same POI
-                $friendYName = Zend_Filter::filterStatic($friends_raw[$y]->userName, 'StringToLower');
+                $friendYName = Zend_Filter::filterStatic($friendsRaw[$y]->userName, 'StringToLower');
                 $friendYName = Zend_Filter::filterStatic($friendYName, 'ASCII', array(), array('GSAA_Filter'));
 
                 $similar_percent = 0;
                 similar_text($friendXName, $friendYName, $similar_percent);
 
                 if ($similar_percent > 90) {
-                    $sameFriendCheckins[] = $friends_raw[$y]; // add all same persons checkins (even more then one)
-                    $friends_raw[$y] = null; // set it to null, so it won't be checked again
+                    $sameFriendCheckins[] = $friendsRaw[$y]; // add all same persons checkins (even more then one)
+                    $friendsRaw[$y] = null; // set it to null, so it won't be checked again
                 }
             }
             // when more checkins from same person is present, find the most recet
             if (count($sameFriendCheckins) > 0) { // some checkins mateched
-                $sameFriendCheckins[] = $friends_raw[$x]; // add the parent match
-                $friends_raw[$x] = null; // set it to null, so it won't be checked again
+                $sameFriendCheckins[] = $friendsRaw[$x]; // add the parent match
+                $friendsRaw[$x] = null; // set it to null, so it won't be checked again
                 $dates = array();
                 foreach ($sameFriendCheckins as $index => $value) {
                     $dates[$index]  = $value->date; // put dates in special array
@@ -106,7 +106,7 @@ class UserController extends Zend_Controller_Action
                 array_multisort($dates, SORT_DESC, $sameFriendCheckins); // sort by dates from the most recet
                 $friendsCheckins[] = $sameFriendCheckins[0]; // add only the most recent checkin
             } else { // person is there only once => just add it to final array
-                $friendsCheckins[] = $friends_raw[$x];
+                $friendsCheckins[] = $friendsRaw[$x];
             }
         }
         return $friendsCheckins;
