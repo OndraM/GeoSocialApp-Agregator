@@ -129,17 +129,17 @@ class PoiController extends Zend_Controller_Action
                                 $poisRaw[$y]->lat,
                                 $poisRaw[$y]->lng);
 
-                /*echo "&nbsp;&nbsp;&nbsp;&nbsp;" . $y . ": " . $poisRaw[$y]->name . " | "
+                /*echo $y . ": " . $poisRaw[$y]->name . " | "
                         . 'similar_text_basic: ' . round($similarPercentBasic, 1) . " | "
                         . 'similar_text_alpha: ' . round($similarPercentAlpha, 1) . " | "
                         . 'distance: '
                         . $distance
-                        . "<br />\n";*/
+                        . "\n";*/
 
                  // Check if POIs names are similair and they are close to each other, so we should merge them
                 if (($similarPercentBasic > 75
                          || $similarPercentAlpha > 82.5)
-                    && $distance < 150) {
+                    && $distance < 200) {
 
                     $agPoi->addPoi($poisRaw[$y]); // copy entire POI
                     $poisRaw[$y] = null; // remove content from array, so that the POI wont be merged again
