@@ -1,6 +1,6 @@
 <?php
 
-class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract 
+class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
 {
     const SERVICE_URL = 'http://api.gowalla.com';
     const PUBLIC_URL = 'https://gowalla.com';
@@ -17,14 +17,13 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
      * May increase in time (depending on increase of gowalla users).
      */
     const TOP_QUALITY_USERSCOUNT_SCALE = 50;
-        
+
     public function init() {
-        // TODO: set client properties?
     }
 
     /**
      * Function to get nearby venues.
-     * 
+     *
      * @param double $lat Latitude
      * @param double $long Longitude
      * @param int    $radius Radius to search
@@ -40,7 +39,7 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
         if ($term) {
             $limit = self::LIMIT;
         }
-        
+
         $client = $this->_constructClient($endpoint,
                                         array(  'lat'            => $lat,
                                                 'lng'           => $long,
@@ -52,27 +51,27 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
         } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
             return array();
         }
-        
+
         // error in response
         if ($response->isError()) {
             return array();
         }
         $result = Zend_Json::decode($response->getBody());
-        
+
         if ($result['total_results'] == 0) {
             return array();
         }
-        
+
         // cut unwanted part of result (longer than $limit)
         if ($result['total_results'] > $limit) {
             array_splice($result['spots'], $limit);
-        }        
-        
-        // Load venues into array of GSAA_Model_POI        
+        }
+
+        // Load venues into array of GSAA_Model_POI
         $pois = array();
         foreach ($result['spots'] as $entry) {
             // skip venues that are not in radius x2 (avoid showing venues that are too far)
-            if ($this->getDistance($lat, $long, $entry['lat'], $entry['lng']) > $radius) {
+            if (GSAA_POI_Distance::getDistance($lat, $long, $entry['lat'], $entry['lng']) > $radius) {
                 continue;
             }
             $poi = new GSAA_Model_POI();
@@ -85,39 +84,39 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
             $poi->lng       = $entry['lng'];
             if (isset($entry['location']['address']))
                 $poi->address    = $entry['address']['locality'];
-            
-            $poi->distance = $this->getDistance($lat, $long, $poi->lat, $poi->lng);
+
+            $poi->distance = GSAA_POI_Distance::getDistance($lat, $long, $poi->lat, $poi->lng);
 
             $poi->quality = $this->_calculateQuality($poi, $entry['users_count']);
-            
+
             $pois[] = $poi;
         }
         return $pois;
     }
-    
+
     /**
      * Get full detail of venue.
-     * 
+     *
      * @param string $id Venue ID
      * @return GSAA_Model_POI
      */
     public function getDetail($id) {
         $endpoint = '/spots';
-        
+
         $client = $this->_constructClient($endpoint . '/' . $id);
         try {
             $response = $client->request();
         } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
             return;
         }
-        
+
         // error in response
         if ($response->isError()) return;
 
-        $entry = Zend_Json::decode($response->getBody());       
-        
+        $entry = Zend_Json::decode($response->getBody());
+
         $poi = new GSAA_Model_POI();
-        
+
         $poi->type      = self::TYPE;
         $poi->name      = $entry['name'];
         $urlExploded    = explode('/',  $entry['url']);
@@ -130,10 +129,10 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
 
         if (isset($entry['phone_number']))
             $poi->phone = $entry['phone_number'];
-        
+
         if (isset($entry['description']))
             $poi->description = trim($entry['description']);
-        
+
         /*
          * Links
          */
@@ -152,7 +151,7 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
             $tmpCategory['name']    = $category['name'];
             $urlExploded            = explode('/',  $category['url']);
             $tmpCategory['id']      = $urlExploded[2];
-            
+
             $clientCategory = $this->_constructClient('/categories/' . $tmpCategory['id']);
             try {
                 $responseCategory = $clientCategory->request();
@@ -166,9 +165,9 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
                 // dont add category
                 continue;
             }
-            $poi->categories[] = $tmpCategory;            
+            $poi->categories[] = $tmpCategory;
         }
-        
+
         /**
          * Add photos
          */
@@ -180,7 +179,7 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
                 // error in response
                 if ($responsePhotos->isError()) return;
 
-                $resultPhotos = Zend_Json::decode($responsePhotos->getBody());       
+                $resultPhotos = Zend_Json::decode($responsePhotos->getBody());
                 $entryPhotos = $resultPhotos['activity'];
 
                 if (count($entryPhotos) > 0) {
@@ -190,7 +189,7 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
                         $tmpPhoto = array(
                             'url'   => $photo['photo_urls']['high_res_320x480'],
                             'thumbnail' => $photo['photo_urls']['square_100'],
-                            'id'    => md5($photo['checkin_url']), // create "static" url 
+                            'id'    => md5($photo['checkin_url']), // create "static" url
                             'date'  => $tmpDate->get(Zend_Date::TIMESTAMP),
                             'title' => trim($photo['message'])
                         );
@@ -200,14 +199,14 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
                             if ($tmpClient->request('HEAD')->isSuccessful()) $poi->photos[] = $tmpPhoto;
                         } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
                             // don't add
-                        }                    
+                        }
                     }
                 }
             } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
                 // keep photos empty
             }
         }
-        
+
         /*
          * Add tips (aka highlights)
          */
@@ -218,7 +217,7 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
             // error in response
             if ($responseTips->isError()) return;
 
-            $resultTips = Zend_Json::decode($responseTips->getBody());        
+            $resultTips = Zend_Json::decode($responseTips->getBody());
             $entryTips = $resultTips['highlights'];
 
             if (count($entryTips) > 0) {
@@ -226,7 +225,7 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
                     if (empty($tip['comment'])) continue; // skip highlights without text
                     $tmpDate = new Zend_Date(substr($tip['updated_at'], 0, -1) . '+00:00', Zend_Date::W3C);
                     $tmpTip = array(
-                        'id'    => md5($tip['updated_at']), // create "static" url 
+                        'id'    => md5($tip['updated_at']), // create "static" url
                         'text'  => $tip['comment'],
                         'date'  => $tmpDate->get(Zend_Date::TIMESTAMP)
                     );
@@ -236,9 +235,9 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
         } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
             // keep tips empty
         }
-        
+
         return $poi;
-        
+
     }
 
     /**
@@ -255,13 +254,13 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
         $url = self::OAUTH_URL . '?' . $queryString;
         return $url;
     }
-    
+
     /**
      * Request OAuth access token.
-     * 
+     *
      * @param string $code OAuth code we got from service.
      * @return string Token, or null if we didn't obtain a proper token
-     */    
+     */
     public function requestToken($code) {
         $client = new Zend_Http_Client();
         $queryParams = array(
@@ -292,13 +291,13 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
         }
         return;
     }
-    
+
     /**
      *  Check if token is still valid in service
-     * 
+     *
      * @param string $token OAuth token
      * @return bool Whether token is still valid in service
-     */    
+     */
     public function checkToken($token) {
         $client = new Zend_Http_Client();
         $queryParams = array(
@@ -317,12 +316,12 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
         }
         return false;
     }
-    
+
     /**
      * Get details of signed in user.
-     * 
+     *
      * @return array Array of user details
-     */    
+     */
     public function getUserInfo() {
         $client = $this->_constructClient('/users/me');
         try {
@@ -419,16 +418,16 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
         }
         return $friendsActivity;
     }
-    
+
     /**
      * Construct Zend_Http_Client object.
-     * 
+     *
      * @param string $endpoint
-     * @param array $queryParams 
+     * @param array $queryParams
      * @param array $clientConfig
      * @return Zend_Http_Client
      */
-    
+
     protected function _constructClient($endpoint, $queryParams = array(), $clientConfig = array()) {
         $client = new Zend_Http_Client();
 
@@ -442,8 +441,8 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
                     'X-Gowalla-API-Key' => self::CLIENT_ID,
                     'Accept'            => 'application/json'
                 ));
-        
-        
+
+
         return $client;
     }
     /**

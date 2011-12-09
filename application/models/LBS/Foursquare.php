@@ -1,6 +1,6 @@
 <?php
 
-class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract 
+class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
 {
     const SERVICE_URL = 'https://api.foursquare.com/v2';
     const PUBLIC_URL = 'https://foursquare.com';
@@ -12,7 +12,7 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
     const LIMIT = 30;
     const RADIUS_MAX = 100000;
     const TYPE = 'fq';
-    
+
     /**
      * Number of usersCount, when POI is considered as "top quality" (quality = 5).
      * May increase in time (depending on increase of foursquare users).
@@ -22,14 +22,14 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
      *  Date of 4SQ API is verified to be up-to-date.
      */
     const DATEVERIFIED = '20111027';
-    
+
     public function init() {
         // TODO: set client properties?
     }
 
     /**
      * Function to get nearby venues.
-     * 
+     *
      * @param double $lat Latitude
      * @param double $long Longitude
      * @param int    $radius Radius to search
@@ -58,30 +58,30 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
             $response = $client->request();
         } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
             return array();
-        }        
-        
+        }
+
         // error in response
         if ($response->isError()) {
             return array();
         }
         $result = Zend_Json::decode($response->getBody());
-        
+
         // foursquare returned an error
         if ($result['meta']['code'] != 200) {
             // TODO: log $result['meta']['errorType'] and $result['meta']['errorDetail']
             return array();
         };
-        
+
         // if code was 200 some non fatal error occured
         if (!empty($result['meta']['errorType'])) {
             // TODO: log $result['meta']['errorType'] and $result['meta']['errorDetail']
         }
-        
-        // Load venues into array of GSAA_Model_POI        
+
+        // Load venues into array of GSAA_Model_POI
         $pois = array();
         foreach ($result['response']['venues'] as $entry) {
             // skip venues that are not in radius x2 (avoid showing venues that are too far)
-            if ($this->getDistance($lat, $long,
+            if (GSAA_POI_Distance::getDistance($lat, $long,
                                     $entry['location']['lat'], $entry['location']['lng']) > $radius*2) {
                 continue;
             }
@@ -95,7 +95,7 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
             if (isset($entry['location']['distance'])) {
                 $poi->distance = $entry['location']['distance'];
             } else {
-                $poi->distance = $this->getDistance($lat, $long, $poi->lat, $poi->lng);
+                $poi->distance = GSAA_POI_Distance::getDistance($lat, $long, $poi->lat, $poi->lng);
             }
             if (isset($entry['location']['address']))
                 $poi->address = $entry['location']['address'];
@@ -108,7 +108,7 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
             //    $poi->country = $entry['location']['country'];
 
             $poi->quality = $this->_calculateQuality($poi, $entry['stats']['usersCount']);
-            
+
             $pois[] = $poi;
         }
         return $pois;
@@ -116,7 +116,7 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
 
     /**
      * Get full detail of venue.
-     * 
+     *
      * @param string $id Venue ID
      * @return GSAA_Model_POI
      */
@@ -128,25 +128,25 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
         } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
             return;
         }
-        
+
         // error in response
         if ($response->isError()) return;
-        
-        $result = Zend_Json::decode($response->getBody());        
-        
+
+        $result = Zend_Json::decode($response->getBody());
+
         // foursquare returned an error
         if ($result['meta']['code'] != 200) return;
-        
+
         $entry = $result['response']['venue'];
         $poi = new GSAA_Model_POI();
-        
+
         $poi->type      = self::TYPE;
         $poi->name      = $entry['name'];
         $poi->id        = $entry['id'];
         $poi->url       = $entry['canonicalUrl'];
         $poi->lat       = $entry['location']['lat'];
         $poi->lng       = $entry['location']['lng'];
-        
+
         if (isset($entry['location']['address']))
             $poi->address = $entry['location']['address'];
         if (isset($entry['location']['crossStreet']))
@@ -157,14 +157,14 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
                         . $entry['location']['postalCode'];
         if (isset($entry['location']['city']))
             $poi->address .= (!empty($poi->address) ? ', ' : '')
-                        . $entry['location']['city'];        
-        
+                        . $entry['location']['city'];
+
         if (isset($entry['contact']['formattedPhone']))
             $poi->phone = $entry['contact']['formattedPhone'];
-        
+
         if (isset($entry['description']))
             $poi->description = trim($entry['description']);
-        
+
         /*
          * Links
          */
@@ -172,7 +172,7 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
             $poi->links[] = array("Website" => (strncmp($entry['url'], 'http', 4) == 0 ? '' : 'http://') . $entry['url']);
         if (isset($entry['contact']['twitter'])) // twitter account
             $poi->links[] = array("Twitter" => "http://twitter.com/" . $entry['contact']['twitter']);
-        
+
         /*
          * Categories
          */
@@ -191,11 +191,11 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
                                                 array('group' => 'venue'));
         try {
             $responsePhotos = $clientPhotos->request();
-        
+
             // error in response
             if ($responsePhotos->isError()) return;
 
-            $resultPhotos = Zend_Json::decode($responsePhotos->getBody());        
+            $resultPhotos = Zend_Json::decode($responsePhotos->getBody());
             // foursquare returned an error
             if ($resultPhotos['meta']['code'] != 200) return;
 
@@ -204,7 +204,7 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
             if (count($entryPhotos['items']) > 0) {
                 foreach ($entryPhotos['items'] as $photo) {
                     $thumbUrl = null;
-                    // find apropriate thumbnail size 
+                    // find apropriate thumbnail size
                     foreach ($photo['sizes']['items'] as $sizes) {
                         if ($sizes['height'] == 100) {
                             $thumbUrl = $sizes['url'];
@@ -231,7 +231,7 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
         } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
             // keep photos empty
         }
-        
+
         /*
          * Add tips
          */
@@ -245,11 +245,11 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
             // error in response
             if ($responseTips->isError()) return;
 
-            $resultTips = Zend_Json::decode($responseTips->getBody());        
+            $resultTips = Zend_Json::decode($responseTips->getBody());
             // foursquare returned an error
             if ($resultTips['meta']['code'] != 200) return;
 
-            $entryTips = $resultTips['response']['tips'];        
+            $entryTips = $resultTips['response']['tips'];
 
             if (count($entryTips['items']) > 0) {
                 foreach ($entryTips['items'] as $tip) {
@@ -264,7 +264,7 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
         } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
             // keep tips empty
         }
-        
+
         return $poi;
     }
 
@@ -282,13 +282,13 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
         $url = self::OAUTH_URL . '?' . $queryString;
         return $url;
     }
-    
+
     /**
      * Request OAuth access token.
-     * 
+     *
      * @param string $code OAuth code we got from service.
      * @return string Token, or null if we didn't obtain a proper token
-     */    
+     */
     public function requestToken($code) {
         $client = new Zend_Http_Client();
         $queryParams = array(
@@ -305,7 +305,7 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
             $response = $client->request();
         } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
             return;
-        }   
+        }
 
         // error in response
         if ($response->isError()) {
@@ -319,25 +319,25 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
         }
         return;
     }
-    
+
     /**
      *  Check if token is still valid in service
-     * 
+     *
      * @param string $token OAuth token
      * @return bool Whether token is still valid in service
-     */    
+     */
     public function checkToken($token) {
         $client = new Zend_Http_Client();
         $queryParams = array(
             'oauth_token'   => $token,
         );
-        $client->setUri(self::OAUTH_CHECK); 
+        $client->setUri(self::OAUTH_CHECK);
         $client->setParameterGet($queryParams);
         try {
             $response = $client->request();
         } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
             return false;
-        }   
+        }
         if ($response->isSuccessful()) {
             return true;
         }
@@ -357,14 +357,14 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
         } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
             return;
         }
-        
+
         // error in response
         if ($response->isError()) return;
-        
+
         $result = Zend_Json::decode($response->getBody());
         // foursquare returned an error
         if ($result['meta']['code'] != 200) return;
-        
+
         $entry = $result['response']['user'];
         $user = array(
             'name'      => $entry['firstName'] . ' ' . $entry['lastName'],
@@ -400,7 +400,7 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
         foreach ($entry as $friend) {
             if (!isset($friend['venue'])) continue; // may be shout without venue -> skip than
             if ($friend['user']['relationship'] != 'friend') continue; // skip follwings
-            
+
             // fill GSAA_Model_Checkin
                 $checkin = new GSAA_Model_Checkin(self::TYPE, $friend['createdAt']);
                 $checkin->userName  = (isset($friend['user']['firstName']) ? $friend['user']['firstName'] : '')
@@ -411,42 +411,42 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
                 $checkin->lng       = $friend['venue']['location']['lng'];
                 $checkin->comment   = (isset($friend['shout']) ? $friend['shout'] : '');
                 $checkin->id        = 'id-' . substr(md5(uniqid()), 0, 8);
-                
+
                 $friendsActivity[]  = $checkin;
         }
         return $friendsActivity;
     }
-    
+
     /**
      * Construct Zend_Http_Client object.
-     * 
+     *
      * @param string $endpoint
-     * @param array $queryParams 
+     * @param array $queryParams
      * @param array $clientConfig
      * @return Zend_Http_Client
      */
-    
+
     protected function _constructClient($endpoint, $queryParams = array(), $clientConfig = array()) {
         $client = new Zend_Http_Client();
-        
+
         // add predefined params
         $queryParams['client_id'] = self::CLIENT_ID;
         $queryParams['client_secret'] = self::CLIENT_SECRET;
         $queryParams['v'] = self::DATEVERIFIED;
         if (!empty($this->_oauthToken)) $queryParams['oauth_token'] = $this->_oauthToken;
-        
+
         // set client options
         $client->setUri(self::SERVICE_URL . $endpoint);
         $client->setParameterGet($queryParams);
         $client->setConfig($clientConfig);
-        
-        
+
+
         return $client;
     }
-    
+
     /**
      * Calculate POI quality
-     * 
+     *
      * @param GSAA_Model_POI $poi POI which quality should be calculated
      * @param int $usersCount
      * @return double Quality of POI (-5.0 - 5.0)

@@ -38,7 +38,7 @@ class PoiController extends Zend_Controller_Action
             return; // no proper lat & lng set => we can't search for venues
         }
 
-        $poisRaw = $this->loadNearbyPois($lat, $long, $radius, $term);
+        $poisRaw = $this->_loadNearbyPois($lat, $long, $radius, $term);
 
         // Fill view->pois variable with JSON structure.
         if (count($poisRaw) > 0) {
@@ -165,7 +165,7 @@ class PoiController extends Zend_Controller_Action
                 similar_text($poiXName, $poiYName, $similarPercentBasic);
                 similar_text( Zend_Filter::filterStatic($poiXName, 'Alnum'),
                               Zend_Filter::filterStatic($poiYName, 'Alnum'), $similarPercentAlpha);
-                $distance = $this->_serviceModels[$poisRaw[$x]->type]->getDistance(
+                $distance = GSAA_POI_Distance::getDistance(
                                 $poisRaw[$x]->lat,
                                 $poisRaw[$x]->lng,
                                 $poisRaw[$y]->lat,

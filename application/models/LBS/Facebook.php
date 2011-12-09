@@ -1,6 +1,6 @@
 <?php
 
-class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract 
+class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
 {
     const SERVICE_URL = 'https://graph.facebook.com';
     const PUBLIC_URL = 'https://facebook.com';
@@ -12,7 +12,7 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
     const ACCESS_TOKEN = '110157905740540|Pq1zptubbe1gq5L8hAL3aBswvPs';
     const LIMIT = 30;
     const TYPE = 'fb';
-    
+
     public function init() {
         /*Zend_Loader::loadFile("facebook.php", null, true);
         $config = array(
@@ -24,7 +24,7 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
 
     /**
      * Function to get nearby venues.
-     * 
+     *
      * @param double $lat Latitude
      * @param double $long Longitude
      * @param int    $radius Radius to search
@@ -40,9 +40,9 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
         if ($term) {
             $limit = self::LIMIT;
         }
-        
+
         $queryParams = array('type'     => 'place',
-                             'center'   => "$lat,$long",                            
+                             'center'   => "$lat,$long",
                              'limit'    => $limit,
                              'distance' => ($radius > 0 ? $radius : self::RADIUS),
                              'access_token' => self::ACCESS_TOKEN // even if user has his own token, overwrite it with the app token here
@@ -57,19 +57,19 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
         } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
             return array();
         }
-        
+
         // error in response
         if ($response->isError()) {
             return array();
         }
         $result = Zend_Json::decode($response->getBody());
-        
-        // Load venues into array of GSAA_Model_POI        
+
+        // Load venues into array of GSAA_Model_POI
         $pois = array();
         foreach ($result['data'] as $entry) {
             // skip venues that are not in radius x2 (avoid showing venues that are too far)
             // in fact the distance parametr do the same on FB side (and actually works), so this is kind of redundant check
-            if ($this->getDistance($lat, $long,
+            if (GSAA_POI_Distance::getDistance($lat, $long,
                                     $entry['location']['latitude'], $entry['location']['longitude']) > $radius*2) {
                 continue;
             }
@@ -80,23 +80,23 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
             $poi->url       = self::PUBLIC_URL . "/" . $entry['id'];
             $poi->lat       = $entry['location']['latitude'];
             $poi->lng       = $entry['location']['longitude'];
-            $poi->distance = $this->getDistance($lat, $long, $poi->lat, $poi->lng);
+            $poi->distance = GSAA_POI_Distance::getDistance($lat, $long, $poi->lat, $poi->lng);
 
             if (isset($entry['location']['street']))
                 $poi->address = $entry['location']['street'];
             if (isset($entry['location']['city']))
                 $poi->address .= (!empty($poi->address) ? ', ' : '')
                             . $entry['location']['city'];
-            
+
             $pois[] = $poi;
         }
 
         return $pois;
     }
-    
+
     /**
      * Get full detail of venue.
-     * 
+     *
      * @param string $id Venue ID
      * @return GSAA_Model_POI
      */
@@ -108,12 +108,12 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
         } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
             return;
         }
-        
+
         // error in response
         if ($response->isError()) return;
-        
+
         $entry = Zend_Json::decode($response->getBody());
-        
+
         $poi = new GSAA_Model_POI();
         $poi->type      = self::TYPE;
         $poi->name      = $entry['name'];
@@ -128,14 +128,14 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
                         . $entry['location']['zip'];
         if (isset($entry['location']['city']))
             $poi->address .= (!empty($poi->address) ? ', ' : '')
-                        . $entry['location']['city'];            
+                        . $entry['location']['city'];
 
         if (isset($entry['phone']))
             $poi->phone = $entry['phone'];
-        
+
         if (isset($entry['website']))
             $poi->links[] = array("Website" => (strncmp($entry['website'], 'http', 4) == 0 ? '' : 'http://') . $entry['website']);
-        
+
         /**
          * Add photos (Facebook profile photos)
          */
@@ -151,7 +151,7 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
             if (count($entryPhotos) > 0) {
                 foreach ($entryPhotos as $photo) {
                     $thumbUrl = null;
-                    // find apropriate thumbnail size 
+                    // find apropriate thumbnail size
                     foreach ($photo['images'] as $sizes) {
                         if ($sizes['height'] < 150) { // firt thumbnail smaller the 150px
                             $thumbUrl = $sizes['source'];
@@ -178,7 +178,7 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
         } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
             // keep photos empty
         }
-        
+
         return $poi;
     }
 
@@ -197,13 +197,13 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
         $url = self::OAUTH_URL . '?' . $queryString;
         return $url;
     }
-    
+
     /**
      * Request OAuth access token.
-     * 
+     *
      * @param string $code OAuth code we got from service.
      * @return string Token, or null if we didn't obtain a proper token
-     */    
+     */
     public function requestToken($code) {
         $client = new Zend_Http_Client();
         $queryParams = array(
@@ -233,13 +233,13 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
         }
         return;
     }
-    
+
     /**
      *  Check if token is still valid in service
-     * 
+     *
      * @param string $token OAuth token
      * @return bool Whether token is still valid in service
-     */    
+     */
     public function checkToken($token) {
         $client = new Zend_Http_Client();
         $queryParams = array(
@@ -258,12 +258,12 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
         }
         return false;
     }
-    
+
     /**
      * Get details of signed in user.
-     * 
+     *
      * @return array Array of user details
-     */    
+     */
     public function getUserInfo() {
         $client = $this->_constructClient('/me');
         try {
@@ -326,13 +326,13 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
 
     /**
      * Construct Zend_Http_Client object.
-     * 
+     *
      * @param string $endpoint
-     * @param array $queryParams 
+     * @param array $queryParams
      * @param array $clientConfig
      * @return Zend_Http_Client
      */
-    
+
     protected function _constructClient($endpoint, $queryParams = array(), $clientConfig = array()) {
         $client = new Zend_Http_Client();
 
@@ -342,13 +342,13 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
         } else { // otherwise use APP token
             $queryParams['access_token'] = self::ACCESS_TOKEN;
         }
-        
+
         // set client options
         $client->setUri(self::SERVICE_URL . $endpoint);
         $client->setParameterGet($queryParams);
-        $client->setConfig($clientConfig);        
-        
+        $client->setConfig($clientConfig);
+
         return $client;
     }
-    
+
 }
