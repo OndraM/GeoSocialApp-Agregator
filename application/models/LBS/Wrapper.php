@@ -30,16 +30,16 @@ class GSAA_Model_LBS_Wrapper
      */
     public static function loadNearbyPois($lat, $long, $radius, $term) {
         $serviceModels = self::_initServiceModel();
-        $poisRaw = array();
+        $pois = array();
 
         foreach ($serviceModels as $modelId => $model) {    // iterate through availabe LBS models
             if ((boolean) $this->_getParam($modelId)) {     // use service
-                $poisRaw = array_merge(
-                        $poisRaw,
+                $pois = array_merge(
+                        $pois,
                         $model->getNearbyVenues($lat, $long, $radius, $term));
             }
         }
-        return $poisRaw;
+        return $pois;
     }
 
     /**
@@ -68,17 +68,21 @@ class GSAA_Model_LBS_Wrapper
 
     /**
      * Load last activity of friends from availabe LBS services
+     *
+     * @param array Array of services to request friends
+     * @return Array of friends latest checkins in GSAA_Model_Checkin
      */
-    public static function loadFriendsActivity() {
+    public static function loadFriendsActivity($services) {
         $serviceModels = self::_initServiceModel();
         $friendsActivity = array();
 
-        foreach($serviceModels as $model) {
-            if (method_exists($model, 'getFriendsActivity')) {
+        foreach ($services as $service => $token) {     // iterate through active services
+            if (method_exists($serviceModels[$service], 'getFriendsActivity')) {
                 $friendsActivity = array_merge($friendsActivity,
-                    $model->getFriendsActivity());
+                    $serviceModels[$service]->getFriendsActivity());
             }
         }
+        return $friendsActivity;
     }
 
 }

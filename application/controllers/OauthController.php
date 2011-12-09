@@ -9,28 +9,25 @@ class OauthController extends Zend_Controller_Action
         if (!isset($this->session->services)) {
             $this->session->services = array();
         }
-        
-        $ajaxContext = $this->_helper->getHelper('AjaxContext');        
+
+        $ajaxContext = $this->_helper->getHelper('AjaxContext');
         $ajaxContext->addActionContext('is-authenticated', 'json')
                     ->initContext();
     }
 
     public function callbackAction()
     {
-        //$this->_helper->layout->disableLayout();
-        //$this->_helper->viewRenderer->setNoRender();
-        
         $services = Zend_Registry::get('var')->services;
-        
+
         $service = $this->_getParam('service');
         $code = $this->_getParam('code');
-        
+
         if (array_key_exists($service, $services)) {
             $model = new $services[$service]['model']();
             $this->view->serviceName = $services[$service]['name'];
-            
-            $token = $model->requestToken($code);            
-            if ($token) {            
+
+            $token = $model->requestToken($code);
+            if ($token) {
                 $this->session->services[$service] = $token;
                 $this->view->status = true;
                 $this->_helper->layout->setLayout('simple');
@@ -39,14 +36,15 @@ class OauthController extends Zend_Controller_Action
             }
         }
     }
-    
+
     /**
      * Check whether user is authenticated and token is valid.
-     */    
+     * Called through AJAX request.
+     */
     public function isAuthenticatedAction()
     {
         $services = Zend_Registry::get('var')->services;
-        
+
         $service = $this->_getParam('service');
         $this->view->status = false;
         if (isset($this->session->services[$service])) {
@@ -56,10 +54,10 @@ class OauthController extends Zend_Controller_Action
                 unset($this->session->services[$service]);
             }
         }
-    }    
-    
+    }
+
     /**
-     * Destroy session
+     * Destroy all sessions.
      */
     public function destroyAction()
     {

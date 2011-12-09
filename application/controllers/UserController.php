@@ -26,8 +26,7 @@ class UserController extends Zend_Controller_Action
         $this->view->cLat = $this->_getParam('cLat');
         $this->view->cLng = $this->_getParam('cLng');
 
-        $friendsRaw = GSAA_Model_LBS_Wrapper::loadFriendsActivity();
-
+        $friendsRaw = GSAA_Model_LBS_Wrapper::loadFriendsActivity($this->session->services);
 
         if (count($friendsRaw) > 0) {
             $friendsCheckins = $this->_mergeFriendsCheckins($friendsRaw);
