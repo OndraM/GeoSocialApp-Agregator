@@ -10,11 +10,13 @@ class PoiController extends Zend_Controller_Action
 
     public function init()
     {
+        // initialize model for each service
         foreach (Zend_Registry::get('var')->services as $serviceId => $service) {
             $classname = $service['model'];
             $this->_serviceModels[$serviceId] = new $classname();
         }
-        
+
+        // set ajax contexts
         $ajaxContext = $this->_helper->getHelper('AjaxContext');        
         $ajaxContext->addActionContext('get-nearby', 'json')
                     ->initContext();
@@ -26,14 +28,14 @@ class PoiController extends Zend_Controller_Action
      */
     public function getNearbyAction()
     {
-        $lat = (double) $this->_getParam('lat');
-        $long = (double) $this->_getParam('long');
+        $lat    = $this->_getParam('lat');
+        $long   = $this->_getParam('long');
         $radius = (int) $this->_getParam('radius');
-        $term = (string) $this->_getParam('term');
+        $term   = (string) $this->_getParam('term');
         
         // lat and long params are mandatory
         if (!is_numeric($lat) || !is_numeric($long)) {
-            return;
+            return; // no proper lat & lng set => we can't search for venues
         }
         
         $poisRaw = array();
@@ -61,7 +63,7 @@ class PoiController extends Zend_Controller_Action
                 $this->view->pois[$i]['distance']   = $poi->getField('distance');
                 $this->view->pois[$i]['address']    = $poi->getField('address', false);
                 $this->view->pois[$i]['phone']      = $poi->getField('phone');
-                $this->view->pois[$i]['quality']   = $poi->getField('quality');
+                $this->view->pois[$i]['quality']    = $poi->getField('quality');
                 $this->view->pois[$i]['pois']       = $poi->getPois();
                 $i++;
             }
@@ -76,7 +78,7 @@ class PoiController extends Zend_Controller_Action
      */
     public function showDetailAction()
     {
-        if ($this->getRequest()->isXmlHttpRequest()) {
+        if ($this->getRequest()->isXmlHttpRequest()) { // disable layout for AJAX requests
             $this->_helper->layout->disableLayout();
         } 
         
@@ -103,6 +105,7 @@ class PoiController extends Zend_Controller_Action
         $this->view->values['tips']     = $aggregatedPOI->getFieldAll('tips');
         $this->view->values['notes']    = $aggregatedPOI->getFieldAll('notes');
         $this->view->values['categories'] = $aggregatedPOI->getFieldAll('categories');
+
         if (count($this->view->values['address']) == 0) {
             $addressGeocode = $aggregatedPOI->getField('address', true); // geocode address
             if ($addressGeocode) {
@@ -119,8 +122,8 @@ class PoiController extends Zend_Controller_Action
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender();
         
-        $lat = (double) $this->_getParam('lat');
-        $long = (double) $this->_getParam('long');
+        $lat = $this->_getParam('lat');
+        $long = $this->_getParam('long');
         $radius = (int) $this->_getParam('radius');
         $term = (string) $this->_getParam('term');
         $service['fq'] = (boolean) $this->_getParam('fq');
@@ -161,6 +164,7 @@ class PoiController extends Zend_Controller_Action
             
             $poiXName = Zend_Filter::filterStatic($poisRaw[$x]->name, 'StringToLower');
             $poiXName = Zend_Filter::filterStatic($poiXName, 'ASCII', array(), array('GSAA_Filter'));
+            
             for ($y = 0; $y < count($poisRaw); $y++) {
                 if (is_null($poisRaw[$y])) continue; // skip already merged items
                 if ($x == $y) continue; // skip the same POI
@@ -192,9 +196,11 @@ class PoiController extends Zend_Controller_Action
                         . 'distance: '
                         . $distance
                         . "<br />\n";*/
+
+                 // Check if POIs names are similair and they are close to each other, so we should merge them
                 if (($similarPercentBasic > 75
                          || $similarPercentAlpha > 82.5)
-                    && $distance < 150) { // Merge objects
+                    && $distance < 150) {
                     
                     $agPoi->addPoi($poisRaw[$y]); // copy entire POI
                     $poisRaw[$y] = null; // remove content from array, so that the POI wont be merged again
