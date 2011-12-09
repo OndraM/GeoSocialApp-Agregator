@@ -6,22 +6,22 @@ class GSAA_Model_Checkin
      * Type of POI {fq, gw, gg, fb, ...}
      */
     public $type    = null;
-    
+
     /**
-     * Unique id of POI 
+     * Unique id of POI
      */
     public $id      = null;
-    
+
     /**
      * Name of user
      */
     public $userName    = null;
-    
+
     /**
      * Latitude of checkin
      */
     public $lat     = null;
-    
+
     /**
      * Longitude of checkin
      */
@@ -70,10 +70,10 @@ class GSAA_Model_Checkin
         $date = new Zend_Date($timestamp);
         $this->date = $timestamp;
         $this->dateFormatted = $date->get(Zend_Date::DATETIME_MEDIUM);
-        
+
         $this->type = $type;
-        $this->serviceName = $services[$type]['name'];        
+        $this->serviceName = $services[$type]['name'];
     }
-     
-    
+
+
 }

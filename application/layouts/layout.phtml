@@ -5,14 +5,14 @@
 <?php
     $this->headMeta()
 		->setCharset('utf-8');
-    
+
     $this->headLink()
         ->appendStylesheet('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/ui-lightness/jquery-ui.css', 'screen, projection')
         ->appendStylesheet($this->baseUrl() . '/styles/jquery.fancybox.css', 'screen, projection')
         ->appendStylesheet($this->baseUrl() . '/styles/jquery.bxSlider.css', 'screen, projection')
         ->appendStylesheet($this->baseUrl() . '/styles/jquery.tipsy.css', 'screen, projection')
         ->appendStylesheet($this->baseUrl() . '/styles/styles.css', 'screen, projection');
-    
+
 
     $this->headScript()
         ->prependFile('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js')
@@ -30,7 +30,7 @@
     echo $this->headMeta() . "\n\n";
     echo $this->headLink() . "\n\n";
     echo $this->headScript() . "\n\n";
-    
+
 ?>
     <title><?php echo Zend_Registry::isRegistered('var') ? Zend_Registry::get('var')->sitename : "";?></title>
 
@@ -41,14 +41,14 @@
         <h1>GeoSocialApp aggregator</h1>
         <h2>Bacheleror thesis project of Ondřej Machulda</h2>
     </div>
-    
+
     <div id="content">
 
     <?php echo $this->layout()->content; ?>
 
     </div>
-        
+
 </div>
-        
+
     </body>
 </html>

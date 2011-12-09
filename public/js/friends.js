@@ -51,7 +51,7 @@ function filterMarkers(time) {
         } else { // remove marker
             friendMarkers[friend.id].setMap(null);
         }
-        
+
     })
 }
 
@@ -126,7 +126,7 @@ function initFriendsMap() {
             infoWindow.setContent(content);
             infoWindow.open(map, this);
         });
-        
+
     });
 
     // Limit maximum and minimum zoom after fit bounds.

@@ -14,8 +14,8 @@ class GSAA_Controller_Action_Helper_AjaxContext
         $context = $this->getActionContexts($action);
 
         //check in case multiple contexts DO exist
-        if(count($context) === 1) { 
-            $format = $context[0]; 
+        if(count($context) === 1) {
+            $format = $context[0];
 
         }
         return parent::initContext($format);

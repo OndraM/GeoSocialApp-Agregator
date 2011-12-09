@@ -13,7 +13,7 @@ if (typeof console === "undefined") {
  /**
   * Diacritics removal map
   * Source: http://lehelk.com/2011/05/06/script-to-remove-diacritics/
-  */ 
+  */
 var diacriticsRemovalMap = [
     {'base':'A', 'letters':/[\u0041\u24B6\uFF21\u00C0\u00C1\u00C2\u1EA6\u1EA4\u1EAA\u1EA8\u00C3\u0100\u0102\u1EB0\u1EAE\u1EB4\u1EB2\u0226\u01E0\u00C4\u01DE\u1EA2\u00C5\u01FA\u01CD\u0200\u0202\u1EA0\u1EAC\u1EB6\u1E00\u0104\u023A\u2C6F]/g},
     {'base':'AA','letters':/[\uA732]/g},
@@ -121,10 +121,10 @@ $(document).ready(function() {
     $('a.external').live('click', function() {
 		this.target = '_blank';
 	});
-    
+
     // Fancybox init
     //$(".fancybox").fancybox();
-    
+
     /*
      * jSort - jQury sorting plugin
      * http://do-web.com/jsort/overview
@@ -134,7 +134,7 @@ $(document).ready(function() {
      * http://do-web.com/jsort/license
      */
    $.fn.jSort = function(options){
-	   
+
 	var options = $.extend({
 		sort_by: 'p',
 		item: 'div',
@@ -144,62 +144,62 @@ $(document).ready(function() {
 		attr_name: ''
 	},options);
 
-	return this.each(function() {            
+	return this.each(function() {
 		var hndl = this;
 		var titles = [];
 		var i = 0;
-		
+
 		//init titles
 		$(this).find(options.item).each(function(){
-		
+
 			var txt;
 			var sort_by = $(this).find(options.sort_by);
-			
+
 			if(options.sort_by_attr){
-				txt = sort_by.attr(options.attr_name).toLowerCase();	
+				txt = sort_by.attr(options.attr_name).toLowerCase();
 			}
 			else{
-				txt = sort_by.text().toLowerCase();	
+				txt = sort_by.text().toLowerCase();
 			}
-						
+
 			titles.push([txt, i]);
-			
-			$(this).attr("rel", "sort" + i);			
+
+			$(this).attr("rel", "sort" + i);
 			i++;
 		});
-		
-		this.sortNum = function(a, b){			
+
+		this.sortNum = function(a, b){
 			return eval(a[0] -  b[0]);
 		};
-		
-		this.sortABC = function(a, b){			
+
+		this.sortABC = function(a, b){
 			return a[0] > b[0] ? 1 : -1;
 		};
-		
+
 		if(options.is_num){
 			titles.sort(hndl.sortNum);
 		}
 		else{
 			titles.sort(hndl.sortABC);
-		}	
-		
+		}
+
 		if(options.order == "desc"){
 			if(options.is_num){
 				titles.reverse(hndl.sortNum);
 			}
-			else{				
+			else{
 				titles.reverse(hndl.sortABC);
-			}				
+			}
 		}
-		
+
 		for (var t=0; t < titles.length; t++){
 			var el = $(hndl).find(options.item + "[rel='sort" + titles[t][1] + "']");
 			$(hndl).append(el);
 		}
-		
-	});    
+
+	});
    };
-    
+
 });
 
 /* ----------------------- Index page specific code -----------------------  */
@@ -237,15 +237,15 @@ function initIndex() {
     $('#searchform').submit(function() {
         // show ajax spinner
         toggleVenuesLoading();
-        
+
         // reset possible highlight
         $('#searchform input[type=submit]').stop().css({backgroundColor: "#F6F6F6"});
-        
+
         // check whether xhrRequest isn't already running
         if (xhrVenues && xhrVenues.readyState != 4){
             xhrVenues.abort(); // if so, abort it first
         }
-        
+
         // do the xhr request itself
         xhrVenues = $.ajax({
             url: getNearbyUrl + '?' + $('#searchform input').serialize(),
@@ -261,7 +261,7 @@ function initIndex() {
         .done(function(data) {
             // got result; don't show venues loading anymore
             toggleVenuesLoading(true);
-            
+
             // something found:
             if (typeof data == 'object'
                     && typeof data.pois != 'undefined'
@@ -293,7 +293,7 @@ function initIndex() {
                     })
                 );
                 $('#venues-list').prepend('<p id="sorter"><strong>Sort by:</strong> <a id="sort-services" class="active">default</a> &ndash; <a id="sort-distance">distance</a> &ndash; <a id="sort-alpha">alphabetically</a> &ndash; <a id="sort-quality">quality</a></p>');
-                
+
                 $('#sorter a').click(function() {
                     var sortOpts = {};
                     switch ($(this).attr('id')) {
@@ -338,19 +338,19 @@ function initIndex() {
                     $("#venues-list ul").jSort(sortOpts);
                     //$(this).removeAttr('href');
                     $(this).addClass('active');
-                    
+
                     $('#sorter a').not(this).removeClass('active');
                     //$('#sorter a').not(this).attr('href', '#');
-                    
+
                     /*$.each($("#venues-list ul li span"), function(i, type) {
                         console.log(i);
                         console.log($(this).attr('id'));
                     })*/
-                    
-                   return false; 
+
+                   return false;
                 });
-                
-                
+
+
                 addPoisOnMap(mapItems);
             } else {  // no pois found
                 // clear the previous ones
@@ -362,7 +362,7 @@ function initIndex() {
         });
         // move map to values in from (in case they have been changed by user input, not by dragging map)
         setMapCenter( $('#searchform input[name=lat]').val(), $('#searchform input[name=long]').val());
-        
+
         return false;
     });
 
@@ -372,7 +372,7 @@ function initIndex() {
 			if (status == google.maps.GeocoderStatus.OK) {
 				var latlng = results[0].geometry.location;
 				map.panTo(latlng);
-                // when map is so zoomed in or out, zoom to default 
+                // when map is so zoomed in or out, zoom to default
                 if (map.getZoom() > 17 || map.getZoom() < 12) {
 					map.setZoom(14);
                     getAndSetRadius();
@@ -389,11 +389,11 @@ function initIndex() {
     $('#searchform').submit();
     initIndexMap();
     //doGeolocate(); // commented just for testing purposes // TODO uncomment
-    
+
     // Initial check of already connected services (with delay, to lower server load)
-    setTimeout('initConnectionsCheck()', 1000);    
-    
-    // When clicked on connect buttons    
+    setTimeout('initConnectionsCheck()', 1000);
+
+    // When clicked on connect buttons
     $('#oauth-wrapper div a').live('click', function() {
         var type =  $(this).parent().attr('id').substr(0, 2);
         var parent = $(this).parent();
@@ -403,7 +403,7 @@ function initIndex() {
         if (window.focus) {
             authWindow.focus();
         }
-        
+
         var loopCounter = 0;
         var authLoop = setInterval(function() {
             // check whether xhrRequest isn't already running
@@ -430,7 +430,7 @@ function initIndex() {
                 }
                 loopCounter++;
             });
-        }, 1500);        
+        }, 1500);
         return false;
     });
 
@@ -498,7 +498,7 @@ function initIndexForm() {
     // also when any checbox is clicked, highlight submit button
     $('#searchform input[type=checkbox]').click(function() {
         $('#searchform input[type=submit]').animate({backgroundColor: "#ffe45c"}, 500);
-    });    
+    });
 
     // toggle image on checbox checked
     $('#search-services label').click(function(){
@@ -575,7 +575,7 @@ function initIndexMap() {
     } else { // otherwise use default location
         latlng = new google.maps.LatLng(50.087811, 14.42046);
     }
-    
+
     var mapOptions = {
         zoom: 14,
         center: latlng,
@@ -584,32 +584,32 @@ function initIndexMap() {
     map = new google.maps.Map(
         document.getElementById('venues-map'),
         mapOptions
-    );     
+    );
     showMapCenterPointer(latlng, 5000);
-        
+
     google.maps.event.addListener(map, 'dragend', function() {
 		var latlng = map.getCenter();
         $('#searchform input[name=lat]').val(latlng.lat().toFixed(6));
         $('#searchform input[name=long]').val(latlng.lng().toFixed(6));
         $('#searchform').submit();
 	});
-    
+
     google.maps.event.addListener(map, 'zoom_changed', function() {
 		var latlng = map.getCenter();
         getAndSetRadius();
         $('#searchform input[name=lat]').val(latlng.lat().toFixed(6));
-        $('#searchform input[name=long]').val(latlng.lng().toFixed(6));        
+        $('#searchform input[name=long]').val(latlng.lng().toFixed(6));
         showMapCenterPointer(latlng, 1000);
-	});    
-    
+	});
+
     infoWindow = new google.maps.InfoWindow({
         maxWidth: 400
     });
-    
+
     var input = document.getElementById('search-address');
     var autocomplete = new google.maps.places.Autocomplete(input, {types: ['geocode']});
     google.maps.event.addListener(autocomplete, 'place_changed', function() {
-       getAndSetRadius(); 
+       getAndSetRadius();
     });
 
     autocomplete.bindTo('bounds', map);
@@ -623,11 +623,11 @@ function setMapCenter(lat, lng) {
     if (typeof map !== "undefined") {
         var newMapCenter = new google.maps.LatLng(lat, lng);
         var mapCenter = map.getCenter();
-        if (!mapCenter.equals(newMapCenter)) {            
+        if (!mapCenter.equals(newMapCenter)) {
             map.panTo(newMapCenter);
             showMapCenterPointer(newMapCenter, 3000);
         }
-        
+
     }
 }
 
@@ -651,7 +651,7 @@ function clearMap() {
 function addPoisOnMap(pois) {
     // clear current markers first
     clearMap();
-    
+
     // put pois on map
     $.each(pois, function(i, poi) {
         var content;
@@ -671,8 +671,8 @@ function addPoisOnMap(pois) {
         });
         content += ' </div>';
         if (typeof poi.address !== "undefined" && poi.address)
-            content += '<div>' + poi.address + '</div>';        
-        
+            content += '<div>' + poi.address + '</div>';
+
         /*if (poi.pois.length > 1) { // if this is more merged venues, list original names
             content += '<ul>'
             $.each(poi.pois, function(i, specificPoi) {
@@ -686,39 +686,39 @@ function addPoisOnMap(pois) {
             });
             content += '</ul>';
         }*/
-        
-        content += '<div>' 
+
+        content += '<div>'
                 + '<a href="' + poi.url + '" class ="popUp fancybox.ajax" title="Show all details of this venue">Show details &raquo;</a>'
-                + '</div>';        
-        
+                + '</div>';
+
         content += '</div>';
 
         google.maps.event.addListener(poiMarkers[poi.id], 'click', function() {
             infoWindow.setContent(content);
             infoWindow.open(map, poiMarkers[poi.id]);
         });
-        
+
         $('li#' + poi.id).click(function() {
             infoWindow.setContent(content);
             infoWindow.open(map, poiMarkers[$(this).attr('id')]);
         });
-        
+
         /*$('li#' + poi.id).mouseover(function() {
             if (poiMarkers[$(this).attr('id')].getAnimation() == null) {
                     poiMarkers[$(this).attr('id')].setAnimation(google.maps.Animation.BOUNCE);
                     var markerId = $(this).attr('id');
                     setTimeout(function() {poiMarkers[markerId].setAnimation(null);},750);
-                    
+
                 }
         });*/
-        
-        
+
+
     })
 }
 
 /*
  * Toggle venues loading spinner & wait cursor
- * 
+ *
  * @param forceRemove If set, force loading state to off.
  */
 function toggleVenuesLoading(forceRemove) {
@@ -729,16 +729,16 @@ function toggleVenuesLoading(forceRemove) {
         $('#venues-list').html('<ul><li><img src="/images/spinner.gif" alt="" /> Loading...</li></ul>');
         $('#venues-list').addClass('loading');
         $('#venues-wrapper').css('cursor', 'progress')
-    }        
+    }
 }
 
 /**
  * Calculate radius of current map (if defined) and set it as <input name=radius> value.
  * In map is not defined, return default radius.
- * 
- * Algorithm source: 
+ *
+ * Algorithm source:
  * http://stackoverflow.com/questions/3525670/radius-of-viewable-region-in-google-maps-v3/3527136#3527136
- * 
+ *
  * @return int Radius in meters.
  */
 
@@ -752,7 +752,7 @@ function getAndSetRadius() {
     ne = bounds.getNorthEast();
 
     // r = radius of the earth
-    var r = 6378;  
+    var r = 6378;
 
     // Convert lat or lng from decimal degrees into radians (divide by 57.2958)
     var lat1 = (center.lat() / 180) * Math.PI;
@@ -762,22 +762,22 @@ function getAndSetRadius() {
 
     // radius = circle radius from center to Northeast corner of bounds
     var radius = Math.round(
-        1000 * r * Math.acos(Math.sin(lat1) * Math.sin(lat2) + 
+        1000 * r * Math.acos(Math.sin(lat1) * Math.sin(lat2) +
       Math.cos(lat1) * Math.cos(lat2) * Math.cos(lng2 - lng1))
       );
-    
+
     var prevVal = $('#searchform input[name=radius]').val();
     if (prevVal != radius) {
         $('#searchform input[name=radius]').val(radius).change();
     }
     //$('#searchform input[name=radius]')
 
-    return radius;        
+    return radius;
 }
 
 /**
  * Show map center crosshair pointer for specified time.
- * 
+ *
  * @param latlng google.maps.LatLng object
  * @param timeout Timeout in miliseconds
  */

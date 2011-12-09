@@ -13,13 +13,13 @@ class GSAA_Filter_ASCII implements Zend_Filter_Interface
     public function __construct()
     {
     }
-    
+
     /**
      * Convert string in UTF-8 with european accent characters to ASCII equivalent.
      * Source: WordPress (wp-includes/formatting.php)
-     * 
+     *
      * @param type $value
-     * @return type 
+     * @return type
      */
     public function filter($value)
     {

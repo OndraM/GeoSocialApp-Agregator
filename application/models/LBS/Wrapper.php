@@ -1,6 +1,6 @@
 <?php
 /*
- * Class to provide unified access to all LBS model classes
+ * Class to provide unified access to all LBS model classes at once
  */
 
 class GSAA_Model_LBS_Wrapper

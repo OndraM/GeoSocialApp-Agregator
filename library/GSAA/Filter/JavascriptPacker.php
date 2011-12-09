@@ -1,7 +1,7 @@
 <?php
 /**
  * Pack a given Javascript code
- * 
+ *
  * @author  Ondřej Machulda <ondrej.machulda@gmail.com>
  *
  */
@@ -15,12 +15,12 @@ class GSAA_Filter_JavascriptPacker implements Zend_Filter_Interface
     {
         Zend_Loader::loadFile("jsmin.php", null, true);
     }
-    
+
     /**
      * Pack (minify) content of $value
-     * 
+     *
      * @param type $value
-     * @return type 
+     * @return type
      */
     public function filter($value)
     {

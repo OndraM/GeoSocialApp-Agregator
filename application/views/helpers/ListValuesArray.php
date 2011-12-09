@@ -12,19 +12,19 @@ class GSAA_View_Helper_ListValuesArray extends Zend_View_Helper_Abstract
 
     /**
      *
-     * @param array $values 
+     * @param array $values
      * @param string $field Field type
      * @param bool $escape Escape output?
-     * @return string 
+     * @return string
      */
     public function listValuesArray($valuesArray, $field, $escape = true)
     {
         $return = "";
         if (count($valuesArray) < 1) return "";
-        
+
         foreach ($valuesArray as $values) {
             if (count($values) < 1) return "";
-            
+
             foreach ($values as $type => $value) {
                 if ($field == 'links') {
                     $return .= "\t<li>"

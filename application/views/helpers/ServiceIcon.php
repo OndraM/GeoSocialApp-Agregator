@@ -14,14 +14,14 @@ class GSAA_View_Helper_ServiceIcon extends Zend_View_Helper_Abstract
      *
      * @param string $service
      * @param string $align
-     * @return string 
+     * @return string
      */
     public function serviceIcon($service, $align = 'left')
     {
         $return = "<img src=\""
         . $this->view->baseUrl() . "/images/icon-{$service}.png\""
         . " alt=\"{$service}\""
-        . " class=\"icon-{$align}\" />";        
+        . " class=\"icon-{$align}\" />";
         return $return;
 
     }

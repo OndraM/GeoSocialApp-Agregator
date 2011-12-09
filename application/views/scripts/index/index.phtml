@@ -5,7 +5,7 @@
             <label>Longitude: <input type="text" name="long" value="<?=Zend_Registry::get('var')->defaultLong;?>" /></label>
             <label title="Average radius of venue search.">Radius [m]: <input type="text" name="radius" value="<?=Zend_Registry::get('var')->defaultRadius;?>" /></label>
             <div id="search-services" title="Select services, which you want to include in venue search.">
-                Search in: 
+                Search in:
 <?php
 foreach(Zend_Registry::get('var')->services as $serviceId => $service) {
 ?>
@@ -35,7 +35,7 @@ foreach(Zend_Registry::get('var')->services as $serviceId => $service) {
     <div id="venues-wrapper">
         <div id="venues-map">
         </div>
-        
+
         <div id="venues-list">
         </div>
     </div>
