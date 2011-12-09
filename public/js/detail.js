@@ -1,5 +1,9 @@
+var map;
+var venueMarkers;
+
 function initDetail(markers) {
-    initDetailMap(markers);
+    venueMarkers = markers;
+    initDetailMap();
 
     // Show only 10 first tips, other on demand
     var allTips = $('#venue-tips').next('ul').children();
@@ -84,8 +88,8 @@ function initDetail(markers) {
     }
 }
 
-function initDetailMap(markers) {
-    var centerLatLng = new google.maps.LatLng(markers[0].lat, markers[0].lng);
+function initDetailMap() {
+    var centerLatLng = new google.maps.LatLng(venueMarkers[0].lat, venueMarkers[0].lng);
     var mapOptions = {
         zoom: 16,
         center: centerLatLng,
@@ -102,7 +106,9 @@ function initDetailMap(markers) {
     );
 
     var bounds = new google.maps.LatLngBounds();
-    $.each(markers, function(i, marker) {
+    var latSum = 0;
+    var lngSum = 0;
+    $.each(venueMarkers, function(i, marker) {
         var markerLatLng = new google.maps.LatLng(marker.lat, marker.lng);
         new google.maps.Marker({
             position: markerLatLng,
@@ -110,7 +116,20 @@ function initDetailMap(markers) {
             title: 'Venue location on ' + marker.serviceName
         });
         bounds.extend(markerLatLng);
+        latSum += parseFloat(marker.lat);
+        lngSum += parseFloat(marker.lng);
     });
+    // Add average location marker
+    if (venueMarkers.length > 1) { // only when merging venues
+        var markerLatLng = new google.maps.LatLng(latSum / venueMarkers.length, lngSum / venueMarkers.length);
+        new google.maps.Marker({
+            position: markerLatLng,
+            map: map,
+            title: 'Average venue location',
+            icon: 'https://chart.googleapis.com/chart?chst=d_map_pin_icon&chld=glyphish_star|36c',
+            zIndex: 99999
+        });
+    }
     var boundsInitListener = google.maps.event.addListener(map, 'bounds_changed', function() { // limit maximum zoom after fit bounds
         google.maps.event.removeListener(boundsInitListener); // do it only once
         if (map.getZoom() > 17) {
