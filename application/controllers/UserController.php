@@ -87,10 +87,10 @@ class UserController extends Zend_Controller_Action
                 $friendYName = Zend_Filter::filterStatic($friendsRaw[$y]->userName, 'StringToLower');
                 $friendYName = Zend_Filter::filterStatic($friendYName, 'ASCII', array(), array('GSAA_Filter'));
 
-                $similar_percent = 0;
-                similar_text($friendXName, $friendYName, $similar_percent);
+                $similarPercent = 0;
+                similar_text($friendXName, $friendYName, $similarPercent);
 
-                if ($similar_percent > 90) {
+                if ($similarPercent > 90) {
                     $sameFriendCheckins[] = $friendsRaw[$y]; // add all same persons checkins (even more then one)
                     $friendsRaw[$y] = null; // set it to null, so it won't be checked again
                 }

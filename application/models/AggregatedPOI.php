@@ -136,12 +136,12 @@ class GSAA_Model_AggregatedPOI
      * @return double POI average quality
      */
     protected function _getQuality() {
-        $quality_array = $this->getFieldAll('quality');
+        $qualityArray = $this->getFieldAll('quality');
         $total = 0;
-        foreach ($quality_array as $value) {
+        foreach ($qualityArray as $value) {
             $total += current($value);
         }
-        return round(($total / count($quality_array)), 2);
+        return round(($total / count($qualityArray)), 2);
     }
         
     /**

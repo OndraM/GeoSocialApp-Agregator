@@ -14,7 +14,7 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
 
     /**
      * Number of usersCount, when POI is considered as "top quality" (quality = 5).
-     * May increase in time (depending on increase of foursquare users).
+     * May increase in time (depending on increase of gowalla users).
      */
     const TOP_QUALITY_USERSCOUNT_SCALE = 50;
         
@@ -166,15 +166,7 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
                 // dont add category
                 continue;
             }
-            $poi->categories[] = $tmpCategory;
-                
-            // TODO: load category icon
-            /*$poi->categories[] = array(
-                'id'    => $category['id'],
-                'name'  => $category['name'],
-                'icon'  => $category['icon']['prefix'] . $category['icon']['sizes'][0] . $category['icon']['name']
-            );*/
-            
+            $poi->categories[] = $tmpCategory;            
         }
         
         /**

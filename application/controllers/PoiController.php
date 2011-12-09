@@ -167,8 +167,8 @@ class PoiController extends Zend_Controller_Action
                 $poiYName = Zend_Filter::filterStatic($poisRaw[$y]->name, 'StringToLower');
                 $poiYName = Zend_Filter::filterStatic($poiYName, 'ASCII', array(), array('GSAA_Filter'));
                 
-                $similar_percent_basic = 0;
-                $similar_percent_alpha = 0;
+                $similarPercentBasic = 0;
+                $similarPercentAlpha = 0;
                 /*
                  * TODO: other text matching improvements suggestions (see also issue #45):
                  * - maybe remove some chars
@@ -177,9 +177,9 @@ class PoiController extends Zend_Controller_Action
                  * - try different word order
                  */
                 
-                similar_text($poiXName, $poiYName, $similar_percent_basic);
+                similar_text($poiXName, $poiYName, $similarPercentBasic);
                 similar_text( Zend_Filter::filterStatic($poiXName, 'Alnum'),
-                              Zend_Filter::filterStatic($poiYName, 'Alnum'), $similar_percent_alpha);
+                              Zend_Filter::filterStatic($poiYName, 'Alnum'), $similarPercentAlpha);
                 $distance = $this->_serviceModels[$poisRaw[$x]->type]->getDistance(
                                 $poisRaw[$x]->lat,
                                 $poisRaw[$x]->lng,
@@ -187,13 +187,13 @@ class PoiController extends Zend_Controller_Action
                                 $poisRaw[$y]->lng);
 
                 /*echo "&nbsp;&nbsp;&nbsp;&nbsp;" . $y . ": " . $poisRaw[$y]->name . " | "
-                        . 'similar_text_basic: ' . round($similar_percent_basic, 1) . " | "
-                        . 'similar_text_alpha: ' . round($similar_percent_alpha, 1) . " | "
+                        . 'similar_text_basic: ' . round($similarPercentBasic, 1) . " | "
+                        . 'similar_text_alpha: ' . round($similarPercentAlpha, 1) . " | "
                         . 'distance: '
                         . $distance
                         . "<br />\n";*/
-                if (($similar_percent_basic > 75
-                         || $similar_percent_alpha > 82.5)
+                if (($similarPercentBasic > 75
+                         || $similarPercentAlpha > 82.5)
                     && $distance < 150) { // Merge objects
                     
                     $agPoi->addPoi($poisRaw[$y]); // copy entire POI
