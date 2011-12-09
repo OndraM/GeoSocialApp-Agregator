@@ -5,17 +5,8 @@
 
 class PoiController extends Zend_Controller_Action
 {
-
-    protected $_serviceModels = array();
-
     public function init()
     {
-        // initialize model for each service
-        foreach (Zend_Registry::get('var')->services as $serviceId => $service) {
-            $classname = $service['model'];
-            $this->_serviceModels[$serviceId] = new $classname();
-        }
-
         // set ajax contexts
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
         $ajaxContext->addActionContext('get-nearby', 'json')
@@ -38,7 +29,7 @@ class PoiController extends Zend_Controller_Action
             return; // no proper lat & lng set => we can't search for venues
         }
 
-        $poisRaw = $this->_loadNearbyPois($lat, $long, $radius, $term);
+        $poisRaw = GSAA_Model_LBS_Wrapper::loadNearbyPois($lat, $long, $radius, $term);
 
         // Fill view->pois variable with JSON structure.
         if (count($poisRaw) > 0) {
@@ -73,7 +64,7 @@ class PoiController extends Zend_Controller_Action
             $this->_helper->layout->disableLayout();
         }
 
-        $aggregatedPOI = $this->_loadPoiDetails($this->_request->getParams());
+        $aggregatedPOI = GSAA_Model_LBS_Wrapper::loadPoiDetails($this->_request->getParams());
 
         $this->view->serviceParams      = $aggregatedPOI->getTypes(true);
         $this->view->pois               = $aggregatedPOI->getPois();
@@ -95,39 +86,6 @@ class PoiController extends Zend_Controller_Action
         }
         $this->view->services = Zend_Registry::get('var')->services;
     }
-
-    /**
-     * Action only for testing and development purposes.
-     */
-    public function testAction() {
-        $this->_helper->layout->disableLayout();
-        $this->_helper->viewRenderer->setNoRender();
-
-        $lat = $this->_getParam('lat');
-        $long = $this->_getParam('long');
-        $radius = (int) $this->_getParam('radius');
-        $term = (string) $this->_getParam('term');
-        $service['fq'] = (boolean) $this->_getParam('fq');
-        $service['gw'] = (boolean) $this->_getParam('gw');
-        $service['gg'] = (boolean) $this->_getParam('gg');
-        $service['fb'] = (boolean) $this->_getParam('fb');
-
-        //$model = new GSAA_Model_LBS_GooglePlaces();
-        //print_r($model->getNearbyVenues($lat, $long, $radius, $term));
-        $poisRaw = array();
-        foreach ($this->_serviceModels as $modelId => $model) { // iterate through availabe models
-            if ((boolean) $service[$modelId] ) { // use service
-                $poisRaw = array_merge(
-                        $poisRaw,
-                        $model->getNearbyVenues($lat, $long, $radius, $term));
-            }
-        }
-
-        $pois = $this->_mergePois($poisRaw);
-
-        print_r($pois);
-    }
-
 
     /**
      * Merge array of GSAA_Model_POI
@@ -192,50 +150,6 @@ class PoiController extends Zend_Controller_Action
         }
         return $pois;
     }
-
-    /**
-     * Load POIs specified by their ID into one AggregatedPOI model.
-     *
-     * @param array $pois Array of pois in form (poiId => poiType).
-     * @return GSAA_Model_AggregatedPOI
-     *
-     */
-    protected function _loadPoiDetails($pois) {
-        $aggregatedPOI = new GSAA_Model_AggregatedPOI();
-        foreach ($pois as $index => $value) {
-            if (array_key_exists($value, $this->_serviceModels)) { // only parameters representing POIs
-                $poi = $this->_serviceModels[$value]->getDetail($index);
-                if (!$poi) continue;
-                $aggregatedPOI->addPoi($poi);
-            }
-        }
-        if (count($aggregatedPOI->getPois()) < 1) {
-            throw new Zend_Controller_Action_Exception('No POI specified or available.', 404);
-        }
-        return $aggregatedPOI;
-    }
-
-    /**
-     * Load nearby POIs from all services into one array
-     *
-     * @param double $lat Latitude
-     * @param double $long Longitude
-     * @param int    $radius Radius to search
-     * @param string $term Search term
-     * @return array Array of all nearby POIs
-     */
-    protected function _loadNearbyPois($lat, $long, $radius, $term) {
-        $poisRaw = array();
-        foreach ($this->_serviceModels as $modelId => $model) { // iterate through availabe models
-            if ((boolean) $this->_getParam($modelId)) { // use service
-                $poisRaw = array_merge(
-                        $poisRaw,
-                        $model->getNearbyVenues($lat, $long, $radius, $term));
-            }
-        }
-        return $poisRaw;
-    }
-
 }
 
 

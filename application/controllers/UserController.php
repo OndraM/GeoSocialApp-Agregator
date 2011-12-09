@@ -1,43 +1,33 @@
 <?php
+/**
+ * Controller for work with current user
+ */
 
 class UserController extends Zend_Controller_Action
 {
-
-    protected $_serviceModels = array();
-    
     public function init()
     {
         $this->session = new Zend_Session_Namespace('GSAA');
         if (!isset($this->session->services)) {
             $this->session->services = array();
         }
-        
-        foreach (Zend_Registry::get('var')->services as $serviceId => $service) {
-            $classname = $service['model'];
-            $this->_serviceModels[$serviceId] = new $classname();
-        }
-        
+
         /*$ajaxContext = $this->_helper->getHelper('AjaxContext');
         $ajaxContext->addActionContext('FIXME', 'json')
                     ->initContext();
-         * 
+         *
          */
     }
-    
+
     public function friendsAction() {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->layout->disableLayout();
         }
         $this->view->cLat = $this->_getParam('cLat');
         $this->view->cLng = $this->_getParam('cLng');
-        $friendsRaw = array();
-        
-        foreach($this->_serviceModels as $model) {
-            if (method_exists($model, 'getFriendsActivity')) {
-                $friendsRaw = array_merge($friendsRaw,
-                    $model->getFriendsActivity());
-            }
-        }
+
+        $friendsRaw = GSAA_Model_LBS_Wrapper::loadFriendsActivity();
+
 
         if (count($friendsRaw) > 0) {
             $friendsCheckins = $this->_mergeFriendsCheckins($friendsRaw);
@@ -47,23 +37,32 @@ class UserController extends Zend_Controller_Action
         $this->view->services = Zend_Registry::get('var')->services;
 
     }
-    
+
     public function checkinAction() {
         // TODO checkin in specified POIs
     }
 
+    /**
+     * Class used only for development and testing purposes.
+     */
     public function testAction()
     {
         $this->_helper->viewRenderer->setNoRender();
         $this->_helper->layout->disableLayout();
-        
-        /*foreach($this->_serviceModels as $model) {
+
+        $serviceModels = array();
+        foreach (Zend_Registry::get('var')->services as $serviceId => $service) {
+            $classname = $service['model'];
+            $serviceModels[$serviceId] = new $classname();
+        }
+
+        /*foreach($serviceModels as $model) {
             $user = $model->getUserInfo();
             d($user, $model::TYPE);
         }*/
-        $model = $this->_serviceModels['fq'];
+        $model = $serviceModels['fq'];
         d($model->getFriendsActivity());
-        
+
     }
 
     /**
@@ -72,7 +71,6 @@ class UserController extends Zend_Controller_Action
      * @param array $friendsRaw Array of GSAA_Model_Checkin
      * @return array Array of GSAA_Model_Checkin, with only the most recent checkin of each friend
      */
-
     protected function _mergeFriendsCheckins($friendsRaw) {
         $friendsCheckins = array();
         for ($x = 0; $x < count($friendsRaw); $x++) {
