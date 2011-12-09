@@ -1,6 +1,6 @@
 function initDetail(markers) {
     initDetailMap(markers);
-    
+
     // Show only 10 first tips, other on demand
     var allTips = $('#venue-tips').next('ul').children();
     var tipsLimit = 10;
@@ -10,12 +10,12 @@ function initDetail(markers) {
         $('<li><a href=\"#\">Only ' + tipsLimit + ' first tips are shown. Click here to show remaining ' + hideTips.length + '.</a></li>')
             .appendTo($('#venue-tips').next('ul'))
             .click(function() {
-                hideTips.show();
+                hideTips.slideDown();
                 $(this).remove();
                 return false;
             });
     }
-            
+
     // init photo carousel
     $('#photos-carousel').bxSlider({
         displaySlideQty: 5,
@@ -24,7 +24,7 @@ function initDetail(markers) {
         hideControlOnEnd: true,
         startingSlide: 0
     });
-    
+
     // define photo tooltip options
     $('#photos-carousel li a').tipsy({
         gravity: $.fn.tipsy.autoNS,
@@ -32,11 +32,11 @@ function initDetail(markers) {
         opacity: 1,
         trigger: 'manual'
     });
-    
+
     // show tooltip photo on click
     $('#photos-carousel li a').click(function() {
         console.log($(this).attr('data-detail'));
-        $(this).attr('original-title', 
+        $(this).attr('original-title',
             '<div class=\"photo-tooltip\">'
             + '<div class=\"photo-tooltip-image\"><img src=\"' + $(this).attr('href') + '\" height=\"210\"/></div>'
             + '<div class=\"photo-tooltip-title\">'
@@ -57,7 +57,7 @@ function initDetail(markers) {
     $('#photos-carousel li a').mouseout(function() {
         $(this).tipsy('hide');
     });
-    
+
     // show Remove icon on mousover
     $('#venue-source').next('ul').children().mouseover(function(){
         $('.removeService', this).show();
@@ -66,7 +66,7 @@ function initDetail(markers) {
     $('#venue-source').next('ul').children().mouseout(function(){
         $('.removeService', this).hide();
     });
-    
+
     // make Remove icon color on mouseenter in
     $('.removeService').mouseenter(function(){
         $('span:eq(1)', this).show();
@@ -99,8 +99,8 @@ function initDetailMap(markers) {
     var map = new google.maps.Map(
         document.getElementById('detail-map'),
         mapOptions
-    );    
-    
+    );
+
     var bounds = new google.maps.LatLngBounds();
     $.each(markers, function(i, marker) {
         var markerLatLng = new google.maps.LatLng(marker.lat, marker.lng);
@@ -110,13 +110,13 @@ function initDetailMap(markers) {
             title: 'Venue location on ' + marker.serviceName
         });
         bounds.extend(markerLatLng);
-    });    
-    var boundsInitListener = google.maps.event.addListener(map, 'bounds_changed', function() { // limit maximum zoom after fit bounds 
+    });
+    var boundsInitListener = google.maps.event.addListener(map, 'bounds_changed', function() { // limit maximum zoom after fit bounds
         google.maps.event.removeListener(boundsInitListener); // do it only once
         if (map.getZoom() > 17) {
             map.setZoom(17);
         }
         // Why use listener? It is way how to ensure is is called after map init.
     });
-    map.fitBounds(bounds);   
+    map.fitBounds(bounds);
 }
