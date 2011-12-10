@@ -8,8 +8,24 @@ function initDetail(markers) {
     // Init checkin actions
     $('#checkin-submit').button();
     $('#checkin-form').submit(function() {
+        $('#checkin-submit').slideUp(function(){ $('#checkin-submit').remove(); });
+        $('#checkin-message-label').slideUp(function(){ $('#checkin-message').remove(); });
+        $('#checkin-form input[type=checkbox]').attr('disabled', 'disabled');
         $('#checkin-form input[type=checkbox]:checked').each(function() {
-
+            var element = $(this).parent();
+            var type = encodeURIComponent($(this).parent().attr('data-type'));
+            var poiId = encodeURIComponent($(this).parent().attr('data-id'));
+            var comment = encodeURIComponent($('#checkin-message').val());
+            $(this).parent().html('<img src="/images/spinner.gif" />');
+            $.getJSON('/user/checkin/type/' + type + '/id/' + poiId + '/comment/' + comment, function(response) {
+                if (typeof response.message !== "undefined" && response.message) {
+                    $(element).html('<img src="/images/ok.png" class="icon-left result" alt="OK" title="' + response.message + '" />');
+                } else {
+                    $(element).html('<img src="/images/ko.png" class="icon-left result" alt="Error" title="Error executing checking" />');
+                }
+            }).error(function() {
+                $(element).html('<img src="/images/ko.png" class="icon-left result" alt="Error" title="Check-in not available" />');
+            })
         })
         return false;
     });

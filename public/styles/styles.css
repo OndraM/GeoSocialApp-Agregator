@@ -344,6 +344,20 @@ ul#photos-carousel {
     line-height: 25px;
     margin-left: 12em;
 }
+#checkin-message-label {
+    display: block;
+    width: 12em;
+    float: left;
+    height: 25px;
+    line-height: 25px;
+}
+#checkin-submit {
+    display: block;
+}
+
+#checkin-form span img.result {
+    cursor: help;
+}
 
 /* Friends activity window */
 #friends-map {

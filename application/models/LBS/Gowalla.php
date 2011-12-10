@@ -324,7 +324,7 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
      *
      * @param string $poiId ID of POI
      * @param string $comment Check-in comment
-     * @return array Response array // TODO
+     * @return array Response message
      */
     public function doCheckin($poiId, $comment = '') {
         $client = $this->_constructClient('/checkins',
