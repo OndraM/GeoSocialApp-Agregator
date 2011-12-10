@@ -282,7 +282,6 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
         );
         try {
             $response = $client->request('POST');
-            d($response);
         } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
             return;
         }

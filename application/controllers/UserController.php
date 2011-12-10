@@ -12,13 +12,15 @@ class UserController extends Zend_Controller_Action
             $this->session->services = array();
         }
 
-        /*$ajaxContext = $this->_helper->getHelper('AjaxContext');
-        $ajaxContext->addActionContext('FIXME', 'json')
+        $ajaxContext = $this->_helper->getHelper('AjaxContext');
+        $ajaxContext->addActionContext('checkin', 'json')
                     ->initContext();
-         *
-         */
     }
 
+    /**
+     * Load and render recent friends checkins.
+     * If called using XmlHttpRequest, layout is not used.
+     */
     public function friendsAction() {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->layout->disableLayout();
@@ -37,11 +39,11 @@ class UserController extends Zend_Controller_Action
 
     }
 
+    /**
+     * Execute checkin. Service and POI ID must be in params.
+     * Result is in view variables => returned as JSON.
+     */
     public function checkinAction() {
-        // TODO: json action
-        $this->_helper->viewRenderer->setNoRender();
-        $this->_helper->layout->disableLayout();
-
         $services = Zend_Registry::get('var')->services;
 
         $service    = $this->_getParam('type');
@@ -60,7 +62,6 @@ class UserController extends Zend_Controller_Action
             return;
         }
         $this->view->message = $result;
-
     }
 
     /**
