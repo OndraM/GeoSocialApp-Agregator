@@ -375,6 +375,40 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
     }
 
     /**
+     * Execute checkin on specified POI.
+     *
+     * @param string $poiId ID of POI
+     * @param string $comment Check-in comment
+     * @return array Response array // TODO
+     */
+    public function doCheckin($poiId, $comment = '') {
+        $client = $this->_constructClient('/checkins/add',
+                                            array(
+                                                'venueId' => $poiId,
+                                                'shout'   => $comment,
+                                                'broadcast' => 'private' // TODO - remove
+                                            )
+        );
+        try {
+            $response = $client->request('POST');
+        } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
+            return;
+        }
+
+        // error in response
+        if ($response->isError()) return;
+
+        $result = Zend_Json::decode($response->getBody());
+        $responseMessage = '';
+        foreach ($result['notifications'] as $notification) {
+            if ($notification['type'] == 'message') {
+                $responseMessage = $notification['item']['message'];
+            }
+        }
+        return $responseMessage;
+    }
+
+    /**
      * Get latest checkins of my friends
      *
      * @return array Array of friends latest checkins in GSAA_Model_Checkin
