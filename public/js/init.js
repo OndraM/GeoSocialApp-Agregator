@@ -207,7 +207,7 @@ $(document).ready(function() {
 /*
  * Global variables
  */
-var map;
+var indexMap;
 var geocoder = new google.maps.Geocoder();
 var poiMarkers = [];
 var mapCenterPoiner;
@@ -371,10 +371,10 @@ function initIndex() {
         geocoder.geocode({"address": $('#addressform input[name=address]').val()}, function(results, status) {
 			if (status == google.maps.GeocoderStatus.OK) {
 				var latlng = results[0].geometry.location;
-				map.panTo(latlng);
+				indexMap.panTo(latlng);
                 // when map is so zoomed in or out, zoom to default
-                if (map.getZoom() > 17 || map.getZoom() < 12) {
-					map.setZoom(14);
+                if (indexMap.getZoom() > 17 || indexMap.getZoom() < 12) {
+					indexMap.setZoom(14);
                     getAndSetRadius();
                 }
                 $('#searchform input[name=lat]').val(latlng.lat().toFixed(6));
@@ -581,21 +581,21 @@ function initIndexMap() {
         center: latlng,
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
-    map = new google.maps.Map(
+    indexMap = new google.maps.Map(
         document.getElementById('venues-map'),
         mapOptions
     );
     showMapCenterPointer(latlng, 5000);
 
-    google.maps.event.addListener(map, 'dragend', function() {
-		var latlng = map.getCenter();
+    google.maps.event.addListener(indexMap, 'dragend', function() {
+		var latlng = indexMap.getCenter();
         $('#searchform input[name=lat]').val(latlng.lat().toFixed(6));
         $('#searchform input[name=long]').val(latlng.lng().toFixed(6));
         $('#searchform').submit();
 	});
 
-    google.maps.event.addListener(map, 'zoom_changed', function() {
-		var latlng = map.getCenter();
+    google.maps.event.addListener(indexMap, 'zoom_changed', function() {
+		var latlng = indexMap.getCenter();
         getAndSetRadius();
         $('#searchform input[name=lat]').val(latlng.lat().toFixed(6));
         $('#searchform input[name=long]').val(latlng.lng().toFixed(6));
@@ -612,7 +612,7 @@ function initIndexMap() {
        getAndSetRadius();
     });
 
-    autocomplete.bindTo('bounds', map);
+    autocomplete.bindTo('bounds', indexMap);
 }
 
 /*
@@ -620,11 +620,11 @@ function initIndexMap() {
  */
 
 function setMapCenter(lat, lng) {
-    if (typeof map !== "undefined") {
+    if (typeof indexMap !== "undefined") {
         var newMapCenter = new google.maps.LatLng(lat, lng);
-        var mapCenter = map.getCenter();
+        var mapCenter = indexMap.getCenter();
         if (!mapCenter.equals(newMapCenter)) {
-            map.panTo(newMapCenter);
+            indexMap.panTo(newMapCenter);
             showMapCenterPointer(newMapCenter, 3000);
         }
 
@@ -657,7 +657,7 @@ function addPoisOnMap(pois) {
         var content;
         poiMarkers[poi.id] = new google.maps.Marker({
                 position: new google.maps.LatLng(poi.lat, poi.lng),
-                map: map,
+                map: indexMap,
                 title: poi.name
             });
         content = '<div id="infoWindow">'
@@ -695,12 +695,12 @@ function addPoisOnMap(pois) {
 
         google.maps.event.addListener(poiMarkers[poi.id], 'click', function() {
             infoWindow.setContent(content);
-            infoWindow.open(map, poiMarkers[poi.id]);
+            infoWindow.open(indexMap, poiMarkers[poi.id]);
         });
 
         $('li#' + poi.id).click(function() {
             infoWindow.setContent(content);
-            infoWindow.open(map, poiMarkers[$(this).attr('id')]);
+            infoWindow.open(indexMap, poiMarkers[$(this).attr('id')]);
         });
 
         /*$('li#' + poi.id).mouseover(function() {
@@ -743,10 +743,10 @@ function toggleVenuesLoading(forceRemove) {
  */
 
 function getAndSetRadius() {
-    if (typeof map == "undefined") {
+    if (typeof indexMap == "undefined") {
         return 2500;
     }
-    bounds = map.getBounds();
+    bounds = indexMap.getBounds();
 
     center = bounds.getCenter();
     ne = bounds.getNorthEast();
@@ -788,7 +788,7 @@ function showMapCenterPointer (latlng, timeout) {
     }
     mapCenterPoiner = new google.maps.Marker({
         position: latlng,
-        map: map,
+        map: indexMap,
         icon: mapCenterImage,
         zIndex: -1
     });

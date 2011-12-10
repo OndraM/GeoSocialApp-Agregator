@@ -1,4 +1,4 @@
-var map;
+var detailMap;
 var venueMarkers;
 
 function initDetail(markers) {
@@ -109,7 +109,7 @@ function initDetailMap() {
 
         }
     };
-    var map = new google.maps.Map(
+    var detailMap = new google.maps.Map(
         document.getElementById('detail-map'),
         mapOptions
     );
@@ -121,7 +121,7 @@ function initDetailMap() {
         var markerLatLng = new google.maps.LatLng(marker.lat, marker.lng);
         new google.maps.Marker({
             position: markerLatLng,
-            map: map,
+            map: detailMap,
             title: 'Venue location on ' + marker.serviceName
         });
         bounds.extend(markerLatLng);
@@ -133,18 +133,18 @@ function initDetailMap() {
         var markerLatLng = new google.maps.LatLng(latSum / venueMarkers.length, lngSum / venueMarkers.length);
         new google.maps.Marker({
             position: markerLatLng,
-            map: map,
+            map: detailMap,
             title: 'Average venue location',
             icon: 'https://chart.googleapis.com/chart?chst=d_map_pin_icon&chld=glyphish_star|36c',
             zIndex: 99999
         });
     }
-    var boundsInitListener = google.maps.event.addListener(map, 'bounds_changed', function() { // limit maximum zoom after fit bounds
+    var boundsInitListener = google.maps.event.addListener(detailMap, 'bounds_changed', function() { // limit maximum zoom after fit bounds
         google.maps.event.removeListener(boundsInitListener); // do it only once
-        if (map.getZoom() > 17) {
-            map.setZoom(17);
+        if (detailMap.getZoom() > 17) {
+            detailMap.setZoom(17);
         }
         // Why use listener? It is way how to ensure is is called after map init.
     });
-    map.fitBounds(bounds);
+    detailMap.fitBounds(bounds);
 }

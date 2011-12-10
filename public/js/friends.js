@@ -1,5 +1,5 @@
 /* Global variables */
-var map;
+var friendsMap;
 var infoWindow;
 var friends;
 var friendMarkers = [];
@@ -24,7 +24,7 @@ function initFriends(f) {
     });
 
     $('#friend-fitbouds').click(function() {
-        map.fitBounds(bounds);
+        friendsMap.fitBounds(bounds);
         return false;
     });
 }
@@ -46,7 +46,7 @@ function filterMarkers(time) {
         // limit is all or it has nat yet passed
         if (limit == 0 || (d.getTime()/1000) - limit < friend.date) {
             if (!friendMarkers[friend.id].getMap()) { // marker not present on the map right now
-                friendMarkers[friend.id].setMap(map); // put it here
+                friendMarkers[friend.id].setMap(friendsMap); // put it here
             }
         } else { // remove marker
             friendMarkers[friend.id].setMap(null);
@@ -76,7 +76,7 @@ function initFriendsMap() {
             mapTypeIds: [google.maps.MapTypeId.ROADMAP, google.maps.MapTypeId.SATELLITE]
         }
     };
-    map = new google.maps.Map(
+    friendsMap = new google.maps.Map(
         document.getElementById('friends-map'),
         mapOptions
     );
@@ -99,7 +99,7 @@ function initFriendsMap() {
      	friendAvatar.width = 32;
 		var marker = new MarkerWithLabel({
             position      : friendLatLng,
-            map           : map,
+            map           : friendsMap,
             title         : friend.userName + ' at ' + friend.poiName,
             labelClass    : 'friend-marker',
             labelAnchor   : new google.maps.Point(18, 44),
@@ -124,7 +124,7 @@ function initFriendsMap() {
         friendMarkers[friend.id] = marker;
         google.maps.event.addListener(marker, 'click', function() {
             infoWindow.setContent(content);
-            infoWindow.open(map, this);
+            infoWindow.open(friendsMap, this);
         });
 
     });
@@ -134,15 +134,15 @@ function initFriendsMap() {
     var boundsInitListener = google.maps.event.addListener(map, 'bounds_changed', function() {
         google.maps.event.removeListener(boundsInitListener); // do it only once
         // zoom is too big, leave it at 16
-        if (map.getZoom() > 16) {
-            map.setZoom(16);
-        } else if (map.getZoom() < 7    // friends did't fit map even at zoom 7 => center it to main map position and zoom to center
+        if (friendsMap.getZoom() > 16) {
+            friendsMap.setZoom(16);
+        } else if (friendsMap.getZoom() < 7    // friends did't fit map even at zoom 7 => center it to main map position and zoom to center
             && centerLatLng)            // if centerLatLng not set, leave it automatic
         {
-            map.setZoom(7);
-            map.setCenter(centerLatLng);
+            friendsMap.setZoom(7);
+            friendsMap.setCenter(centerLatLng);
         }
         // else do nothing, map center is adjusted automatically from bounds
     });
-    map.fitBounds(bounds);
+    friendsMap.fitBounds(bounds);
 }
