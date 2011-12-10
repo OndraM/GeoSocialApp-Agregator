@@ -38,7 +38,29 @@ class UserController extends Zend_Controller_Action
     }
 
     public function checkinAction() {
-        // TODO checkin in specified POIs
+        // TODO: json action
+        $this->_helper->viewRenderer->setNoRender();
+        $this->_helper->layout->disableLayout();
+
+        $services = Zend_Registry::get('var')->services;
+
+        $service    = $this->_getParam('type');
+        $poiId      = $this->_getParam('id');
+        $comment    = $this->_getParam('comment', '');
+
+        if (!$service || !$poiId  || !isset($services[$service])) {
+            return;
+        }
+        $model = new $services[$service]['model']();
+        if (!method_exists($model, 'doCheckin')) {
+            return;
+        }
+        $result = $model->doCheckin($poiId, $comment);
+        if (is_null($result)) { // returned an error
+            return;
+        }
+        $this->view->message = $result;
+
     }
 
     /**

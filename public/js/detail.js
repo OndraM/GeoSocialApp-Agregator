@@ -5,6 +5,15 @@ function initDetail(markers) {
     venueMarkers = markers;
     initDetailMap();
 
+    // Init checkin actions
+    $('#checkin-submit').button();
+    $('#checkin-form').submit(function() {
+        $('#checkin-form input[type=checkbox]:checked').each(function() {
+            // TODO: do checkin using AJAX
+        })
+        return false;
+    });
+
     // Show only 10 first tips, other on demand
     var allTips = $('#venue-tips').next('ul').children();
     var tipsLimit = 10;

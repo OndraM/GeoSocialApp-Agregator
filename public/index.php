@@ -18,7 +18,7 @@ set_include_path(implode(PATH_SEPARATOR, array(
 require_once 'Zend/Application.php';
 
 // include debug functions
-include("dump.php");
+include("debug.php");
 
 // Create application, bootstrap, and run
 $application = new Zend_Application(
