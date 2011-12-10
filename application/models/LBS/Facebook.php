@@ -260,6 +260,45 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
     }
 
     /**
+     * Execute checkin on specified POI.
+     *
+     * @param string $poiId ID of POI
+     * @param string $comment Check-in comment
+     * @return array Response array // TODO
+     */
+    public function doCheckin($poiId, $comment = '') {
+        // at first, get detail of POI, so we load its lat and lng
+        $poiDetail = $this->getDetail($poiId);
+
+        $client = $this->_constructClient('/me/checkins/',
+                                            array(
+                                                'place'       => $poiId,
+                                                'message'     => $comment,
+                                                'coordinates' => Zend_Json::encode(array(
+                                                    'latitude'  => $poiDetail->lat,
+                                                    'longitude' => $poiDetail->lng
+                                                ))
+                                            )
+        );
+        try {
+            $response = $client->request('POST');
+            d($response);
+        } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
+            return;
+        }
+
+        // error in response
+        if ($response->isError()) return;
+
+        $result = Zend_Json::decode($response->getBody());
+        $responseMessage = '';
+        if ($result) {
+            $responseMessage = 'Check-in successful';
+        }
+        return $responseMessage;
+    }
+
+    /**
      * Get details of signed in user.
      *
      * @return array Array of user details
@@ -338,7 +377,7 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
 
         // when no ouath_token is set, and user has his own, try to use it
         if (!empty($this->_oauthToken) && !isset($queryParams['oauth_token'])) {
-            $queryParams['oauth_token'] = $this->_oauthToken;
+            $queryParams['access_token'] = $this->_oauthToken;
         } else { // otherwise use APP token
             $queryParams['access_token'] = self::ACCESS_TOKEN;
         }
