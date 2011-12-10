@@ -17,10 +17,8 @@ set_include_path(implode(PATH_SEPARATOR, array(
 /** Zend_Application */
 require_once 'Zend/Application.php';
 
-// Create shortcut for global debug dump function - d()
-function d($var, $label = null) {
-    Zend_Debug::dump($var, $label);
-}
+// include debug functions
+include("dump.php");
 
 // Create application, bootstrap, and run
 $application = new Zend_Application(
