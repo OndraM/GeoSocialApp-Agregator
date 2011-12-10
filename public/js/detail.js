@@ -5,6 +5,11 @@ function initDetail(markers) {
     venueMarkers = markers;
     initDetailMap();
 
+    $('#venue-checkin a').click(function() {
+       $('span', this).toggle();
+       $('#checkin-form').slideToggle();
+    });
+
     // Init checkin actions
     $('#checkin-submit').button();
     $('#checkin-form').submit(function() {
@@ -30,7 +35,7 @@ function initDetail(markers) {
         return false;
     });
     doConnectionsCheck('detail');
-    $('#checkin-form div a').live('click', function() {
+    $('#checkin-form div span[id^="checkin-select"] a').live('click', function() {
         doConnection(this, 'detail');
         return false;
     });

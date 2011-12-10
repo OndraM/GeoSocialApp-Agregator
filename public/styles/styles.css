@@ -330,6 +330,9 @@ ul#photos-carousel {
 }
 
 /* Checkin form */
+#checkin-form {
+    overflow: hidden;
+}
 #checkin-form div label {
     display: block;
     width: 12em;

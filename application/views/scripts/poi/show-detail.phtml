@@ -50,8 +50,8 @@ echo "</ul>\n";
 <?php
  // checkin if google is not the only one service in venue listing
 if (!array_search('gg', $this->serviceParams) || count($this->serviceParams) > 1) {
-    echo "<h2 id=\"venue-checkin\">Checkin</h3>\n";
-    echo "<form id=\"checkin-form\">\n";
+    echo "<h2 id=\"venue-checkin\"><a href=\"#\">Checkin <span>&raquo;</span><span class=\"hidden\">&laquo;</span></span></a></h3>\n";
+    echo "<form id=\"checkin-form\" class=\"hidden\">\n";
     echo "<div>\n";
     foreach ($this->serviceParams as $id => $type) {
         if ($type == 'gg') continue;
