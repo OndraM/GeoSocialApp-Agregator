@@ -42,10 +42,10 @@ foreach(Zend_Registry::get('var')->services as $serviceId => $service) {
     <div id="oauth-wrapper">
 <?php
 foreach(Zend_Registry::get('var')->services as $serviceId => $service) {
-    if ($service['model']::OAUTH_URL) {
+    if ($this->getServiceAuthUrl($service['model'])) {
 ?>
         <div id="<?=$serviceId;?>-connect">
-            <a href="<?=$service['model']::getAuthUrl();?>" title="Click to connect to <?=$service['name'];?>">
+            <a href="<?=$this->getServiceAuthUrl($service['model']);?>" title="Click to connect to <?=$service['name'];?>">
                 <img src="<?=$this->baseUrl();?>/images/connect-<?=$serviceId;?>.png" alt="Connect to <?=$service['name'];?>" />
             </a>
         </div>
