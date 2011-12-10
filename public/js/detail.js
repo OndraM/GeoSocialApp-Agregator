@@ -9,8 +9,13 @@ function initDetail(markers) {
     $('#checkin-submit').button();
     $('#checkin-form').submit(function() {
         $('#checkin-form input[type=checkbox]:checked').each(function() {
-            // TODO: do checkin using AJAX
+
         })
+        return false;
+    });
+    doConnectionsCheck('detail');
+    $('#checkin-form div a').live('click', function() {
+        doConnection(this, 'detail');
         return false;
     });
 

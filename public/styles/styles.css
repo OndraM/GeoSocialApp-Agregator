@@ -37,7 +37,7 @@ a img {
 
 img.icon, img.icon-right, img.icon-left {
     vertical-align: middle;
-	border-style: none;    
+	border-style: none;
 }
 
 img.icon-right, img.icon {
@@ -96,7 +96,7 @@ img.left {
     padding: 0 1em;
 }
 #header h1 {
-    
+
 }
 #header h2 {
     position: absolute;
@@ -156,7 +156,7 @@ img.left {
 }
 
 #venues-list p#sorter {
-    margin-bottom: .5em; 
+    margin-bottom: .5em;
 }
 #venues-list p#sorter a {
     color: #00f;
@@ -272,11 +272,11 @@ form#addressform input[name=address] {
     max-height: 32px;
 }
 
-/* carousel */
+/* POI detail photo carousel */
 #venue-photos {
     clear: both;
 }
-#photos-wrapper {    
+#photos-wrapper {
     margin: 0 auto;
     width: 600px;
 }
@@ -305,14 +305,13 @@ ul#photos-carousel {
     cursor: pointer;
 }
 
-
-/* Tooltip for photos */
+/* Tooltip for photos in carousel */
 .photo-tooltip {
     height: 210px;
     width: 320px;
     background-image: url('../images/fancybox_loading.gif');
     background-position: center center;
-    background-repeat: no-repeat;    
+    background-repeat: no-repeat;
 }
 .photo-tooltip-image img {
     height: 210px;
@@ -325,9 +324,25 @@ ul#photos-carousel {
     width: 320px;
     overflow: hidden;
     white-space: nowrap;
-    text-overflow: ellipsis;    
+    text-overflow: ellipsis;
     text-align: left;
     text-shadow:  0 0 .3em #000, 0 0 .2em #000, 0 0 .1em #000;
+}
+
+/* Checkin form */
+#checkin-form div label {
+    display: block;
+    width: 12em;
+    float: left;
+    height: 25px;
+    line-height: 25px;
+}
+#checkin-form span {
+    display: block;
+    width: 160px;
+    height: 25px;
+    line-height: 25px;
+    margin-left: 12em;
 }
 
 /* Friends activity window */
@@ -354,7 +369,7 @@ ul#photos-carousel {
     border: 1px solid #cccccc;
     background: #f6f6f6 url('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/ui-lightness/images/ui-bg_glass_100_f6f6f6_1x400.png') 50% 50% repeat-x;
     font-weight: bold;
-    color: #1c94c4; 
+    color: #1c94c4;
 }
 .ui-state-active,
 .ui-widget-content .ui-state-active,
@@ -362,12 +377,12 @@ ul#photos-carousel {
     border: 1px solid #fbd850;
     background: #ffffff url('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/ui-lightness/images/ui-bg_glass_65_ffffff_1x400.png') 50% 50% repeat-x;
     font-weight: bold;
-    color: #eb8f00; 
+    color: #eb8f00;
 }
-.ui-state-active a, 
+.ui-state-active a,
 .ui-state-active a:link,
 .ui-state-active a:visited {
-    color: #eb8f00; 
+    color: #eb8f00;
     text-decoration: none;
 }
 

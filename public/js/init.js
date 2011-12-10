@@ -1,8 +1,21 @@
-/* --------------------------- Global functions ---------------------------  */
+/* ----------------- Global document.ready initialization -----------------  */
+$(document).ready(function() {
+	// Open external Links in new window
+	//$('a[href^="http://"]').click(function() {
+    $('a.external').live('click', function() {
+		this.target = '_blank';
+	});
 
- /**
-  * If console is not set, overwrite the function to prevent function not defined errors
-  */
+    // Fancybox init
+    //$(".fancybox").fancybox();
+});
+
+/* --------------------------- Global functions ---------------------------  */
+var xhrConnect = [];
+
+/**
+* If console is not set, overwrite the function to prevent function not defined errors
+*/
 if (typeof console === "undefined") {
     console = {
         log: function() { },
@@ -112,100 +125,204 @@ function removeDiacritics (str) {
     return str;
 }
 
+/*
+* jSort - jQury sorting plugin
+* http://do-web.com/jsort/overview
+*
+* Copyright 2011, Miriam Zusin
+* Dual licensed under the MIT or GPL Version 2 licenses.
+* http://do-web.com/jsort/license
+*/
+$.fn.jSort = function(options){
 
-/* ----------------- Global document.ready initialization -----------------  */
+var options = $.extend({
+        sort_by: 'p',
+        item: 'div',
+        order: 'asc', //desc
+        is_num: false,
+        sort_by_attr: false,
+        attr_name: ''
+    }, options);
 
-$(document).ready(function() {
-	// Open external Links in new window
-	//$('a[href^="http://"]').click(function() {
-    $('a.external').live('click', function() {
-		this.target = '_blank';
-	});
+    return this.each(function() {
+        var hndl = this;
+        var titles = [];
+        var i = 0;
 
-    // Fancybox init
-    //$(".fancybox").fancybox();
+        //init titles
+        $(this).find(options.item).each(function(){
 
-    /*
-     * jSort - jQury sorting plugin
-     * http://do-web.com/jsort/overview
-     *
-     * Copyright 2011, Miriam Zusin
-     * Dual licensed under the MIT or GPL Version 2 licenses.
-     * http://do-web.com/jsort/license
-     */
-   $.fn.jSort = function(options){
+            var txt;
+            var sort_by = $(this).find(options.sort_by);
 
-	var options = $.extend({
-		sort_by: 'p',
-		item: 'div',
-		order: 'asc', //desc
-		is_num: false,
-		sort_by_attr: false,
-		attr_name: ''
-	},options);
+            if(options.sort_by_attr){
+                txt = sort_by.attr(options.attr_name).toLowerCase();
+            }
+            else{
+                txt = sort_by.text().toLowerCase();
+            }
 
-	return this.each(function() {
-		var hndl = this;
-		var titles = [];
-		var i = 0;
+            titles.push([txt, i]);
 
-		//init titles
-		$(this).find(options.item).each(function(){
+            $(this).attr("rel", "sort" + i);
+            i++;
+        });
 
-			var txt;
-			var sort_by = $(this).find(options.sort_by);
+        this.sortNum = function(a, b){
+            return eval(a[0] -  b[0]);
+        };
 
-			if(options.sort_by_attr){
-				txt = sort_by.attr(options.attr_name).toLowerCase();
-			}
-			else{
-				txt = sort_by.text().toLowerCase();
-			}
+        this.sortABC = function(a, b){
+            return a[0] > b[0] ? 1 : -1;
+        };
 
-			titles.push([txt, i]);
+        if(options.is_num){
+            titles.sort(hndl.sortNum);
+        }
+        else{
+            titles.sort(hndl.sortABC);
+        }
 
-			$(this).attr("rel", "sort" + i);
-			i++;
-		});
+        if(options.order == "desc"){
+            if(options.is_num){
+                titles.reverse(hndl.sortNum);
+            }
+            else{
+                titles.reverse(hndl.sortABC);
+            }
+        }
 
-		this.sortNum = function(a, b){
-			return eval(a[0] -  b[0]);
-		};
+        for (var t=0; t < titles.length; t++){
+            var el = $(hndl).find(options.item + "[rel='sort" + titles[t][1] + "']");
+            $(hndl).append(el);
+        }
 
-		this.sortABC = function(a, b){
-			return a[0] > b[0] ? 1 : -1;
-		};
+    });
+};
 
-		if(options.is_num){
-			titles.sort(hndl.sortNum);
-		}
-		else{
-			titles.sort(hndl.sortABC);
-		}
+/**
+ * Check for services, which are already connected and dont need
+ * to ask user for connection.
+ *
+ * @param type Type of connections check - on {index|detail} page
+ */
+function doConnectionsCheck(type) {
+    var selector;
+    if (type == 'detail') {
+        selector = '#checkin-form div span[id^="checkin-select"]';
+    } else {
+        selector = '#oauth-wrapper div[id$="connect"]';
+    }
 
-		if(options.order == "desc"){
-			if(options.is_num){
-				titles.reverse(hndl.sortNum);
-			}
-			else{
-				titles.reverse(hndl.sortABC);
-			}
-		}
+    $(selector).each(function() {
+        var element = $(this);
+        var origHtml = $(this).html();
+        var serviceType;
+        var finalHtml;
+        if (type == 'detail') {
+            serviceType = $(this).attr('data-type');
+            finalHtml = '<input name="checkin-' + serviceType + '" id="checkin-' + serviceType + '" type="checkbox" value="' + $(this).attr('data-id') + '" checked="checked" />'
+        } else {
+            serviceType = $(this).attr('id').substr(0, 2);
+            finalHtml = '<img src="/images/icon-' + serviceType + '.png" alt="' + serviceType + '" class="icon-left" alt /> connected';
+        }
+        element.html('<img src="/images/spinner.gif" />');
+        $.ajax({
+            url: '/oauth/is-authenticated/service/' + serviceType,
+            dataType: 'json'})
+        .fail(function() {
+            element.html(origHtml);
+        })
+        .done(function(response) {
+            if (typeof response.status !== "undefined" && response.status == true) {
+                element.html(finalHtml);
+                if (type == 'detail') {
+                    enableCheckinForm();
+                } else {
+                    enableFriendsWindow();
+                }
+            } else {
+                element.html(origHtml);
+            }
+        });
+    });
+}
 
-		for (var t=0; t < titles.length; t++){
-			var el = $(hndl).find(options.item + "[rel='sort" + titles[t][1] + "']");
-			$(hndl).append(el);
-		}
+/**
+ * Enable link to open friends windows
+ */
+function enableFriendsWindow() {
+    $('#oauth-wrapper a#openFriendsWindow').attr('href', friendsWindowsUrl);
+    $('#oauth-wrapper a#openFriendsWindow').attr('title', $('#oauth-wrapper a#openFriendsWindow').attr('data-title'));
+    $('#oauth-wrapper a#openFriendsWindow').css('cursor', 'pointer');
+    $('#oauth-wrapper a#openFriendsWindow').addClass('popUpFixed fancybox.ajax');
+}
+/**
+ * Enable submit button of checkin form
+ */
+function enableCheckinForm() {
+    $('#checkin-submit').removeAttr('disabled');
+    $('#checkin-submit').button("refresh");
+}
+/**
+ * Start connection process, triggered by element
+ *
+ * @param element Element which triggered the connection. Usually <a> with "Connect to XXX" icon
+ * @param type Type of connection source - {index|detail} page
+ */
+function doConnection(element, type) {
+    var serviceType
+    if (type == 'detail') {
+        serviceType = $(element).parent().attr('data-type');
+    } else {
+        serviceType =  $(element).parent().attr('id').substr(0, 2);
+    }
+    var parent = $(element).parent();
+    var origHtml = parent.html();
+    $(element).html('<img src="/images/spinner.gif" />');
+    var authWindow = window.open(element.href);
+    if (window.focus) {
+        authWindow.focus();
+    }
 
-	});
-   };
-
-});
+    var loopCounter = 0;
+    var authLoop = setInterval(function() {
+        // check whether xhrRequest isn't already running
+        if (xhrConnect[serviceType] && xhrConnect[serviceType].readyState != 4){
+            return; // dont't execute another one!
+        }
+        xhrConnect[serviceType] = $.ajax({
+            url: '/oauth/is-authenticated/service/' + serviceType,
+            dataType: 'json'})
+        .fail(function() {
+            clearInterval(authLoop);
+            parent.html(origHtml);
+        })
+        .done(function(response) {
+            if (typeof response.status !== "undefined" && response.status == true) {
+                clearInterval(authLoop);
+                if (type == 'detail') {
+                    parent.html('<input name="checkin-' + serviceType + '" id="checkin-' + serviceType + '" type="checkbox" value="' + $(this).attr('data-id') + '" checked="checked" />');
+                    enableCheckinForm();
+                } else {
+                    parent.html('<img src="../images/icon-' + serviceType + '.png" alt="' + serviceType + '" class="icon-left" /> connected');
+                    enableFriendsWindow();
+                }
+            } else if (typeof authWindow === "undefined" || authWindow.closed // window has been closed
+                || loopCounter > 50)  // to many loops, dont't wait anymore
+            {
+                clearInterval(authLoop);
+                parent.html(origHtml);
+            }
+            loopCounter++;
+        });
+    }, 1500);
+}
 
 /* ----------------------- Index page specific code -----------------------  */
 
 /*
- * Global variables
+ * Index page global variables
  */
 var indexMap;
 var geocoder = new google.maps.Geocoder();
@@ -217,7 +334,6 @@ var getNearbyUrl = '/poi/get-nearby';
 var friendsWindowsUrl = '/user/friends';
 var infoWindow;
 var xhrVenues;
-var xhrConnect = [];
 
 /*
  * Init main page:
@@ -391,46 +507,11 @@ function initIndex() {
     //doGeolocate(); // commented just for testing purposes // TODO uncomment
 
     // Initial check of already connected services (with delay, to lower server load)
-    setTimeout('initConnectionsCheck()', 1000);
+    setTimeout('doConnectionsCheck("index")', 1000);
 
     // When clicked on connect buttons
     $('#oauth-wrapper div a').live('click', function() {
-        var type =  $(this).parent().attr('id').substr(0, 2);
-        var parent = $(this).parent();
-        var origHtml = parent.html();
-        $('img', this).attr('src', '../images/spinner.gif');
-        var authWindow = window.open(this.href);
-        if (window.focus) {
-            authWindow.focus();
-        }
-
-        var loopCounter = 0;
-        var authLoop = setInterval(function() {
-            // check whether xhrRequest isn't already running
-            if (xhrConnect[type] && xhrConnect[type].readyState != 4){
-                return; // dont't execute another one!
-            }
-            xhrConnect[type] = $.ajax({
-                url: '/oauth/is-authenticated/service/' + type,
-                dataType: 'json'})
-            .fail(function() {
-                clearInterval(authLoop);
-                parent.html(origHtml);
-            })
-            .done(function(response) {
-                if (typeof response.status !== "undefined" && response.status == true) {
-                    clearInterval(authLoop);
-                    parent.html('<img src="../images/icon-' + type + '.png" alt="' + type + '" class="icon-left" /> connected');
-                    enableFriendsWindow();
-                } else if (typeof authWindow === "undefined" || authWindow.closed // window has been closed
-                    || loopCounter > 50)  // to many loops, dont't wait anymore
-                {
-                    clearInterval(authLoop);
-                    parent.html(origHtml);
-                }
-                loopCounter++;
-            });
-        }, 1500);
+        doConnection(this);
         return false;
     });
 
@@ -511,44 +592,9 @@ function initIndexForm() {
     });
 }
 
-/**
- * Initial check fore services, which are already connected and don need
- * to ask user for connection
- */
-function initConnectionsCheck() {
-    $('#oauth-wrapper div[id$="connect"]').each(function() {
-        var type =  $(this).attr('id').substr(0, 2);
-        var element = $(this);
-        var origHtml = $(this).html();
-        $('img', this).attr('src', '../images/spinner.gif');
-        $.ajax({
-            url: '/oauth/is-authenticated/service/' + type,
-            dataType: 'json'})
-        .fail(function() {
-            element.html(origHtml);
-        })
-        .done(function(response) {
-            if (typeof response.status !== "undefined" && response.status == true) {
-                element.html('<img src="../images/icon-' + type + '.png" alt="' + type + '" class="icon-left" alt /> connected');
-                enableFriendsWindow();
-            } else {
-                element.html(origHtml);
-            }
-        });
-    });
-}
-
-function enableFriendsWindow() {
-    $('#oauth-wrapper a#openFriendsWindow').attr('href', friendsWindowsUrl);
-    $('#oauth-wrapper a#openFriendsWindow').attr('title', $('#oauth-wrapper a#openFriendsWindow').attr('data-title'));
-    $('#oauth-wrapper a#openFriendsWindow').css('cursor', 'pointer');
-    $('#oauth-wrapper a#openFriendsWindow').addClass('popUpFixed fancybox.ajax');
-}
-
 /*
  * Do geolocation (if available)
  */
-
 function doGeolocate() {
     if (navigator.geolocation) {
         // TODO: show note about geolocation beeing loaded?

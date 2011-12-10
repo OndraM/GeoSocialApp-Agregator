@@ -52,14 +52,23 @@ echo "</ul>\n";
 if (!array_search('gg', $this->serviceParams) || count($this->serviceParams) > 1) {
     echo "<h2 id=\"venue-checkin\">Checkin</h3>\n";
     echo "<form id=\"checkin-form\">\n";
+    echo "<div>\n";
     foreach ($this->serviceParams as $id => $type) {
         if ($type == 'gg') continue;
-        echo "<label><input name=\"checkin-$type'\" id=\"checkin-$type'\" type=\"checkbox\" data-type=\"$type'\" value=\"$id\" /> "
+        echo "\t<label for=\"checkin-$type\">"
+            . $this->serviceIcon($type)
             . $this->services[$type]['name']
-            . "</label><br />\n";
+            . "</label>\n";
+        echo "\t<span id=\"checkin-select-$type\" data-type=\"$type\" data-id=\"$id\">"
+            . "<a href=\"" . $this->getServiceAuthUrl($this->services[$type]['model']) . "\" title=\"Click to connect to {$this->services[$type]['name']}\">"
+            . "<img src=\"" . $this->baseUrl() . "/images/connect-{$type}.png\" alt=\"Connect to {$this->services[$type]['name']}\" />"
+            . "</a>"
+            //. "<input name=\"checkin-$type\" id=\"checkin-$type\" type=\"checkbox\" data-type=\"$type\" value=\"$id\" />"
+            . "</span>\n";
     }
+    echo "</div>\n";
     echo "<label>Message: <input type=\"text\" name=\"checkin-message\" id=\"checkin-message\" /></label><br />\n";
-    echo "<input type=\"submit\" id=\"checkin-submit\" value=\"Check-in\" />\n";
+    echo "<input type=\"submit\" id=\"checkin-submit\" value=\"Check-in\" disabled=\"disabled\" />\n";
     echo "</form>\n";
 
 }
