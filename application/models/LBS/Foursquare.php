@@ -345,36 +345,6 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
     }
 
     /**
-     * Get details of signed in user.
-     *
-     * @return array Array of user details
-     */
-    public function getUserInfo() {
-        $endpoint = '/users';
-        $client = $this->_constructClient($endpoint . '/self');
-        try {
-            $response = $client->request();
-        } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
-            return;
-        }
-
-        // error in response
-        if ($response->isError()) return;
-
-        $result = Zend_Json::decode($response->getBody());
-        // foursquare returned an error
-        if ($result['meta']['code'] != 200) return;
-
-        $entry = $result['response']['user'];
-        $user = array(
-            'name'      => $entry['firstName'] . ' ' . $entry['lastName'],
-            'id'        => $entry['id'],
-            'avatar'    => $entry['photo']
-        );
-        return $user;
-    }
-
-    /**
      * Execute checkin on specified POI.
      *
      * @param string $poiId ID of POI
@@ -399,6 +369,9 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
         if ($response->isError()) return;
 
         $result = Zend_Json::decode($response->getBody());
+        // foursquare returned an error
+        if ($result['meta']['code'] != 200) return;
+
         $responseMessage = '';
         foreach ($result['notifications'] as $notification) {
             if ($notification['type'] == 'message') {
@@ -406,6 +379,37 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
             }
         }
         return $responseMessage;
+    }
+
+    /**
+     * Get details of signed in user.
+     *
+     * @return array Array of user details
+     */
+    public function getUserInfo() {
+        $endpoint = '/users';
+        $client = $this->_constructClient($endpoint . '/self');
+        try {
+            $response = $client->request();
+        } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
+            return;
+        }
+
+        // error in response
+        if ($response->isError()) return;
+
+        $result = Zend_Json::decode($response->getBody());
+
+        // foursquare returned an error
+        if ($result['meta']['code'] != 200) return;
+
+        $entry = $result['response']['user'];
+        $user = array(
+            'name'      => $entry['firstName'] . ' ' . $entry['lastName'],
+            'id'        => $entry['id'],
+            'avatar'    => $entry['photo']
+        );
+        return $user;
     }
 
     /**
