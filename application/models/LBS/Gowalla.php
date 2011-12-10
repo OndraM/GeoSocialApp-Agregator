@@ -249,6 +249,7 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
         $queryString = http_build_query(
             array(  'client_id'     => self::CLIENT_ID,
                     'response_type' => 'code',
+                    'scope'         => 'read-write',
                     'redirect_uri'  => 'http://gsaa.local/oauth/callback/service/' . self::TYPE // TODO: variable path?
         ));
         $url = self::OAUTH_URL . '?' . $queryString;
@@ -268,6 +269,7 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
             'client_secret' => self::CLIENT_SECRET,
             'grant_type'    => 'authorization_code',
             'redirect_uri'  => rawurldecode('http://gsaa.local/oauth/callback/service/' . self::TYPE), // TODO: get absolute url dynamically
+            'scope'         => 'read-write',
             'code'          => $code
         );
         $client->setUri(self::OAUTH_CALLBACK);
@@ -315,6 +317,34 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
             return true;
         }
         return false;
+    }
+
+    /**
+     * Execute checkin on specified POI.
+     *
+     * @param string $poiId ID of POI
+     * @param string $comment Check-in comment
+     * @return array Response array // TODO
+     */
+    public function doCheckin($poiId, $comment = '') {
+        $client = $this->_constructClient('/checkins',
+                                            array(
+                                                'spot_id'       => $poiId,
+                                                'comment'       => $comment
+                                            )
+        );
+        try {
+            $response = $client->request('POST');
+        } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
+            return;
+        }
+        // error in response
+        if ($response->isError()) return;
+
+
+        $result = Zend_Json::decode($response->getBody());
+        $responseMessage = trim($result['detail_text']);
+        return $responseMessage;
     }
 
     /**
