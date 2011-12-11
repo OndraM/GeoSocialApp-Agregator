@@ -32,9 +32,9 @@ class UserController extends Zend_Controller_Action
 
         if (count($friendsRaw) > 0) {
             $friendsCheckins = $this->_mergeFriendsCheckins($friendsRaw);
+            $this->view->friends = $friendsCheckins;
         }
 
-        $this->view->friends = $friendsCheckins;
         $this->view->services = Zend_Registry::get('var')->services;
 
     }

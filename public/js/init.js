@@ -534,9 +534,11 @@ function initIndex() {
     }
     // Init venue details PopUp
     $(".popUp").fancybox(fancyboxOpts);
-    // Specific options
-    fancyboxOpts.maxHeight = 550;
-    fancyboxOpts.beforeLoad = function() {
+
+    // Copy options
+    var fancyBoxFixed = jQuery.extend({}, fancyboxOpts);
+    fancyBoxFixed.maxHeight = 550;
+    fancyBoxFixed.beforeLoad = function() {
         $('#oauth-wrapper a#openFriendsWindow').attr('href', friendsWindowsUrl
             + '/cLat/'
             + $('#searchform input[name=lat]').val()
@@ -545,7 +547,7 @@ function initIndex() {
         )
     };
     // Init friends PopUp
-    $('.popUpFixed').fancybox(fancyboxOpts);
+    $('.popUpFixed').fancybox(fancyBoxFixed);
 
 
 }
