@@ -49,9 +49,10 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
         $client = $this->_constructClient($endpoint,
                                         array(  'll'            => "$lat,$long",
                                                 'query'         => $term,
-                                                'intent'        => 'checkin', // other possible LIMIT_WITHOUT_FILTERvalues: browse, match
+                                                'intent'        => 'checkin', // other possible values: browse, match
                                                 'limit'         => $limit,
-                                                'radius'        => ($radius > 0 ? $radius : self::RADIUS)
+                                                'radius'        => ($radius > 0 ? $radius : self::RADIUS),
+                                                'oauth_token'   => '' // even if user has his own token, overwrite it
                                             ));
 
         try {
@@ -478,7 +479,13 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
         $queryParams['client_id'] = self::CLIENT_ID;
         $queryParams['client_secret'] = self::CLIENT_SECRET;
         $queryParams['v'] = self::DATEVERIFIED;
-        if (!empty($this->_oauthToken)) $queryParams['oauth_token'] = $this->_oauthToken;
+
+        // when ouath_token is not empty, and was not reset to false, use it
+        if (isset($queryParams['oauth_token']) && $queryParams['oauth_token'] == "") {
+            // leave it empty
+        } elseif (!empty($this->_oauthToken)) { // if token is set, use it
+            $queryParams['oauth_token'] = $this->_oauthToken;
+        }
 
         // set client options
         $client->setUri(self::SERVICE_URL . $endpoint);
