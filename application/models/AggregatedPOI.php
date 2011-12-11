@@ -44,7 +44,10 @@ class GSAA_Model_AggregatedPOI
             $urlParams[($poi->type == 'gg') ? $poi->reference : $poi->id] = $poi->type;
         }
         // little bit MVC break, but we really need to get the url view heleper...
-        $url = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('view')->url($urlParams);
+        $url = Zend_Controller_Front::getInstance()
+                ->getParam('bootstrap')
+                ->getResource('view')
+                ->url($urlParams);
         return $url;
     }
 

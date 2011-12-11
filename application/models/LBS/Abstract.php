@@ -120,5 +120,13 @@ abstract class GSAA_Model_LBS_Abstract
      */
     abstract public function getUserInfo();
 
+    public static function getAbsoluteUrl(array $urlParams = array()) {
+        $url = Zend_Controller_Front::getInstance()
+                ->getParam('bootstrap')
+                ->getResource('view')
+                ->absoluteUrl($urlParams, null, true);
+        return $url;
+    }
+
 }
 

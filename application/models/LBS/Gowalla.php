@@ -249,8 +249,12 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
         $queryString = http_build_query(
             array(  'client_id'     => self::CLIENT_ID,
                     'response_type' => 'code',
-                    'scope'         => 'read-write',
-                    'redirect_uri'  => 'http://gsaa.local/oauth/callback/service/' . self::TYPE // TODO: variable path?
+                    'redirect_uri'  => self::getAbsoluteUrl(array(
+                                        'controller'    => 'oauth',
+                                        'action'        => 'callback',
+                                        'service'       => self::TYPE
+                                        )),
+                    'scope'         => 'read-write'
         ));
         $url = self::OAUTH_URL . '?' . $queryString;
         return $url;
@@ -268,7 +272,11 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
             'client_id'     => self::CLIENT_ID,
             'client_secret' => self::CLIENT_SECRET,
             'grant_type'    => 'authorization_code',
-            'redirect_uri'  => rawurldecode('http://gsaa.local/oauth/callback/service/' . self::TYPE), // TODO: get absolute url dynamically
+            'redirect_uri'  => self::getAbsoluteUrl(array(
+                                        'controller'    => 'oauth',
+                                        'action'        => 'callback',
+                                        'service'       => self::TYPE
+                                        )),
             'scope'         => 'read-write',
             'code'          => $code
         );

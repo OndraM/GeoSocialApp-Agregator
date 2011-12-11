@@ -191,7 +191,11 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
         $queryString = http_build_query(
             array(  'client_id'     => self::CLIENT_ID,
                     'response_type' => 'code',
-                    'redirect_uri'  => 'http://gsaa.local/oauth/callback/service/' . self::TYPE, // TODO: variable path?
+                    'redirect_uri'  => self::getAbsoluteUrl(array(
+                                            'controller'    => 'oauth',
+                                            'action'        => 'callback',
+                                            'service'       => self::TYPE
+                                            )),
                     'scope'         => 'user_about_me,user_checkins,friends_checkins,publish_checkins,offline_access'
         ));
         $url = self::OAUTH_URL . '?' . $queryString;
@@ -209,7 +213,11 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
         $queryParams = array(
             'client_id'     => self::CLIENT_ID,
             'client_secret' => self::CLIENT_SECRET,
-            'redirect_uri'  => rawurldecode('http://gsaa.local/oauth/callback/service/' . self::TYPE), // TODO: get absolute url dynamically
+            'redirect_uri'  => self::getAbsoluteUrl(array(
+                                        'controller'    => 'oauth',
+                                        'action'        => 'callback',
+                                        'service'       => self::TYPE
+                                        )),
             'code'          => $code
         );
         $client->setUri(self::OAUTH_CALLBACK);
