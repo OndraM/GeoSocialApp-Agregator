@@ -131,7 +131,7 @@ function initFriendsMap() {
 
     // Limit maximum and minimum zoom after fit bounds.
     // Why use listener? It is way how to ensure is is called after map init.
-    var boundsInitListener = google.maps.event.addListener(map, 'bounds_changed', function() {
+    var boundsInitListener = google.maps.event.addListener(friendsMap, 'bounds_changed', function() {
         google.maps.event.removeListener(boundsInitListener); // do it only once
         // zoom is too big, leave it at 16
         if (friendsMap.getZoom() > 16) {
