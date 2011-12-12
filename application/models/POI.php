@@ -109,8 +109,27 @@ class GSAA_Model_POI
      * Relevance (quality) of POI.
      * @var double Quality of POI, -5.0 is worst, 5.0 is best. 0 is default.
      */
-
     public $quality    = 0;
+
+
+    /**
+     * Priority of POI service
+     * @var int
+     */
+    protected $_priority;
+
+    /**
+     * Class constructor
+     * @param string $type Service type shortcut
+     */
+    public function __construct($type) {
+        $services = Zend_Registry::get('var')->services;
+        if (empty($type)) throw new Exception('POI type not specified');
+        if (!isset($services[$type])) throw new Exception('POI type not found');
+        $this->_priority = Zend_Registry::get('var')->services[$this->type]['priority'];
+
+        $this->type = $type;
+    }
 
     /**
      * Get unique priority of the service.
@@ -119,7 +138,8 @@ class GSAA_Model_POI
      * @return int
      */
     public function getPriority() {
-        return Zend_Registry::get('var')->services[$this->type]['priority'];
+        return $this->_priority;
     }
+
 
 }

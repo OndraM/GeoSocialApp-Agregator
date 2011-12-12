@@ -87,8 +87,7 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
                                     $entry['location']['lat'], $entry['location']['lng']) > $radius*2) {
                 continue;
             }
-            $poi = new GSAA_Model_POI();
-            $poi->type      = self::TYPE;
+            $poi            = new GSAA_Model_POI(self::TYPE);
             $poi->name      = $entry['name'];
             $poi->id        = $entry['id'];
             $poi->url       = self::PUBLIC_URL . "venue/" . $entry['id'];
@@ -140,9 +139,7 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
         if ($result['meta']['code'] != 200) return;
 
         $entry = $result['response']['venue'];
-        $poi = new GSAA_Model_POI();
-
-        $poi->type      = self::TYPE;
+        $poi            = new GSAA_Model_POI(self::TYPE);
         $poi->name      = $entry['name'];
         $poi->id        = $entry['id'];
         $poi->url       = $entry['canonicalUrl'];

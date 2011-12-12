@@ -75,8 +75,7 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
                                     $entry['location']['latitude'], $entry['location']['longitude']) > $radius*2) {
                 continue;
             }
-            $poi = new GSAA_Model_POI();
-            $poi->type      = self::TYPE;
+            $poi            = new GSAA_Model_POI(self::TYPE);
             $poi->name      = $entry['name'];
             $poi->id        = $entry['id'];
             $poi->url       = self::PUBLIC_URL . "/" . $entry['id'];
@@ -116,8 +115,7 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
 
         $entry = Zend_Json::decode($response->getBody());
 
-        $poi = new GSAA_Model_POI();
-        $poi->type      = self::TYPE;
+        $poi            = new GSAA_Model_POI(self::TYPE);
         $poi->name      = $entry['name'];
         $poi->id        = $entry['id'];
         $poi->url       = $entry['link'];

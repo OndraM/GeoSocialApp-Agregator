@@ -64,9 +64,12 @@ class GSAA_Model_Checkin
      */
     public function __construct($type, $timestamp) {
         $services = Zend_Registry::get('var')->services;
+
+        if (empty($type)) throw new Exception('Checkin service not specified');
         if (!isset($services[$type])) throw new Exception('Checkin service not found');
         if (!is_numeric($timestamp) || (int) $timestamp != $timestamp )
             throw new Exception('Incorrect checkin timestamp');
+
         $date = new Zend_Date($timestamp);
         $this->date = $timestamp;
         $this->dateFormatted = $date->get(Zend_Date::DATETIME_MEDIUM);

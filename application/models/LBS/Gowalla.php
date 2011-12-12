@@ -76,8 +76,7 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
             if (GSAA_POI_Distance::getDistance($lat, $long, $entry['lat'], $entry['lng']) > $radius) {
                 continue;
             }
-            $poi = new GSAA_Model_POI();
-            $poi->type      = self::TYPE;
+            $poi            = new GSAA_Model_POI(self::TYPE);
             $poi->name      = $entry['name'];
             $urlExploded    = explode('/',  $entry['url']);
             $poi->id        = $urlExploded[2];
@@ -117,9 +116,7 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
 
         $entry = Zend_Json::decode($response->getBody());
 
-        $poi = new GSAA_Model_POI();
-
-        $poi->type      = self::TYPE;
+        $poi            = new GSAA_Model_POI(self::TYPE);
         $poi->name      = $entry['name'];
         $urlExploded    = explode('/',  $entry['url']);
         $poi->id        = $urlExploded[2];

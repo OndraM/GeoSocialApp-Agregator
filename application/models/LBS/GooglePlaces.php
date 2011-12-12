@@ -73,8 +73,7 @@ class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
                                     $entry['geometry']['location']['lat'], $entry['geometry']['location']['lng']) > $radius*2) {
                 continue;
             }
-            $poi = new GSAA_Model_POI();
-            $poi->type      = self::TYPE;
+            $poi            = new GSAA_Model_POI(self::TYPE);
             $poi->name      = $entry['name'];
             $poi->id        = $entry['id'];
             //$poi->url       = self::PUBLIC_URL . "venue/" . $entry['id'];
@@ -122,8 +121,7 @@ class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
 
         $entry = $result['result'];
 
-        $poi = new GSAA_Model_POI();
-        $poi->type      = self::TYPE;
+        $poi            = new GSAA_Model_POI(self::TYPE);
         $poi->name      = $entry['name'];
         $poi->id        = $entry['id'];
         $poi->url       = $entry['url'];
