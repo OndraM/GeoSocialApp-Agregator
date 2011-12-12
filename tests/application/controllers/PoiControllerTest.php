@@ -33,13 +33,43 @@ class POIControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
         $this->assertResponseCode(500);
     }
 
-    public function testGetNearbyActionAcessibleThroughXmlHttpRequest()
+    public function testGetNearbyActionWithoutParametrsAcessibleThroughXmlHttpRequestAndReturnsEmptyJson()
     {
         $this->request->setHeader('X-Requested-With', 'XMLHttpRequest');
+
         $this->dispatch('/poi/get-nearby');
         $this->assertResponseCode(200);
+        $this->assertHeaderContains('Content-Type', 'application/json');
 
+        $responseBody = $this->getResponse()->getBody();
+        $responseValue = Zend_Json::decode($responseBody);
+        $this->assertTrue(is_array($responseValue));
+        $this->assertTrue(empty($responseValue));
     }
+
+    // TODO: tests with parameters
+
+    // TODO: data provider for details
+
+    // TODO: test show-detail action
+    /*public function testShowDetailActionRoutingWorks()
+    {
+        //$this->request->setHeader('X-Requested-With', 'XMLHttpRequest');
+        $params = array('action' => 'show-detail', 'controller' => 'Poi', 'module' => 'default');
+        $urlParams = $this->urlizeOptions($params);
+        $url = $this->url($urlParams);
+        $this->dispatch($url);
+
+        $this->assertModule($urlParams['module']);
+        $this->assertController($urlParams['controller']);
+        $this->assertAction($urlParams['action']);
+    }*/
+
+    /*public function testGetNearbyActionAccessibleThroughXmlHttpRequest() {
+        $this->dispatch('/poi/show-detail');
+
+        $this->assertResponseCode(500);
+    }*/
 }
 
 
