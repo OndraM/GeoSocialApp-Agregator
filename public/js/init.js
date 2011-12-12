@@ -217,13 +217,11 @@ function doConnectionsCheck(type) {
     $(selector).each(function() {
         var element = $(this);
         var origHtml = $(this).html();
-        var serviceType;
+        var serviceType = $(this).attr('data-type');
         var finalHtml;
         if (type == 'detail') {
-            serviceType = $(this).attr('data-type');
             finalHtml = '<input name="checkin-' + serviceType + '" id="checkin-' + serviceType + '" type="checkbox" value="' + $(this).attr('data-id') + '" checked="checked" />'
         } else {
-            serviceType = $(this).attr('id').substr(0, 2);
             finalHtml = '<img src="/images/icon-' + serviceType + '.png" alt="' + serviceType + '" class="icon-left" alt /> connected';
         }
         element.html('<img src="/images/spinner.gif" />');
@@ -257,6 +255,7 @@ function enableFriendsWindow() {
     $('#oauth-wrapper a#openFriendsWindow').css('cursor', 'pointer');
     $('#oauth-wrapper a#openFriendsWindow').addClass('popUpFixed fancybox.ajax');
 }
+
 /**
  * Enable submit button of checkin form
  */
@@ -264,6 +263,7 @@ function enableCheckinForm() {
     $('#checkin-submit').removeAttr('disabled');
     $('#checkin-submit').button("refresh");
 }
+
 /**
  * Start connection process, triggered by element
  *
@@ -271,20 +271,19 @@ function enableCheckinForm() {
  * @param type Type of connection source - {index|detail} page
  */
 function doConnection(element, type) {
-    var serviceType
-    if (type == 'detail') {
-        serviceType = $(element).parent().attr('data-type');
-    } else {
-        serviceType =  $(element).parent().attr('id').substr(0, 2);
-    }
+    var serviceType = $(element).parent().attr('data-type');
     var parent = $(element).parent();
     var origHtml = parent.html();
+    var finalHtmlIndex = '<img src="/images/icon-' + serviceType + '.png" alt="' + serviceType + '" class="icon-left" alt /> connected';
+    var finalHtmlDetail = '<input name="checkin-' + serviceType + '" id="checkin-' + serviceType + '" type="checkbox" value="' + $(this).attr('data-id') + '" checked="checked" />';
+
     $(element).html('<img src="/images/spinner.gif" />');
     var authWindow = window.open(element.href);
+
     if (window.focus) {
         authWindow.focus();
     }
-
+    
     var loopCounter = 0;
     var authLoop = setInterval(function() {
         // check whether xhrRequest isn't already running
@@ -302,10 +301,14 @@ function doConnection(element, type) {
             if (typeof response.status !== "undefined" && response.status == true) {
                 clearInterval(authLoop);
                 if (type == 'detail') {
-                    parent.html('<input name="checkin-' + serviceType + '" id="checkin-' + serviceType + '" type="checkbox" value="' + $(this).attr('data-id') + '" checked="checked" />');
+                    parent.html(finalHtmlDetail);
                     enableCheckinForm();
+                    if (isPopupWindow()) { // also change connect button in main window
+                        $('#oauth-wrapper div#' + serviceType + '-connect').html(finalHtmlIndex);
+                        enableFriendsWindow();
+                    }
                 } else {
-                    parent.html('<img src="../images/icon-' + serviceType + '.png" alt="' + serviceType + '" class="icon-left" /> connected');
+                    parent.html(finalHtmlIndex);
                     enableFriendsWindow();
                 }
             } else if (typeof authWindow === "undefined" || authWindow.closed // window has been closed

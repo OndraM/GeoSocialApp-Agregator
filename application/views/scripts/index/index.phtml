@@ -44,7 +44,7 @@ foreach(Zend_Registry::get('var')->services as $serviceId => $service) {
 foreach(Zend_Registry::get('var')->services as $serviceId => $service) {
     if ($this->getServiceAuthUrl($service['model'])) {
 ?>
-        <div id="<?=$serviceId;?>-connect">
+        <div id="<?=$serviceId;?>-connect" data-type="<?=$serviceId;?>">
             <a href="<?=$this->getServiceAuthUrl($service['model']);?>" title="Click to connect to <?=$service['name'];?>">
                 <img src="<?=$this->baseUrl();?>/images/connect-<?=$serviceId;?>.png" alt="Connect to <?=$service['name'];?>" />
             </a>
