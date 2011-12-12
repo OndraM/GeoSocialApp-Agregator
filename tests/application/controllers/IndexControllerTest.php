@@ -7,9 +7,13 @@ class IndexControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
     {
         $this->bootstrap = new Zend_Application(APPLICATION_ENV, APPLICATION_PATH . '/configs/application.ini');
         parent::setUp();
+
+        // default server variables
+        $_SERVER['SERVER_PROTOCOL'] = 'HTTP/1.1';
+        $_SERVER['HTTP_HOST'] = 'gsaa.local';
     }
 
-    public function testIndexAction()
+    public function testIndexActionRoutingWorks()
     {
         $params = array('action' => 'index', 'controller' => 'Index', 'module' => 'default');
         $urlParams = $this->urlizeOptions($params);
@@ -17,17 +21,38 @@ class IndexControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
         $this->dispatch($url);
 
         // assertions
-        /*$this->assertModule($urlParams['module']);
+        $this->assertModule($urlParams['module']);
         $this->assertController($urlParams['controller']);
         $this->assertAction($urlParams['action']);
-        $this->assertQueryContentContains("div#welcome h3", "This is your project's main page");
-         *
-         */
-        $this->assertTrue(true);
     }
 
+    public function testIndexPageProperlyDispatched() {
+        $this->dispatch('/');
+
+        $this->assertNotController('error');
+
+        $this->assertNotRedirect();
+
+        $this->assertModule('default');
+        $this->assertController('index');
+        $this->assertAction('index');
+        $this->assertResponseCode(200);
+    }
+
+    public function testIndexPafeProperlyRendered() {
+        $this->dispatch('/');
+
+        // header is present
+        $this->assertQueryContentContains("#header h1", "GeoSocialApp aggregator");
+
+        // both address form and search fomr are present
+        $this->assertQueryCount('form', 2);
+
+        // connect buttons are there
+        $this->assertQueryCount('div#oauth-wrapper div', 3);
+        $this->assertQuery("div#oauth-wrapper div a img");
+
+
+    }
 
 }
-
-
-
