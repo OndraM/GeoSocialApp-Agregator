@@ -1,9 +1,9 @@
     <form id="searchform">
         <fieldset>
             <legend>Search nearby venues</legend>
-            <label>Latitude: <input type="text" name="lat" value="<?=Zend_Registry::get('var')->defaultLat;?>" /></label>
-            <label>Longitude: <input type="text" name="long" value="<?=Zend_Registry::get('var')->defaultLong;?>" /></label>
-            <label title="Average radius of venue search.">Radius [m]: <input type="text" name="radius" value="<?=Zend_Registry::get('var')->defaultRadius;?>" /></label>
+            <label>Latitude: <input type="text" name="lat" value="<?=Zend_Registry::get('var')->defaultLat;?>" required pattern="\-?[0-9]{0,3}(\.[0-9]+)?" /></label>
+            <label>Longitude: <input type="text" name="long" value="<?=Zend_Registry::get('var')->defaultLong;?>" required pattern="\-?[0-9]{0,3}(\.[0-9]+)?" /></label>
+            <label title="Average radius of venue search.">Radius [m]: <input type="text" name="radius" value="<?=Zend_Registry::get('var')->defaultRadius;?>" pattern="\d*" /></label>
             <div id="search-services" title="Select services, which you want to include in venue search.">
                 Search in:
 <?php

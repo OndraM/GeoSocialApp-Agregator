@@ -283,7 +283,7 @@ function doConnection(element, type) {
     if (window.focus) {
         authWindow.focus();
     }
-    
+
     var loopCounter = 0;
     var authLoop = setInterval(function() {
         // check whether xhrRequest isn't already running
