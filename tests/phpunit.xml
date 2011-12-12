@@ -10,6 +10,7 @@
             <exclude>
                 <directory suffix=".phtml">../application</directory>
                 <file>../application/controllers/ErrorController.php</file>
+                <file>../application/Bootstrap.php</file>
                 <directory suffix=".phtml">../application</directory>
                 <directory suffix=".php">../library/Zend</directory>
                 <directory suffix=".php">../library/third-party</directory>
