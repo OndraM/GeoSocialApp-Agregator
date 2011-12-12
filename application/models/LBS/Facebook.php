@@ -33,18 +33,20 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
      */
     public function getNearbyVenues($lat, $long, $radius, $term = null) {
         $endpoint = '/search';
-        if ($radius > self::RADIUS_MAX) {
+        if ($radius > self::RADIUS_MAX) {       // limit maximum radius
             $radius = self::RADIUS_MAX;
+        } elseif ($radius == 0) {               // when no radius is send
+            $radius = self::RADIUS;
         }
-        $limit = self::LIMIT_WITHOUT_FILTER;
+        $limit = self::LIMIT_WITHOUT_FILTER;    // limit number of POIs when no search is being executed
         if ($term) {
-            $limit = self::LIMIT;
+            $limit = self::LIMIT;               // limit of POIs when searching
         }
 
         $queryParams = array('type'     => 'place',
                              'center'   => "$lat,$long",
                              'limit'    => $limit,
-                             'distance' => ($radius > 0 ? $radius : self::RADIUS),
+                             'distance' => $radius,
                              'access_token' => self::ACCESS_TOKEN // even if user has his own token, overwrite it with the app token here
                              );
         if ($term) {

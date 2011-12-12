@@ -38,12 +38,14 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
      */
     public function getNearbyVenues($lat, $long, $radius, $term = null) {
         $endpoint = '/venues/search';
-        if ($radius > self::RADIUS_MAX) {
+        if ($radius > self::RADIUS_MAX) {       // limit maximum radius
             $radius = self::RADIUS_MAX;
+        } elseif ($radius == 0) {               // when no radius is send
+            $radius = self::RADIUS;
         }
-        $limit = self::LIMIT_WITHOUT_FILTER;
+        $limit = self::LIMIT_WITHOUT_FILTER;    // limit number of POIs when no search is being executed
         if ($term) {
-            $limit = self::LIMIT;
+            $limit = self::LIMIT;               // limit of POIs when searching
         }
 
         $client = $this->_constructClient($endpoint,
@@ -51,7 +53,7 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
                                                 'query'         => $term,
                                                 'intent'        => 'checkin', // other possible values: browse, match
                                                 'limit'         => $limit,
-                                                'radius'        => ($radius > 0 ? $radius : self::RADIUS),
+                                                'radius'        => $radius,
                                                 'oauth_token'   => '' // even if user has his own token, overwrite it
                                             ));
 
@@ -66,7 +68,6 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
             return array();
         }
         $result = Zend_Json::decode($response->getBody());
-
         // foursquare returned an error
         if ($result['meta']['code'] != 200) {
             // TODO: log $result['meta']['errorType'] and $result['meta']['errorDetail']

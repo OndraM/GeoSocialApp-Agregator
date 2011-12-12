@@ -26,19 +26,21 @@ class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
      */
     public function getNearbyVenues($lat, $long, $radius, $term = null) {
         $endpoint = '/place/search/json';
-        if ($radius > self::RADIUS_MAX) {
+        if ($radius > self::RADIUS_MAX) {       // limit maximum radius
             $radius = self::RADIUS_MAX;
+        } elseif ($radius == 0) {               // when no radius is send
+            $radius = self::RADIUS;
         }
-        $limit = self::LIMIT_WITHOUT_FILTER;
+        $limit = self::LIMIT_WITHOUT_FILTER;    // limit number of POIs when no search is being executed
         if ($term) {
-            $limit = self::LIMIT;
+            $limit = self::LIMIT;               // limit of POIs when searching
         }
 
         $client = $this->_constructClient($endpoint,
                                         array(  'location'      => "$lat,$long",
                                                 'name'          => $term,
                                                 'types'         => 'establishment',
-                                                'radius'        => (($radius > 0 ? $radius : self::RADIUS)*2/3) // get only 2/3 of radius, to get better results
+                                                'radius'        => $radius * 2/3    // get only 2/3 of radius, to get better results
                                             ));
 
         try {
