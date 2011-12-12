@@ -63,12 +63,11 @@ class GSAA_Model_Checkin
      * @param int $timestamp Checkin timestamp
      */
     public function __construct($type, $timestamp) {
+        if (empty($type)) throw new InvalidArgumentException('Checkin service not specified');
         $services = Zend_Registry::get('var')->services;
-
-        if (empty($type)) throw new Exception('Checkin service not specified');
-        if (!isset($services[$type])) throw new Exception('Checkin service not found');
+        if (!isset($services[$type])) throw new InvalidArgumentException('Checkin service not found');
         if (!is_numeric($timestamp) || (int) $timestamp != $timestamp )
-            throw new Exception('Incorrect checkin timestamp');
+            throw new InvalidArgumentException('Incorrect checkin timestamp');
 
         $date = new Zend_Date($timestamp);
         $this->date = $timestamp;

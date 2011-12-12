@@ -123,12 +123,12 @@ class GSAA_Model_POI
      * @param string $type Service type shortcut
      */
     public function __construct($type) {
+        if (empty($type)) throw new InvalidArgumentException('POI type not specified');
         $services = Zend_Registry::get('var')->services;
-        if (empty($type)) throw new Exception('POI type not specified');
-        if (!isset($services[$type])) throw new Exception('POI type not found');
-        $this->_priority = Zend_Registry::get('var')->services[$this->type]['priority'];
+        if (!isset($services[$type])) throw new InvalidArgumentException('POI type not found');
 
         $this->type = $type;
+        $this->_priority = Zend_Registry::get('var')->services[$this->type]['priority'];
     }
 
     /**
