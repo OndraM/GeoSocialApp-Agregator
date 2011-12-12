@@ -20,7 +20,6 @@ class IndexControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
         $url = $this->url($urlParams);
         $this->dispatch($url);
 
-        // assertions
         $this->assertModule($urlParams['module']);
         $this->assertController($urlParams['controller']);
         $this->assertAction($urlParams['action']);
@@ -39,7 +38,7 @@ class IndexControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
         $this->assertResponseCode(200);
     }
 
-    public function testIndexPafeProperlyRendered() {
+    public function testIndexPageProperlyRendered() {
         $this->dispatch('/');
 
         // header is present
