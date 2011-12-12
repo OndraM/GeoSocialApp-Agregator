@@ -128,7 +128,7 @@ class GSAA_Model_POI
         if (!isset($services[$type])) throw new InvalidArgumentException('POI type not found');
 
         $this->type = $type;
-        $this->_priority = Zend_Registry::get('var')->services[$this->type]['priority'];
+        $this->_priority = (int) Zend_Registry::get('var')->services[$this->type]['priority'];
     }
 
     /**
