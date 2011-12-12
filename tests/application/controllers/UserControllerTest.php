@@ -7,6 +7,7 @@ class UserControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
     {
         $this->bootstrap = new Zend_Application(APPLICATION_ENV, APPLICATION_PATH . '/configs/application.ini');
         parent::setUp();
+
     }
 
     public function testIndexAction()
@@ -25,7 +26,7 @@ class UserControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
             'div#view-content p',
             'View script for controller <b>' . $params['controller'] . '</b> and script/action name <b>' . $params['action'] . '</b>'
             );
-         * 
+         *
          */
     }
 
