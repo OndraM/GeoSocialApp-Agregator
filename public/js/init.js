@@ -319,6 +319,17 @@ function doConnection(element, type) {
     }, 1500);
 }
 
+/**
+ * Check whether we are in an open fancybox pop up window (true) or in standalone window (false)
+ */
+function isPopupWindow() {
+    if ($('div.fancybox-wrap').length != 0 && ($('#detail').length != 0 || $('#friends').length != 0)) {
+        return true;
+    }
+    return false;
+}
+
+
 /* ----------------------- Index page specific code -----------------------  */
 
 /*
@@ -504,7 +515,7 @@ function initIndex() {
     });
     $('#searchform').submit();
     initIndexMap();
-    //doGeolocate(); // commented just for testing purposes // TODO uncomment
+    doGeolocate(); // commented just for testing purposes // TODO uncomment
 
     // Initial check of already connected services (with delay, to lower server load)
     setTimeout('doConnectionsCheck("index")', 1000);
