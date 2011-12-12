@@ -9,14 +9,9 @@
             <directory suffix=".php">../application</directory>
             <exclude>
                 <directory suffix=".phtml">../application</directory>
-            </exclude>
-            <exclude>
+                <file>../application/controllers/ErrorController.php</file>
                 <directory suffix=".phtml">../application</directory>
-            </exclude>
-            <exclude>
                 <directory suffix=".php">../library/Zend</directory>
-            </exclude>
-            <exclude>
                 <directory suffix=".php">../library/third-party</directory>
             </exclude>
 
