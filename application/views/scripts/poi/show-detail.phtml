@@ -60,7 +60,7 @@ if (!array_search('gg', $this->serviceParams) || count($this->serviceParams) > 1
             . $this->services[$type]['name']
             . "</label>\n";
         echo "\t<span id=\"checkin-select-$type\" data-type=\"$type\" data-id=\"$id\">"
-            . "<a href=\"" . $this->getServiceAuthUrl($this->services[$type]['model']) . "\" title=\"Click to connect to {$this->services[$type]['name']}\">"
+            . "<a href=\"" . $this->getServiceAuthUrl($this->services[$type]['model']) . "\" title=\"Click to connect to {$this->services[$type]['name']}\" target=\"_blank\">"
             . "<img src=\"" . $this->baseUrl() . "/images/connect-{$type}.png\" alt=\"Connect to {$this->services[$type]['name']}\" />"
             . "</a>"
             . "</span>\n";

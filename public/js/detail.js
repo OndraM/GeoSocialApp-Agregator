@@ -5,9 +5,11 @@ function initDetail(markers) {
     venueMarkers = markers;
     initDetailMap();
 
+    // Init checkin header
     $('#venue-checkin a').click(function() {
        $('span', this).toggle();
        $('#checkin-form').slideToggle();
+       return false;
     });
 
     // Init checkin actions
@@ -34,8 +36,11 @@ function initDetail(markers) {
         })
         return false;
     });
+
     doConnectionsCheck('detail');
-    $('#checkin-form div span[id^="checkin-select"] a').live('click', function() {
+
+    // Bind click events to #checkin-form, so it is removed after window is closed (=> events are not binded multiple times)
+    $('#checkin-form').on('click', '#checkin-form div span a', function(){
         doConnection(this, 'detail');
         return false;
     });
@@ -74,7 +79,6 @@ function initDetail(markers) {
 
     // show tooltip photo on click
     $('#photos-carousel li a').click(function() {
-        console.log($(this).attr('data-detail'));
         $(this).attr('original-title',
             '<div class=\"photo-tooltip\">'
             + '<div class=\"photo-tooltip-image\"><img src=\"' + $(this).attr('href') + '\" height=\"210\"/></div>'
