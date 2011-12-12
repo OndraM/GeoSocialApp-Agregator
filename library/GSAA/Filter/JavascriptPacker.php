@@ -13,7 +13,7 @@ class GSAA_Filter_JavascriptPacker implements Zend_Filter_Interface
      */
     public function __construct()
     {
-        Zend_Loader::loadFile("jsmin.php", null, true);
+        Zend_Loader::loadFile("third-party/jsmin.php", null, true);
     }
 
     /**
