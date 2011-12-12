@@ -1,17 +1,21 @@
 <phpunit bootstrap="./bootstrap.php">
-    <testsuite name="Application Test Suite">
-        <directory>./application</directory>
+    <testsuite name="GSAA Test Suite">
+        <directory>./</directory>
     </testsuite>
-    <testsuite name="Library Test Suite">
-        <directory>./library</directory>
-    </testsuite>
-    
+
     <filter>
-        <!-- If Zend Framework is inside your project's library, uncomment this filter -->
-        <!-- 
         <whitelist>
-            <directory suffix=".php">../../library/Zend</directory>
+            <directory suffix=".php">../library</directory>
+            <directory suffix=".php">../application</directory>
+            <exclude>
+                <directory suffix=".phtml">../application</directory>
+            </exclude>
         </whitelist>
-        -->
     </filter>
+
+    <logging>
+        <log type="coverage-html" target="./log/coverage" charset="UTF-8"
+             yui="true" highlight="true" lowUpperBound="35" highLowerBound="70"/>
+         <log type="testdox-html" target="./log/testdox.html" />
+    </logging>
 </phpunit>
