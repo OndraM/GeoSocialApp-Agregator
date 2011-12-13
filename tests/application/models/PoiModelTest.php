@@ -2,30 +2,13 @@
 class PoiModelTest extends PHPUnit_Framework_TestCase
 {
 
-    protected function setUp()
-    {
+    protected function setUp() {
         parent::setUp();
         $this->bootstrap = new Zend_Application(APPLICATION_ENV, APPLICATION_PATH . '/configs/application.ini');
         $this->bootstrap->bootstrap();
     }
-    protected function tearDown()
-    {
+    protected function tearDown() {
         parent::tearDown();
-    }
-
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testEmptyConstructorFails(){
-        new GSAA_Model_POI('');
-    }
-
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testConstructorFailsWithNotExistingType(){
-        new GSAA_Model_POI('foobar');
-        new GSAA_Model_POI('bazbar');
     }
 
     public function poiTypesProvider() {
@@ -33,15 +16,31 @@ class PoiModelTest extends PHPUnit_Framework_TestCase
         $var = $bootstrap->getOption('var');
         $return = array();
 
-        foreach ($var['services'] as $serviceId => $serviceArray) {
-            $return[] = array($serviceId, $serviceArray['priority']);
+        foreach ($var['services'] as $serviceType => $serviceArray) {
+            $return[] = array($serviceType, $serviceArray['priority']);
         }
         return $return;
     }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testEmptyConstructorFails() {
+        new GSAA_Model_POI('');
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testConstructorFailsWithNotExistingType() {
+        new GSAA_Model_POI('foobar');
+        new GSAA_Model_POI('bazbar');
+    }
+
     /**
      * @dataProvider poiTypesProvider
      */
-    public function testInitWorks($serviceType, $priority){
+    public function testInitWorks($serviceType, $priority) {
         $poi = new GSAA_Model_POI($serviceType);
         $this->assertInstanceOf('GSAA_Model_POI', $poi);
     }
@@ -49,7 +48,7 @@ class PoiModelTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider poiTypesProvider
      */
-    public function testPriorityEquals($serviceType, $priority){
+    public function testPriorityEquals($serviceType, $priority) {
         $poi = new GSAA_Model_POI($serviceType);
         $this->assertEquals($priority, $poi->getPriority());
     }
