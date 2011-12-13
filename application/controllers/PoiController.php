@@ -39,7 +39,7 @@ class PoiController extends Zend_Controller_Action
             foreach ($pois as $poi) {
                 $this->view->pois[$i]['name']       = $poi->getField('name');
                 $this->view->pois[$i]['id']         = $poi->getField('id');
-                $this->view->pois[$i]['url']        = $poi->getDetailUrl();
+                $this->view->pois[$i]['url']        = $this->view->url($poi->getDetailUrlParams());
                 $this->view->pois[$i]['types']      = $poi->getTypes();
                 $this->view->pois[$i]['lat']        = $poi->getField('lat');
                 $this->view->pois[$i]['lng']        = $poi->getField('lng');
