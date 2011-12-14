@@ -56,6 +56,12 @@ class ListValuesArrayTest extends PHPUnit_Framework_TestCase
                 array('fb' => array('Very long link from Facebok with \'some\' "really" special & <characters>' => 'http://mal\'form<>ed"-link.co\'m&'))
             );
         $result = $this->helper->listValuesArray($array, 'links');
+
+        // assert output is valid
+        $doc = new DOMDocument;
+        $testDom = $doc->loadHTML($result);
+        $this->assertTrue($testDom !== false);
+
         $dom = new Zend_Dom_Query($result);
         $results = $dom->query('ul li');
         $this->assertEquals(count($array), count($results));
@@ -84,6 +90,12 @@ class ListValuesArrayTest extends PHPUnit_Framework_TestCase
                 array('gw' => array('id' => 'XCVBN4567', 'text' => 'All your base are belongs to us', 'date' => 1234567890)),
             );
         $result = $this->helper->listValuesArray($array, 'tips');
+
+        // assert output is valid
+        $doc = new DOMDocument;
+        $testDom = $doc->loadHTML($result);
+        $this->assertTrue($testDom !== false);
+
         $dom = new Zend_Dom_Query($result);
         $results = $dom->query('ul li');
         $this->assertEquals(count($array), count($results));

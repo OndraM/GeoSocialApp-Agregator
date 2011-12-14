@@ -41,5 +41,14 @@ class ServiceIconTest extends PHPUnit_Framework_TestCase
         $results = $dom->query('img.icon-left');
         $this->assertEquals(1, count($results));
     }
+
+    public function testOutputIsValidHtml() {
+        $output = $this->helper->serviceIcon('fb');
+        $output .= $this->helper->serviceIcon('fq', 'left');
+        $output .= $this->helper->serviceIcon('fq', 'right');
+        $doc = new DOMDocument;
+        $dom = $doc->loadHTML($output);
+        $this->assertTrue($dom !== false);
+    }
 }
 
