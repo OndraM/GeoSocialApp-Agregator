@@ -67,7 +67,7 @@ if (!array_search('gg', $this->serviceParams) || count($this->serviceParams) > 1
     }
     echo "</div>\n";
     echo "<label for=\"checkin-message\" id=\"checkin-message-label\">Message: </label><input type=\"text\" name=\"checkin-message\" id=\"checkin-message\" />\n";
-    echo "<input type=\"submit\" id=\"checkin-submit\" value=\"Check-in\" disabled=\"disabled\" />\n";
+    echo "<input type=\"submit\" id=\"checkin-submit\" value=\"Check-in\" title=\"You have to be connected to at least one of the services above before you can execute check-in.\" disabled=\"disabled\" />\n";
     echo "</form>\n";
 
 }

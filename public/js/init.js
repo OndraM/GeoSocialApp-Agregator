@@ -261,6 +261,7 @@ function enableFriendsWindow() {
  */
 function enableCheckinForm() {
     $('#checkin-submit').removeAttr('disabled');
+    $('#checkin-submit').removeAttr('title');
     $('#checkin-submit').button("refresh");
 }
 
