@@ -597,6 +597,11 @@ function initIndexForm() {
         $('#searchform input[type=submit]').animate({backgroundColor: "#ffe45c"}, 500);
     });
 
+    $('#locate-me').click(function() {
+        doGeolocate();
+        return false;
+    });
+
     // toggle image on checbox checked
     $('#search-services label').click(function(){
         resetSearchServicesState($(this));

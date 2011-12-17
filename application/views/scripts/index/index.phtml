@@ -29,6 +29,8 @@ foreach(Zend_Registry::get('var')->services as $serviceId => $service) {
             <label title="Enter a location, and we will move the map here!">Address: <input type="text" name="address" value="" id="search-address" placeholder="Enter a location" /></label>
             <br />
             <input type="submit" value="Submit" />
+            or
+            <input type="submit" id="locate-me" title="Click to get your current location" value="Get my location" />
         </fieldset>
     </form>
 
