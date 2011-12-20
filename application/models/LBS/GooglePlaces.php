@@ -10,10 +10,10 @@ class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
     const LIMIT = 30; // Though Google Places return just 20 POIs at once...
     const TYPE = 'gg';
 
+    /*
     public function init() {
-        // TODO: set client properties?
-        ;
     }
+    */
 
     /**
      * Function to get nearby venues.

@@ -13,14 +13,14 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
     const LIMIT = 30;
     const TYPE = 'fb';
 
-    public function init() {
-        /*Zend_Loader::loadFile("facebook.php", null, true);
+    /*public function init() {
+        Zend_Loader::loadFile("facebook.php", null, true);
         $config = array(
             'appId'   => self::CLIENT_ID,
             'secret'  => self::CLIENT_SECRET
         );
-        $this->facebook = new Facebook($config);*/
-    }
+        $this->facebook = new Facebook($config);
+    }*/
 
     /**
      * Function to get nearby venues.

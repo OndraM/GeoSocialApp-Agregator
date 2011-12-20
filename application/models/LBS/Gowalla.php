@@ -18,8 +18,10 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
      */
     const TOP_QUALITY_USERSCOUNT_SCALE = 50;
 
+    /*
     public function init() {
     }
+    */
 
     /**
      * Function to get nearby venues.

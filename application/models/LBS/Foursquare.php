@@ -23,9 +23,10 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
      */
     const DATEVERIFIED = '20111027';
 
+    /*
     public function init() {
-        // TODO: set client properties?
     }
+    */
 
     /**
      * Function to get nearby venues.
