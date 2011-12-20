@@ -653,7 +653,7 @@ function initIndexMap() {
         document.getElementById('venues-map'),
         mapOptions
     );
-    showMapCenterPointer(latlng, 5000);
+    showMapCenterPointer(latlng, 8000);
 
     google.maps.event.addListener(indexMap, 'dragend', function() {
 		var latlng = indexMap.getCenter();
@@ -667,7 +667,7 @@ function initIndexMap() {
         getAndSetRadius();
         $('#searchform input[name=lat]').val(latlng.lat().toFixed(6));
         $('#searchform input[name=long]').val(latlng.lng().toFixed(6));
-        showMapCenterPointer(latlng, 1000);
+        showMapCenterPointer(latlng, 2000);
 	});
 
     infoWindow = new google.maps.InfoWindow({
@@ -693,7 +693,7 @@ function setMapCenter(lat, lng) {
         var mapCenter = indexMap.getCenter();
         if (!mapCenter.equals(newMapCenter)) {
             indexMap.panTo(newMapCenter);
-            showMapCenterPointer(newMapCenter, 3000);
+            showMapCenterPointer(newMapCenter, 5000);
         }
 
     }
