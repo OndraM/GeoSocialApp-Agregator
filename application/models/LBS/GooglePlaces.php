@@ -122,7 +122,7 @@ class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
         $entry = $result['result'];
 
         $poi            = new GSAA_Model_POI(self::TYPE);
-        $poi->name      = $entry['name'];
+        $poi->name      = html_entity_decode($entry['name']);
         $poi->id        = $entry['id'];
         $poi->url       = $entry['url'];
         $poi->reference = $entry['reference'];

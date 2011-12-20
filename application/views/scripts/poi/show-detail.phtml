@@ -6,7 +6,6 @@ if (count($this->values['categories']) > 0) {
         $photo = current($categoryWrapper);
         $type = key($categoryWrapper);
         echo "<img title=\"{$photo["name"]} ({$this->services[$type]['name']})\" src=\"{$photo["icon"]}\" />";
-        // TODO: image with type and name in title
     }
     echo "</div>\n";
 }
