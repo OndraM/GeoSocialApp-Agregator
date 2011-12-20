@@ -3,6 +3,7 @@ class LbsCommonModel extends PHPUnit_Framework_TestCase
 {
     protected $_model;
     protected $_modelName;
+    protected $_testVenue;
 
     protected function setUp() {
         parent::setUp();
@@ -99,7 +100,7 @@ class LbsCommonModel extends PHPUnit_Framework_TestCase
     }
 
     public function testGetVenueDetailWorks() {
-        $result = $this->_model->getDetail('4b6fff72f964a520c8022de3');
+        $result = $this->_model->getDetail($this->_testVenue);
         $this->assertInstanceOf('GSAA_Model_POI', $result);
     }
 
@@ -158,7 +159,7 @@ class LbsCommonModel extends PHPUnit_Framework_TestCase
     }
 
     public function testCheckinFailsWithoutUser() {
-        $result = $this->_model->doCheckin('4b46db8bf964a520f12826e3');
+        $result = $this->_model->doCheckin($this->_testVenue);
         $this->assertInternalType('null', $result);
     }
     public function testGetUserInfoFailsWithoutUser() {

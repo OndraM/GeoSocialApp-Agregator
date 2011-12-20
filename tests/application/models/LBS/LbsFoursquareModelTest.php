@@ -3,13 +3,11 @@ require_once 'application/models/LBS/LbsCommonModel.php';
 
 class LbsFoursquareModelTest extends LbsCommonModel
 {
-    protected $_model;
-    protected $_modelName;
-
     protected function setUp() {
         parent::setUp();
         $this->_model = new GSAA_Model_LBS_Foursquare();
         $this->_modelName = 'GSAA_Model_LBS_Foursquare';
+        $this->_testVenue = '4b46db8bf964a520f12826e3'; // ČVUT FEL (KN), Prague
     }
     protected function tearDown() {
         $this->_model = null;
