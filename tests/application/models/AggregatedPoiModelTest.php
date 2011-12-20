@@ -21,7 +21,7 @@ class AggregatedPoiModelTest extends PHPUnit_Framework_TestCase
         parent::tearDown();
     }
 
-    public function poiProvider() {
+    public static function poiProvider() {
         $bootstrap = new Zend_Application(APPLICATION_ENV, APPLICATION_PATH . '/configs/application.ini');
         $bootstrap->bootstrap();
         //require_once (APPLICATION_PATH . '/models/POI.php');
@@ -209,7 +209,7 @@ class AggregatedPoiModelTest extends PHPUnit_Framework_TestCase
         $this->_aPoi->addPoi($poi2);
 
         $quality = $this->_aPoi->getField('quality');
-        $this->assertEquals(1, $quality);
+        $this->assertEquals(1, $quality); // 0 + 5 + (-2) = 3 / 3 = 1
     }
 
 }

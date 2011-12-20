@@ -11,7 +11,7 @@ class CheckinModelTest extends PHPUnit_Framework_TestCase
         parent::tearDown();
     }
 
-    public function poiTypesProvider() {
+    public static function poiTypesProvider() {
         $bootstrap = new Zend_Application(APPLICATION_ENV, APPLICATION_PATH . '/configs/application.ini');
         $var = $bootstrap->getOption('var');
         $return = array();

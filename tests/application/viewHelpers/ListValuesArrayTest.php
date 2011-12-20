@@ -17,10 +17,6 @@ class ListValuesArrayTest extends PHPUnit_Framework_TestCase
         parent::tearDown();
     }
 
-    public function arrayProvider() {
-
-    }
-
     public function testNothingIsRenderedWithoutValues() {
         $this->assertEquals('', $this->helper->listValuesArray(array(), ''));
         $this->assertEquals('', $this->helper->listValuesArray(array(array()), ''));
