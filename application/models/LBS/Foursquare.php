@@ -187,7 +187,8 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
          * Add photos
          */
         $clientPhotos = $this->_constructClient($endpoint . '/' . $id . '/photos',
-                                                array('group' => 'venue'));
+                                                array('group' => 'venue',
+                                                      'limit' => 100));
         try {
             $responsePhotos = $clientPhotos->request();
 
