@@ -11,7 +11,11 @@
         ->appendStylesheet($this->baseUrl() . '/styles/jquery.fancybox.css', 'screen, projection')
         ->appendStylesheet($this->baseUrl() . '/styles/jquery.bxSlider.css', 'screen, projection')
         ->appendStylesheet($this->baseUrl() . '/styles/jquery.tipsy.css', 'screen, projection')
-        ->appendStylesheet($this->baseUrl() . '/styles/styles.css', 'screen, projection');
+        ->appendStylesheet($this->baseUrl() . '/styles/styles.css', 'screen, projection')
+        ->headLink(array('rel' => 'shortcut icon',
+                    'type' => 'image/x-icon',
+                    'href' => $this->baseUrl() . '/favicon.ico'),
+                        'APEND');
 
 
     $this->headScript()
