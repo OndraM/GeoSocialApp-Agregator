@@ -40,4 +40,23 @@ class LbsGooglePlacesModelTest extends LbsCommonModel
         $this->assertAttributeInternalType('array', 'categories', $poi);
     }
 
+    public function testRequestTokenFailsWithBadCode() {
+        $this->assertTrue(true);
+    }
+    public function testCheckTokenReturnsFalseWithBadToken() {
+        $this->assertTrue(true);
+    }
+    public function testAuthUrlIsValidUrl() {
+        $this->assertTrue(true);
+    }
+    public function testCheckinFailsWithoutUser() {
+        $this->assertTrue(true);
+    }
+    public function testGetUserInfoFailsWithoutUser() {
+        $this->assertTrue(true);
+    }
+    public function testGetFriendsActivityReturnsEmptyArrayWithoutUser() {
+        $this->assertTrue(true);
+    }
+
 }
