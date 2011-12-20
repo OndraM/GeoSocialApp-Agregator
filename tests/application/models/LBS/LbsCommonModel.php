@@ -43,7 +43,7 @@ class LbsCommonModel extends PHPUnit_Framework_TestCase
             $this->assertAttributeNotEmpty('lat', $poi);
             $this->assertAttributeNotEmpty('lng', $poi);
             $this->assertAttributeNotEquals(null, 'distance', $poi);
-            $this->assertAttributeInternalType('float', 'quality', $poi);
+            $this->assertTrue(is_int($poi->quality) || is_float($poi->quality));
         }
     }
 
@@ -112,28 +112,44 @@ class LbsCommonModel extends PHPUnit_Framework_TestCase
         $poi = $this->_model->getDetail($id);
         $this->assertInstanceOf('GSAA_Model_POI', $poi);
 
+        $this->_testMandatoryPoiContents($poi);
+
+        $this->_testLinks($poi);
+        $this->_testTips($poi);
+        $this->_testPhotos($poi);
+        $this->_testNotes($poi);
+        $this->_testCategories($poi);
+    }
+
+    protected function _testMandatoryPoiContents($poi) {
+        $modelName = $this->_modelName;
         $this->assertAttributeEquals($modelName::TYPE, 'type', $poi);
         $this->assertAttributeNotEmpty('id', $poi);
         $this->assertAttributeNotEmpty('name', $poi);
         $this->assertAttributeNotEmpty('lat', $poi);
         $this->assertAttributeNotEmpty('lng', $poi);
         $this->assertAttributeEquals(null, 'distance', $poi);
-
+    }
+    protected function _testLinks($poi) {
         $this->assertAttributeInternalType('array', 'links', $poi);
         $this->assertAttributeNotEmpty('links', $poi);
-
+    }
+    protected function _testTips($poi) {
         $this->assertAttributeInternalType('array', 'tips', $poi);
         $this->assertAttributeNotEmpty('tips', $poi);
-
+    }
+    protected function _testPhotos($poi) {
         $this->assertAttributeInternalType('array', 'photos', $poi);
         $this->assertAttributeNotEmpty('photos', $poi);
-
+    }
+    protected function _testNotes($poi) {
         $this->assertAttributeInternalType('array', 'notes', $poi);
-
+    }
+    protected function _testCategories($poi) {
         $this->assertAttributeInternalType('array', 'categories', $poi);
         $this->assertAttributeNotEmpty('categories', $poi);
-
     }
+
 
     public function testRequestTokenFailsWithBadCode() {
         $result = $this->_model->requestToken('');
