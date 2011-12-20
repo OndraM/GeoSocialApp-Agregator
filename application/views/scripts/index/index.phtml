@@ -14,7 +14,7 @@ foreach(Zend_Registry::get('var')->services as $serviceId => $service) {
                         <img src="<?=$this->baseUrl();?>/images/icon-<?=$serviceId;?>.png" alt="<?=$serviceId;?>"/>
                         <img src="<?=$this->baseUrl();?>/images/icon-<?=$serviceId;?>-disabled.png" class="hidden" alt="<?=$serviceId;?>"/>
                 </label>
-<?
+<?php
 }
 ?>
             </div>
@@ -63,5 +63,5 @@ foreach(Zend_Registry::get('var')->services as $serviceId => $service) {
 <?php
 $this->script("
 initIndex();
-")
+");
 ?>
