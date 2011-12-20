@@ -519,7 +519,7 @@ function initIndex() {
     });
     $('#searchform').submit();
     initIndexMap();
-    doGeolocate(); // commented just for testing purposes // TODO uncomment
+    //doGeolocate(); // do only on demand, see #118
 
     // Initial check of already connected services (with delay, to lower server load)
     setTimeout('doConnectionsCheck("index")', 1000);
