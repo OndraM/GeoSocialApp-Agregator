@@ -32,7 +32,7 @@ foreach ($this->pois as $poi) {
         . $this->escape($poi->name)
         . "</a>"
         . ((count($this->serviceParams) > 1) ?
-                " <a class=\"popUp fancybox.ajax removeService hidden\" title=\"Remove data from this service\"href=\""
+                " <a class=\"popUp fancybox.ajax removeService hidden\" title=\"Remove data from this service\" href=\""
                     . $removeServiceUrl
                     . "\"><span><img src=\""
                     . $this->baseUrl() . "/images/remove-disabled.png"
@@ -49,7 +49,7 @@ echo "</ul>\n";
 <?php
  // checkin if google is not the only one service in venue listing
 if (!array_search('gg', $this->serviceParams) || count($this->serviceParams) > 1) {
-    echo "<h2 id=\"venue-checkin\"><a href=\"#\">Checkin <span>&raquo;</span><span class=\"hidden\">&laquo;</span></span></a></h3>\n";
+    echo "<h2 id=\"venue-checkin\"><a href=\"#\">Checkin <span>&raquo;</span><span class=\"hidden\">&laquo;</span></a></h2>\n";
     echo "<form id=\"checkin-form\" class=\"hidden\">\n";
     echo "<div>\n";
     foreach ($this->serviceParams as $id => $type) {
@@ -59,7 +59,7 @@ if (!array_search('gg', $this->serviceParams) || count($this->serviceParams) > 1
             . $this->services[$type]['name']
             . "</label>\n";
         echo "\t<span id=\"checkin-select-$type\" data-type=\"$type\" data-id=\"$id\">"
-            . "<a href=\"" . $this->getServiceAuthUrl($this->services[$type]['model']) . "\" title=\"Click to connect to {$this->services[$type]['name']}\" target=\"_blank\">"
+            . "<a href=\"" . $this->escape($this->getServiceAuthUrl($this->services[$type]['model'])) . "\" title=\"Click to connect to {$this->services[$type]['name']}\" target=\"_blank\">"
             . "<img src=\"" . $this->baseUrl() . "/images/connect-{$type}.png\" alt=\"Connect to {$this->services[$type]['name']}\" />"
             . "</a>"
             . "</span>\n";
@@ -73,10 +73,10 @@ if (!array_search('gg', $this->serviceParams) || count($this->serviceParams) > 1
 ?>
 <?php
 if (count($this->values['address']) > 0) {
-    echo "<h2 id=\"venue-address\">Address</h3>\n";
+    echo "<h2 id=\"venue-address\">Address</h2>\n";
     echo $this->listValuesArray($this->values['address'], 'address');
 } elseif (isset($this->values['address_geocode'])) {
-    echo "<h2 id=\"venue-address\">Address</h3>\n";
+    echo "<h2 id=\"venue-address\">Address</h2>\n";
     echo "<ul><li>"
             . $this->escape($this->values['address_geocode'])
             . " <abbr title=\"Approximate address found on this coordinates\">(approx.)</abbr>"
@@ -85,13 +85,13 @@ if (count($this->values['address']) > 0) {
 ?>
 <?php
 if (count($this->values['phone']) > 0) {
-    echo "<h2 id=\"venue-phone\">Phone</h3>\n";
+    echo "<h2 id=\"venue-phone\">Phone</h2>\n";
     echo $this->listValuesArray($this->values['phone'], 'phone');
 }
 ?>
 <?php
 if (count($this->values['links']) > 0) {
-    echo "<h2 id=\"venue-links\">Links</h3>\n";
+    echo "<h2 id=\"venue-links\">Links</h2>\n";
     echo $this->listValuesArray($this->values['links'], 'links');
 }
 ?>
@@ -111,7 +111,7 @@ if (count($this->values['photos']) > 0) {
             . "\" data-date=\""
             . (isset($photo["date"]) ? $photoDate->get(Zend_Date::DATETIME_MEDIUM) : '')
             . "\" title=\"Click to show image detail\">"
-            . "<img src=\"{$photo["thumbnail"]}\" height=\"100\" />"
+            . "<img src=\"{$photo["thumbnail"]}\" height=\"100\" alt=\"Photo" . (isset($photo["date"]) ? ' (created ' . $photoDate->get(Zend_Date::DATETIME_MEDIUM) . ')' : '') . "\" />"
             . "</a></li>\n";
     }
     echo "</ul>";
@@ -127,7 +127,7 @@ if (count($this->values['tips']) > 0) {
 ?>
 <?php
 if (count($this->values['notes']) > 0) {
-    echo "<h3 id=\"venue-notes\">Notes</h3>\n";
+    echo "<h2 id=\"venue-notes\">Notes</h2>\n";
     echo $this->listValuesArray($this->values['notes'], 'notes', false);
 }
 ?>
