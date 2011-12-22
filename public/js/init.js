@@ -662,6 +662,11 @@ function initIndexMap() {
         $('#searchform').submit();
 	});
 
+    google.maps.event.addListener(indexMap, 'drag', function() {
+        var latlng = indexMap.getCenter();
+		showMapCenterPointer(latlng, 0);
+	});
+
     google.maps.event.addListener(indexMap, 'zoom_changed', function() {
 		var latlng = indexMap.getCenter();
         getAndSetRadius();
@@ -847,19 +852,22 @@ function getAndSetRadius() {
  * Show map center crosshair pointer for specified time.
  *
  * @param latlng google.maps.LatLng object
- * @param timeout Timeout in miliseconds
+ * @param timeout Timeout in miliseconds; 0 = dont set timeout
  */
 
 function showMapCenterPointer (latlng, timeout) {
-    if (typeof mapCenterPoiner !== "undefined" && mapCenterPoiner) {
-        mapCenterPoiner.setMap(null);
+    if (typeof mapCenterPoiner !== "undefined" && mapCenterPoiner && mapCenterPoiner.getMap()) { // marker already exists, just change its position
+        mapCenterPoiner.setPosition(latlng);
+    } else { // create new marker
+        mapCenterPoiner = new google.maps.Marker({
+            position: latlng,
+            map: indexMap,
+            icon: mapCenterImage,
+            zIndex: -1
+        });
     }
-    mapCenterPoiner = new google.maps.Marker({
-        position: latlng,
-        map: indexMap,
-        icon: mapCenterImage,
-        zIndex: -1
-    });
     clearTimeout(mapCenterTimeout);
-    mapCenterTimeout = setTimeout("mapCenterPoiner.setMap(null)", timeout);
+    if (timeout > 0) {
+        mapCenterTimeout = setTimeout("mapCenterPoiner.setMap(null)", timeout);
+    }
 }
