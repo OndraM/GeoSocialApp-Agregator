@@ -296,6 +296,31 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
         }
 
         $result = Zend_Json::decode($response->getBody());
+
+        // If token already expired, request a new one
+        if ($result['expires_in'] < 0 && isset($result['refresh_token'])) {
+            $refreshClient = new Zend_Http_Client();
+            $refreshQueryParams = array(
+                'client_id'     => self::CLIENT_ID,
+                'client_secret' => self::CLIENT_SECRET,
+                'grant_type'    => 'refresh_token',
+                'refresh_token' => $result['refresh_token']
+            );
+            $refreshClient->setUri(self::OAUTH_CALLBACK);
+            $refreshClient->setParameterGet($refreshQueryParams);
+
+            try {
+                $refreshResponse = $refreshClient->request('POST');
+            } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
+                return;
+            }
+            // error in response
+            if ($refreshResponse->isError()) {
+                return;
+            }
+            // overwrite result
+            $result = Zend_Json::decode($refreshResponse->getBody());
+        }
         if (isset($result['access_token'])) {
             $token = $result['access_token'];
             return $token;
@@ -311,14 +336,17 @@ class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
      */
     public function checkToken($token) {
         $client = new Zend_Http_Client();
+        $client->setHeaders(array(
+                    'X-Gowalla-API-Key' => self::CLIENT_ID,
+                    'Accept'            => 'application/json'
+                ));
         $queryParams = array(
             'oauth_token'   => $token,
         );
         $client->setUri(self::OAUTH_CHECK);
         $client->setParameterGet($queryParams);
-
         try {
-            $response = $client->request('HEAD');
+            $response = $client->request('GET');
         } catch (Zend_Http_Client_Exception $e) {  // timeout or host not accessible
             return false;
         }
