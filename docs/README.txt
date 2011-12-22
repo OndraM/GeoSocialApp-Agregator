@@ -14,13 +14,13 @@ Setting Up Your VHOST
 The following is a sample VHOST you might want to consider for your project.
 
 <VirtualHost *:80>
-   DocumentRoot "/var/www/localhost/projekty/GeoSocialApp-Agregator/public"
-   ServerName GeoSocialApp-Agregator.local
+   DocumentRoot "/var/www/localhost/projekty/gsaa/public"
+   ServerName gsaa.local
 
    # This should be omitted in the production environment
-   SetEnv APPLICATION_ENV development
+   SetEnv APPLICATION_ENV production
 
-   <Directory "/var/www/localhost/projekty/GeoSocialApp-Agregator/public">
+   <Directory "/var/www/localhost/projekty/gsaa/public">
        Options Indexes MultiViews FollowSymLinks
        AllowOverride All
        Order allow,deny
