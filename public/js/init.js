@@ -251,6 +251,7 @@ function doConnectionsCheck(type) {
  */
 function enableFriendsWindow() {
     $('#oauth-wrapper a#openFriendsWindow').attr('href', friendsWindowsUrl);
+    updateFriendsWindowLink(); // update link according to current map position
     $('#oauth-wrapper a#openFriendsWindow').attr('title', $('#oauth-wrapper a#openFriendsWindow').attr('data-title'));
     $('#oauth-wrapper a#openFriendsWindow').css('cursor', 'pointer');
     $('#oauth-wrapper a#openFriendsWindow').addClass('popUpFixed fancybox.ajax');
@@ -404,8 +405,6 @@ function initIndex() {
                     var itemContent = '<li id="' + poi.id + '"><a data-order="' + order++ + '" data-flat="' + removeDiacritics(poi.name) + '" data-quality="' + poi.quality + '">' + poi.name + '</a>';
                     if (typeof poi.distance !== "undefined")
                         itemContent  += ' <span>(<span class="distance">'  + poi.distance + '</span> m)</span>'
-                    if (typeof poi.relevance !== "undefined") // TODO
-                        itemContent  += ' <span class="hidden relevance">'  + poi.relevance + '</span>'
                     $.each(poi.types, function(i, type) {
                         itemContent  += '<img src="/images/icon-'
                                      + type
@@ -553,14 +552,7 @@ function initIndex() {
     // Copy options
     var fancyBoxFixed = jQuery.extend({}, fancyboxOpts);
     fancyBoxFixed.maxHeight = 550;
-    fancyBoxFixed.beforeLoad = function() {
-        $('#oauth-wrapper a#openFriendsWindow').attr('href', friendsWindowsUrl
-            + '/cLat/'
-            + $('#searchform input[name=lat]').val()
-            + '/cLng/'
-            + $('#searchform input[name=long]').val()
-        )
-    };
+    fancyBoxFixed.beforeLoad = updateFriendsWindowLink();
     // Init friends PopUp
     $('.popUpFixed').fancybox(fancyBoxFixed);
 
@@ -619,7 +611,6 @@ function initIndexForm() {
  */
 function doGeolocate() {
     if (navigator.geolocation) {
-        // TODO: show note about geolocation beeing loaded?
         navigator.geolocation.getCurrentPosition(
             function(position) {
                    $('#searchform input[name=lat]').val(position.coords.latitude);
@@ -655,11 +646,14 @@ function initIndexMap() {
     );
     showMapCenterPointer(latlng, 8000);
 
+    updateFriendsWindowLink();
+
     google.maps.event.addListener(indexMap, 'dragend', function() {
 		var latlng = indexMap.getCenter();
         $('#searchform input[name=lat]').val(latlng.lat().toFixed(6));
         $('#searchform input[name=long]').val(latlng.lng().toFixed(6));
         $('#searchform').submit();
+        updateFriendsWindowLink();
 	});
 
     google.maps.event.addListener(indexMap, 'drag', function() {
@@ -870,4 +864,16 @@ function showMapCenterPointer (latlng, timeout) {
     if (timeout > 0) {
         mapCenterTimeout = setTimeout("mapCenterPoiner.setMap(null)", timeout);
     }
+}
+
+/**
+ * Update link to friends window according to current lat & lng
+ */
+function updateFriendsWindowLink() {
+    $('#oauth-wrapper a#openFriendsWindow').attr('href', friendsWindowsUrl
+        + '/cLat/'
+        + $('#searchform input[name=lat]').val()
+        + '/cLng/'
+        + $('#searchform input[name=long]').val()
+    );
 }
