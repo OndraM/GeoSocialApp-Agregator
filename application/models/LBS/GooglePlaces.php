@@ -193,6 +193,7 @@ class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
         // add predefined params
         $queryParams['key'] = self::CLIENT_KEY;
         $queryParams['sensor'] = 'false';
+        $queryParams['language'] = 'cs';
 
         // set client options
         $client->setUri(self::SERVICE_URL . $endpoint);
