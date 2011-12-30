@@ -2,8 +2,8 @@
 
 class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
 {
-    const SERVICE_URL = 'https://maps.googleapis.com/maps/api';
-    const PUBLIC_URL = 'FIXME';
+    const SERVICE_URL = 'https://maps.googleapis.com/maps/api/place';
+    const PUBLIC_URL = null;
     const CLIENT_ID = '702732417915.apps.googleusercontent.com';
     const CLIENT_SECRET = 'j90OM1fvYso4p0haoZbZPUoY';
     const CLIENT_KEY = 'AIzaSyAtSx0_q5JPDtU0GPzlgSi5ZkRvJ1Jmy24';
@@ -25,7 +25,7 @@ class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
      * @return array Array of GSAA_Model_POI
      */
     public function getNearbyVenues($lat, $long, $radius, $term = null) {
-        $endpoint = '/place/search/json';
+        $endpoint = '/search/json';
         if ($radius > self::RADIUS_MAX) {       // limit maximum radius
             $radius = self::RADIUS_MAX;
         } elseif ($radius == 0) {               // when no radius is send
@@ -100,7 +100,7 @@ class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
      * @return GSAA_Model_POI
      */
     public function getDetail($id) {
-        $endpoint = '/place/details/json';
+        $endpoint = '/details/json';
 
         $client = $this->_constructClient($endpoint,
                                         array('reference' => $id));

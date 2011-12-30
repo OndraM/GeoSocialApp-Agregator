@@ -58,7 +58,7 @@ class LbsCommonModel extends PHPUnit_Framework_TestCase
             $result = $this->_model->getNearbyVenues($lat, $lng, $radius);
 
             foreach ($result as $entry) {
-                $this->assertTrue($entry->distance < $radiusTolerance, 'Expected venue distance < ' . $radiusTolerance .', but received ' . $entry->distance . ' instead');
+                $this->assertTrue($entry->distance <= $radiusTolerance, 'Expected venue distance < ' . $radiusTolerance .', but received ' . $entry->distance . ' instead');
             }
         }
     }
