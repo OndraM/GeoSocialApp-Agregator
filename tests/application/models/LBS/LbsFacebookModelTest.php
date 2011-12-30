@@ -7,7 +7,7 @@ class LbsFacebookModelTest extends LbsCommonModel
         parent::setUp();
         $this->_model = new GSAA_Model_LBS_Facebook();
         $this->_modelName = 'GSAA_Model_LBS_Facebook';
-        $this->_testVenue = '109610852438723'; // Mosaic House, Prague
+        $this->_testPoi = '109610852438723'; // Mosaic House, Prague
     }
     protected function tearDown() {
         $this->_model = null;

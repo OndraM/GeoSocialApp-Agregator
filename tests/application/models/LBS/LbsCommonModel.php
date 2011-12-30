@@ -3,7 +3,7 @@ class LbsCommonModel extends PHPUnit_Framework_TestCase
 {
     protected $_model;
     protected $_modelName;
-    protected $_testVenue;
+    protected $_testPoi;
 
     protected function setUp() {
         parent::setUp();
@@ -28,9 +28,9 @@ class LbsCommonModel extends PHPUnit_Framework_TestCase
         parent::tearDown();
     }
 
-    public function testGetNearbyVenuesWorks() {
+    public function testGetNearbyPoisWorks() {
         $modelName = $this->_modelName;
-        $result = $this->_model->getNearbyVenues('50.079776', '14.429713', $modelName::RADIUS);
+        $result = $this->_model->getNearbyPois('50.079776', '14.429713', $modelName::RADIUS);
         $this->assertInternalType('array', $result);
 
         $this->assertTrue(count($result) > 0);
@@ -50,15 +50,15 @@ class LbsCommonModel extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider coordsProvider
      */
-    public function testWhenRadiusIsGivenVenuesAreInsideBounds($lat, $lng) {
+    public function testWhenRadiusIsGivenPoisAreInsideBounds($lat, $lng) {
         $radiusArray = array(10, 200, 5000);
 
         foreach ($radiusArray as $radius) {
             $radiusTolerance = $radius * 2;
-            $result = $this->_model->getNearbyVenues($lat, $lng, $radius);
+            $result = $this->_model->getNearbyPois($lat, $lng, $radius);
 
             foreach ($result as $entry) {
-                $this->assertTrue($entry->distance <= $radiusTolerance, 'Expected venue distance < ' . $radiusTolerance .', but received ' . $entry->distance . ' instead');
+                $this->assertTrue($entry->distance <= $radiusTolerance, 'Expected POI distance < ' . $radiusTolerance .', but received ' . $entry->distance . ' instead');
             }
         }
     }
@@ -69,10 +69,10 @@ class LbsCommonModel extends PHPUnit_Framework_TestCase
     public function testWhenZeroRadiusIsGivenTheDefaultOneIsUsed($lat, $lng) {
         $modelName = $this->_modelName;
         $radiusTolerance = $modelName::RADIUS * 2;
-        $result = $this->_model->getNearbyVenues($lat, $lng, 0);
+        $result = $this->_model->getNearbyPois($lat, $lng, 0);
 
         foreach ($result as $entry) {
-            $this->assertTrue($entry->distance < $radiusTolerance, 'Expected venue distance < ' . $radiusTolerance .', but received ' . $entry->distance . ' instead');
+            $this->assertTrue($entry->distance < $radiusTolerance, 'Expected POI distance < ' . $radiusTolerance .', but received ' . $entry->distance . ' instead');
         }
     }
 
@@ -82,32 +82,32 @@ class LbsCommonModel extends PHPUnit_Framework_TestCase
     public function testWhenOverkillRadiusIsGivenItIsLimitedToTheMaximumOne($lat, $lng) {
         $modelName = $this->_modelName;
         $radiusTolerance = $modelName::RADIUS_MAX * 2;
-        $result = $this->_model->getNearbyVenues($lat, $lng, 999999);
+        $result = $this->_model->getNearbyPois($lat, $lng, 999999);
 
         foreach ($result as $entry) {
-            $this->assertTrue($entry->distance < $radiusTolerance, 'Expected venue distance < ' . $radiusTolerance .', but received ' . $entry->distance . ' instead');
+            $this->assertTrue($entry->distance < $radiusTolerance, 'Expected POI distance < ' . $radiusTolerance .', but received ' . $entry->distance . ' instead');
         }
     }
 
     public function testWhenSearchingWithoutAndWithoutFilterLimitIsAdjusted() {
         $modelName = $this->_modelName;
-        $result = $this->_model->getNearbyVenues(40.706935, -74.010487, 0);
+        $result = $this->_model->getNearbyPois(40.706935, -74.010487, 0);
         $this->assertTrue(count($result) <= $modelName::LIMIT_WITHOUT_FILTER);
 
-        $result = $this->_model->getNearbyVenues(40.706935, -74.010487, 0, 'New York');
+        $result = $this->_model->getNearbyPois(40.706935, -74.010487, 0, 'New York');
         $this->assertTrue(count($result) <= $modelName::LIMIT);
 
     }
 
-    public function testGetVenueDetailWorks() {
-        $result = $this->_model->getDetail($this->_testVenue);
+    public function testGetPoiDetailWorks() {
+        $result = $this->_model->getDetail($this->_testPoi);
         $this->assertInstanceOf('GSAA_Model_POI', $result);
     }
 
     /**
      * @dataProvider poisProvider
      */
-    public function testAllVenueDetailDataRetreivedFine($id) {
+    public function testAllPoiDetailDataRetreivedFine($id) {
         $modelName = $this->_modelName;
         $poi = $this->_model->getDetail($id);
         $this->assertInstanceOf('GSAA_Model_POI', $poi);
@@ -175,7 +175,7 @@ class LbsCommonModel extends PHPUnit_Framework_TestCase
     }
 
     public function testCheckinFailsWithoutUser() {
-        $result = $this->_model->doCheckin($this->_testVenue);
+        $result = $this->_model->doCheckin($this->_testPoi);
         $this->assertInternalType('null', $result);
     }
     public function testGetUserInfoFailsWithoutUser() {

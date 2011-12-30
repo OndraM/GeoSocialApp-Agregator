@@ -7,7 +7,7 @@ class LbsFoursquareModelTest extends LbsCommonModel
         parent::setUp();
         $this->_model = new GSAA_Model_LBS_Foursquare();
         $this->_modelName = 'GSAA_Model_LBS_Foursquare';
-        $this->_testVenue = '4b46db8bf964a520f12826e3'; // ČVUT FEL (KN), Prague
+        $this->_testPoi = '4b46db8bf964a520f12826e3'; // ČVUT FEL (KN), Prague
     }
     protected function tearDown() {
         $this->_model = null;

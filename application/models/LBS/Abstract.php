@@ -23,19 +23,19 @@ abstract class GSAA_Model_LBS_Abstract
      */
     const OAUTH_CHECK = null;
     /**
-     * Default radius for requesting venues if none set
+     * Default radius for requesting POIs if none set
      */
     const RADIUS = 2500;
     /**
-     * Maximum radius for requesting venues
+     * Maximum radius for requesting POIs
      */
     const RADIUS_MAX = 50000;
     /**
-     * Limit for requesting places
+     * Limit for requesting POIs
      */
     const LIMIT = 30;
     /**
-     * Limit for requesting places when no filter is applied
+     * Limit for requesting POIs when no filter is applied
      */
     const LIMIT_WITHOUT_FILTER = 10;
 
@@ -78,7 +78,7 @@ abstract class GSAA_Model_LBS_Abstract
     }
 
     /**
-     * Abstract function to get nearby venues.
+     * Abstract function to get nearby POIs.
      *
      * @param double $lat Latitude
      * @param double $long Longitude
@@ -86,14 +86,14 @@ abstract class GSAA_Model_LBS_Abstract
      * @param string $term Search term
      * @return array Array of GSAA_Model_POI
      */
-    abstract public function getNearbyVenues($x, $y, $radius, $term = null);
+    abstract public function getNearbyPois($x, $y, $radius, $term = null);
 
 
     /**
-     * Abstract function to get full detail of venue.
+     * Abstract function to get full detail of POI.
      *
-     * @param string $id Venue ID
-     * @return GSAA_Model_POI Venue detail object
+     * @param string $id POI ID
+     * @return GSAA_Model_POI POI detail object
      */
     abstract public function getDetail($id);
 

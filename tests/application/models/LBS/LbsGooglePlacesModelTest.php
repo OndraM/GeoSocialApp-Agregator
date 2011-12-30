@@ -7,7 +7,7 @@ class LbsGooglePlacesModelTest extends LbsCommonModel
         parent::setUp();
         $this->_model = new GSAA_Model_LBS_GooglePlaces();
         $this->_modelName = 'GSAA_Model_LBS_GooglePlaces';
-        $this->_testVenue = 'CnRwAAAARIae4C4G0iGNHTwbJD89RX9uOPnCo5i7IuqhgTtDEqzXqTOHOz3DDwkm4tmFhSNcpfmNsYq0aOHzLSAOZ63GgqqaFGd6lte3kgopW22x2fiaIb2V-Df27we_bTZKRL7fr2kwv6S3GRzfEmMOSl9UJxIQNTRktNxRbPxb0vhiQsA91BoUuLdXWkqWjBzYibPkks0dUtB13KY'; // Restaurace Kozlova Almara, Prague
+        $this->_testPoi = 'CnRwAAAARIae4C4G0iGNHTwbJD89RX9uOPnCo5i7IuqhgTtDEqzXqTOHOz3DDwkm4tmFhSNcpfmNsYq0aOHzLSAOZ63GgqqaFGd6lte3kgopW22x2fiaIb2V-Df27we_bTZKRL7fr2kwv6S3GRzfEmMOSl9UJxIQNTRktNxRbPxb0vhiQsA91BoUuLdXWkqWjBzYibPkks0dUtB13KY'; // Restaurace Kozlova Almara, Prague
     }
     protected function tearDown() {
         $this->_model = null;

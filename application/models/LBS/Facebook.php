@@ -23,7 +23,7 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
     }*/
 
     /**
-     * Function to get nearby venues.
+     * Function to get nearby POIs.
      *
      * @param double $lat Latitude
      * @param double $long Longitude
@@ -31,7 +31,7 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
      * @param string $term Search term
      * @return array Array of GSAA_Model_POI
      */
-    public function getNearbyVenues($lat, $long, $radius, $term = null) {
+    public function getNearbyPois($lat, $long, $radius, $term = null) {
         $endpoint = '/search';
         if ($radius > self::RADIUS_MAX) {       // limit maximum radius
             $radius = self::RADIUS_MAX;
@@ -66,10 +66,10 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
         }
         $result = Zend_Json::decode($response->getBody());
 
-        // Load venues into array of GSAA_Model_POI
+        // Load POIs into array of GSAA_Model_POI
         $pois = array();
         foreach ($result['data'] as $entry) {
-            // skip venues that are not in radius x2 (avoid showing venues that are too far)
+            // skip POIs that are not in radius x2 (avoid showing POIs that are too far)
             // in fact the distance parametr do the same on FB side (and actually works), so this is kind of redundant check
             if (GSAA_POI_Distance::getDistance($lat, $long,
                                     $entry['location']['latitude'], $entry['location']['longitude']) > $radius*2) {
@@ -96,10 +96,10 @@ class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
     }
 
     /**
-     * Get full detail of venue.
+     * Get full detail of POI.
      *
-     * @param string $id Venue ID
-     * @return GSAA_Model_POI Venue detail object
+     * @param string $id POI ID
+     * @return GSAA_Model_POI POI detail object
      */
     public function getDetail($id) {
         $endpoint = '';

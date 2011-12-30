@@ -7,7 +7,7 @@ class LbsGowallaModelTest extends LbsCommonModel
         parent::setUp();
         $this->_model = new GSAA_Model_LBS_Gowalla();
         $this->_modelName = 'GSAA_Model_LBS_Gowalla';
-        $this->_testVenue = '1213044'; // Mosaic House, Prague
+        $this->_testPoi = '1213044'; // Mosaic House, Prague
     }
     protected function tearDown() {
         $this->_model = null;

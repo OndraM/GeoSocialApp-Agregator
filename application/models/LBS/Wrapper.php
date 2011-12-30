@@ -38,7 +38,7 @@ class GSAA_Model_LBS_Wrapper
                 if ($serviceState) {                                // use service
                     $pois = array_merge(
                             $pois,
-                            $serviceModels[$serviceType]->getNearbyVenues($lat, $long, $radius, $term));
+                            $serviceModels[$serviceType]->getNearbyPois($lat, $long, $radius, $term));
                 }
             }
         }
