@@ -97,7 +97,7 @@ class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
      * Get full detail of venue.
      *
      * @param string $id Venue reference
-     * @return GSAA_Model_POI
+     * @return GSAA_Model_POI Venue detail object
      */
     public function getDetail($id) {
         $endpoint = '/details/json';

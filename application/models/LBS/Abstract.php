@@ -93,7 +93,7 @@ abstract class GSAA_Model_LBS_Abstract
      * Abstract function to get full detail of venue.
      *
      * @param string $id Venue ID
-     * @return array Array
+     * @return GSAA_Model_POI Venue detail object
      */
     abstract public function getDetail($id);
 
