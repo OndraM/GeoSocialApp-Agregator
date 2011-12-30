@@ -11,7 +11,7 @@ class OauthController extends Zend_Controller_Action
         }
 
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
-        $ajaxContext->addActionContext('is-authenticated', 'json')
+        $ajaxContext->addActionContext('is-authorized', 'json')
                     ->initContext();
     }
 
@@ -38,10 +38,10 @@ class OauthController extends Zend_Controller_Action
     }
 
     /**
-     * Check whether user is authenticated and token is valid.
+     * Check whether user is authorized and token is valid.
      * Called through AJAX request.
      */
-    public function isAuthenticatedAction()
+    public function isAuthorizedAction()
     {
         $services = Zend_Registry::get('var')->services;
 

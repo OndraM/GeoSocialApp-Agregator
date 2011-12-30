@@ -226,7 +226,7 @@ function doConnectionsCheck(type) {
         }
         element.html('<img src="/images/spinner.gif" />');
         $.ajax({
-            url: '/oauth/is-authenticated/service/' + serviceType,
+            url: '/oauth/is-authorized/service/' + serviceType,
             dataType: 'json'})
         .fail(function() {
             element.html(origHtml);
@@ -293,7 +293,7 @@ function doConnection(element, type) {
             return; // dont't execute another one!
         }
         xhrConnect[serviceType] = $.ajax({
-            url: '/oauth/is-authenticated/service/' + serviceType,
+            url: '/oauth/is-authorized/service/' + serviceType,
             dataType: 'json'})
         .fail(function() {
             clearInterval(authLoop);

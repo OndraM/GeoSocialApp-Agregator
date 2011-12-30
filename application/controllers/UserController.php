@@ -66,7 +66,6 @@ class UserController extends Zend_Controller_Action
 
     /**
      * Class used only for development and testing purposes.
-     */
     public function testAction()
     {
         $this->_helper->viewRenderer->setNoRender();
@@ -78,14 +77,15 @@ class UserController extends Zend_Controller_Action
             $serviceModels[$serviceId] = new $classname();
         }
 
-        /*foreach($serviceModels as $model) {
-            $user = $model->getUserInfo();
-            d($user, $model::TYPE);
-        }*/
+        //foreach($serviceModels as $model) {
+        //    $user = $model->getUserInfo();
+        //    d($user, $model::TYPE);
+        //}
         $model = $serviceModels['fq'];
         d($model->getFriendsActivity());
-
     }
+     * 
+     */
 
     /**
      * Merge checkins from the same friends and get only the most recent for each unique friend.
