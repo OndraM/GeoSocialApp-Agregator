@@ -157,7 +157,7 @@ class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
      * @return string Token, or null if we didn't obtain a proper token
      */
     public function requestToken($code) {
-        return;
+        throw new BadMethodCallException('Method not implemented');
     }
 
     /**
@@ -167,7 +167,7 @@ class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
      * @return bool Whether token is still valid in service
      */
     public function checkToken($token) {
-        return;
+        throw new BadMethodCallException('Method not implemented');
     }
 
     /**
@@ -176,7 +176,7 @@ class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
      * @return array Array of user details
      */
     public function getUserInfo() {
-        return;
+        throw new BadMethodCallException('Method not implemented');
     }
 
     /**
