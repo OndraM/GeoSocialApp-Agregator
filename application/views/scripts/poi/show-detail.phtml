@@ -14,7 +14,7 @@ if (count($this->values['categories']) > 0) {
 <div id="detail-map"></div>
 <strong id="venue-source">Sources of venue data:</strong>
 <?php
-echo "<ul>\n";
+echo "<ul id=\"venue-source-list\">\n";
 foreach ($this->pois as $poi) {
     if (count($this->serviceParams) > 1) {
         $tmpArray = $this->serviceParams;
@@ -77,7 +77,7 @@ if (count($this->values['address']) > 0) {
     echo $this->listValuesArray($this->values['address'], 'address');
 } elseif (isset($this->values['address_geocode'])) {
     echo "<h2 id=\"venue-address\">Address</h2>\n";
-    echo "<ul><li>"
+    echo "<ul id=\"venue-address-list\"><li>"
             . $this->escape($this->values['address_geocode'])
             . " <abbr title=\"Approximate address found on this coordinates\">(approx.)</abbr>"
             . "</li></ul>\n";

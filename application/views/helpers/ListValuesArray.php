@@ -52,7 +52,7 @@ class GSAA_View_Helper_ListValuesArray extends Zend_View_Helper_Abstract
                 }
             }
         }
-        return "<ul>\n" . $return . "</ul>\n";
+        return "<ul id=\"venue-{$field}-list\">\n" . $return . "</ul>\n";
     }
 
 }
