@@ -17,7 +17,7 @@ class LbsGowallaModelTest extends LbsCommonModel
     public static function coordsProvider() {
         $array = array(
             array('50.079776', '14.429713'),    // St. Wenceslas statue, Prague
-            //array(51.500613, -0.126819),        // Parliament square, London
+            array(51.500613, -0.126819),        // Parliament square, London
         );
         return $array;
     }
@@ -25,8 +25,8 @@ class LbsGowallaModelTest extends LbsCommonModel
     public static function poisProvider() {
         $array = array(
             array('1107156'),   // Friends Coffee House, Prague
-            //array('22089'),     // Houses of Parliament, London
-            //array('12313')      // Empire State Building, NY
+            array('22089'),     // Houses of Parliament, London
+            array('12313')      // Empire State Building, NY
         );
         return $array;
     }
