@@ -184,7 +184,7 @@ class AggregatedPoiModelTest extends PHPUnit_Framework_TestCase
         $this->_aPoi->addPoi($poi);
 
         $addressgeocoded = $this->_aPoi->getField('address', true);
-        $this->assertEquals('10 Downing St, City of Westminster, SW1A 2, UK', $addressgeocoded);
+        $this->assertEquals('10 Downing St, Westminster, SW1A 2, Velká Británie', $addressgeocoded);
     }
 
     public function testReverseGeocodingWithNotExistingAddressReturnsNull() {
