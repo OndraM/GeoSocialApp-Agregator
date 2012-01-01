@@ -69,15 +69,16 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
             return array();
         }
         $result = Zend_Json::decode($response->getBody());
+
         // foursquare returned an error
         if ($result['meta']['code'] != 200) {
-            // TODO: log $result['meta']['errorType'] and $result['meta']['errorDetail']
+            // Possibly log $result['meta']['errorType'] and $result['meta']['errorDetail']
             return array();
         };
 
         // if code was 200 some non fatal error occured
         if (!empty($result['meta']['errorType'])) {
-            // TODO: log $result['meta']['errorType'] and $result['meta']['errorDetail']
+            // Possibly log $result['meta']['errorType'] and $result['meta']['errorDetail']
         }
 
         // Load POIs into array of GSAA_Model_POI
@@ -217,7 +218,7 @@ class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
                         'thumbnail' => $thumbUrl,
                         'id'    => $photo['id'],
                         'date'  => $photo['createdAt'],
-                        'title' => '' // TODO? But $photo['tip']['text'] is never present in venue photos...
+                        'title' => '' // Not available, since $photo['tip']['text'] is never present in thic context :-(
                     );
                     // check whether image really exists - do HEAD request for each of them
                     $tmpClient = new Zend_Http_Client($tmpPhoto['thumbnail']);

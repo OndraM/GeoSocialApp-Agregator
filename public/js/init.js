@@ -276,7 +276,7 @@ function enableCheckinForm() {
 /**
  * Start on demand connection process of type, triggered by clicking on element
  *
- * @param element Element which triggered the connection. Usually <a> with "Connect to XXX" icon
+ * @param element Element which triggered the connection. Usually <a> with "Connect to SERVICE" icon
  * @param type Type of connection source - {index|detail} page
  */
 function doConnection(element, type) {

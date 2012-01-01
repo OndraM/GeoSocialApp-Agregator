@@ -112,13 +112,6 @@ class PoiController extends Zend_Controller_Action
 
                 $similarPercentBasic = 0;
                 $similarPercentAlpha = 0;
-                /*
-                 * TODO: other text matching improvements suggestions (see also issue #45):
-                 * - maybe remove some chars
-                 * - divide name on parts dividers like | and ()
-                 * - remove common prefixes like "Restaurace" (but then be more strict on distance)
-                 * - try different word order
-                 */
 
                 similar_text($poiXName, $poiYName, $similarPercentBasic);
                 similar_text( Zend_Filter::filterStatic($poiXName, 'Alnum'),
@@ -129,13 +122,6 @@ class PoiController extends Zend_Controller_Action
                                 $poisRaw[$y]->lat,
                                 $poisRaw[$y]->lng);
 
-                /*echo $y . ": " . $poisRaw[$y]->name . " | "
-                        . 'similar_text_basic: ' . round($similarPercentBasic, 1) . " | "
-                        . 'similar_text_alpha: ' . round($similarPercentAlpha, 1) . " | "
-                        . 'distance: '
-                        . $distance
-                        . "\n";*/
-
                  // Check if POIs names are similair and they are close to each other, so we should merge them
                 if (($similarPercentBasic > 75
                          || $similarPercentAlpha > 82.5)
@@ -143,7 +129,6 @@ class PoiController extends Zend_Controller_Action
 
                     $agPoi->addPoi($poisRaw[$y]); // copy entire POI
                     $poisRaw[$y] = null; // remove content from array, so that the POI wont be merged again
-                    // TODO: is it wise, just to find similarities between the first one? Would by better to find all similar pairs and sorty similarity
                 }
             }
             $pois[] = $agPoi;
