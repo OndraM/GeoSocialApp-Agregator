@@ -108,7 +108,6 @@ class POIControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
 
         // no scripts are loaded
         $this->assertQueryCount("head script", 0);
-
     }
 
     public function testShowDetailProperlyRendered()
