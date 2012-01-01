@@ -613,8 +613,8 @@ function doGeolocate() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
             function(position) {
-                   $('#searchform input[name=lat]').val(position.coords.latitude);
-                   $('#searchform input[name=long]').val(position.coords.longitude);
+                   $('#searchform input[name=lat]').val(position.coords.latitude.toFixed(6));
+                   $('#searchform input[name=long]').val(position.coords.longitude.toFixed(6));
                    $('#searchform').submit();
             }
         );
