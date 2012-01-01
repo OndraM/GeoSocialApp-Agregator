@@ -15,7 +15,7 @@ class IndexControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
 
     public function testIndexActionRoutingWorks()
     {
-        $params = array('action' => 'index', 'controller' => 'Index', 'module' => 'default');
+        $params = array('action' => 'index', 'controller' => 'index', 'module' => 'default');
         $urlParams = $this->urlizeOptions($params);
         $url = $this->url($urlParams);
         $this->dispatch($url);
