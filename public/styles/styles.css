@@ -233,7 +233,7 @@ form#addressform {
 }
 
 form#addressform input[name=address] {
-    width: 40ex;
+    width: 38ex;
 }
 
 /* POI detail window */
