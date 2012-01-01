@@ -196,6 +196,7 @@ img.left {
     line-height: 24px;
     text-decoration: none;
     cursor: help;
+    padding: .5ex 1ex;
 }
 
 /* Forms */

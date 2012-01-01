@@ -249,12 +249,19 @@ function doConnectionsCheck(type) {
 /**
  * Enable link to open friends windows
  */
-function enableFriendsWindow() {
-    $('#oauth-wrapper a#openFriendsWindow').attr('href', friendsWindowsUrl);
-    updateFriendsWindowLink(); // update link according to current map position
-    $('#oauth-wrapper a#openFriendsWindow').attr('title', $('#oauth-wrapper a#openFriendsWindow').attr('data-title'));
-    $('#oauth-wrapper a#openFriendsWindow').css('cursor', 'pointer');
-    $('#oauth-wrapper a#openFriendsWindow').addClass('popUpFixed fancybox.ajax');
+function enableFriendsWindow(highlight) {
+    if (!$('#oauth-wrapper a#openFriendsWindow').hasClass('enabled')) {
+        $('#oauth-wrapper a#openFriendsWindow').attr('href', friendsWindowsUrl);
+        updateFriendsWindowLink(); // update link according to current map position
+        $('#oauth-wrapper a#openFriendsWindow').attr('title', $('#oauth-wrapper a#openFriendsWindow').attr('data-title'));
+        $('#oauth-wrapper a#openFriendsWindow').css('cursor', 'pointer');
+        $('#oauth-wrapper a#openFriendsWindow').addClass('popUpFixed fancybox.ajax');
+        $('#oauth-wrapper a#openFriendsWindow').addClass('enabled');
+        if (typeof highlight !== "undefined" && highlight == true) {
+            $('#oauth-wrapper a#openFriendsWindow').effect('highlight', {}, 5000);
+        }
+
+    }
 }
 
 /**
@@ -267,7 +274,7 @@ function enableCheckinForm() {
 }
 
 /**
- * Start connection process, triggered by element
+ * Start on demand connection process of type, triggered by clicking on element
  *
  * @param element Element which triggered the connection. Usually <a> with "Connect to XXX" icon
  * @param type Type of connection source - {index|detail} page
@@ -311,7 +318,7 @@ function doConnection(element, type) {
                     }
                 } else {
                     parent.html(finalHtmlIndex);
-                    enableFriendsWindow();
+                    enableFriendsWindow(true);
                 }
             } else if (typeof authWindow === "undefined" || authWindow.closed // window has been closed
                 || loopCounter > 50)  // to many loops, dont't wait anymore
