@@ -178,6 +178,7 @@ class GSAA_Model_AggregatedPOI
         $queryParams = array();
         $queryParams['sensor'] = 'false';
         $queryParams['latlng'] = $this->getField('lat') . ',' . $this->getField('lng');
+        $queryParams['language'] = 'cs';
 
         // set client options
         $client->setUri('https://maps.googleapis.com/maps/api/geocode/json');
