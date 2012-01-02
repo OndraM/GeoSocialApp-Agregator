@@ -260,7 +260,21 @@ function enableFriendsWindow(highlight) {
         if (typeof highlight !== "undefined" && highlight == true) {
             $('#oauth-wrapper a#openFriendsWindow').effect('highlight', {}, 5000);
         }
+        updateFriendsWindowLink();
+    }
+}
 
+/**
+ * Update link to friends window according to current lat & lng
+ */
+function updateFriendsWindowLink() {
+    if ($('#oauth-wrapper a#openFriendsWindow').hasClass('enabled')) {
+        $('#oauth-wrapper a#openFriendsWindow').attr('href', friendsWindowsUrl
+            + '/cLat/'
+            + $('#searchform input[name=lat]').val()
+            + '/cLng/'
+            + $('#searchform input[name=long]').val()
+        );
     }
 }
 
@@ -559,7 +573,7 @@ function initIndex() {
     // Copy options
     var fancyBoxFixed = jQuery.extend({}, fancyboxOpts);
     fancyBoxFixed.maxHeight = 550;
-    fancyBoxFixed.beforeLoad = updateFriendsWindowLink();
+    fancyBoxFixed.beforeLoad = function() {updateFriendsWindowLink();};
     // Init friends PopUp
     $('.popUpFixed').fancybox(fancyBoxFixed);
 
@@ -652,8 +666,6 @@ function initIndexMap() {
         mapOptions
     );
     showMapCenterPointer(latlng, 8000);
-
-    updateFriendsWindowLink();
 
     google.maps.event.addListener(indexMap, 'dragend', function() {
 		var latlng = indexMap.getCenter();
@@ -871,16 +883,4 @@ function showMapCenterPointer (latlng, timeout) {
     if (timeout > 0) {
         mapCenterTimeout = setTimeout("mapCenterPoiner.setMap(null)", timeout);
     }
-}
-
-/**
- * Update link to friends window according to current lat & lng
- */
-function updateFriendsWindowLink() {
-    $('#oauth-wrapper a#openFriendsWindow').attr('href', friendsWindowsUrl
-        + '/cLat/'
-        + $('#searchform input[name=lat]').val()
-        + '/cLng/'
-        + $('#searchform input[name=long]').val()
-    );
 }
