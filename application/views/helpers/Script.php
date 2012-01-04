@@ -6,7 +6,6 @@
  *
  */
 
-
 class GSAA_View_Helper_Script extends Zend_View_Helper_Abstract
 {
 

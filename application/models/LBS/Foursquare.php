@@ -1,4 +1,7 @@
 <?php
+/**
+ * Foursquare API adapter
+ */
 
 class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract
 {

@@ -1,4 +1,7 @@
 <?php
+/**
+ * Model representating aggregated POI
+ */
 
 class GSAA_Model_AggregatedPOI
 {

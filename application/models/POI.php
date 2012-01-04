@@ -1,4 +1,7 @@
 <?php
+/**
+ * Model representating single POI
+ */
 
 class GSAA_Model_POI
 {

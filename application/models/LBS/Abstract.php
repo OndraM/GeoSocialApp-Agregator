@@ -1,4 +1,7 @@
 <?php
+/**
+ * Abstract adapter of location based service API
+ */
 
 abstract class GSAA_Model_LBS_Abstract
 {

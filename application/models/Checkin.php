@@ -1,4 +1,7 @@
 <?php
+/**
+ * Model representating single check-in
+ */
 
 class GSAA_Model_Checkin
 {

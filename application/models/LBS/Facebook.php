@@ -1,4 +1,7 @@
 <?php
+/**
+ * Facebook Graph API adapter
+ */
 
 class GSAA_Model_LBS_Facebook extends GSAA_Model_LBS_Abstract
 {

@@ -1,4 +1,7 @@
 <?php
+/**
+ * Controller for OAuth interaction
+ */
 
 class OauthController extends Zend_Controller_Action
 {

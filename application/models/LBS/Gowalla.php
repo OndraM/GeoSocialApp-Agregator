@@ -1,4 +1,7 @@
 <?php
+/**
+ * Gowalla API adapter
+ */
 
 class GSAA_Model_LBS_Gowalla extends GSAA_Model_LBS_Abstract
 {

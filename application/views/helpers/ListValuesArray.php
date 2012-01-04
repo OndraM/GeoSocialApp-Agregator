@@ -6,11 +6,11 @@
  *
  */
 
-
 class GSAA_View_Helper_ListValuesArray extends Zend_View_Helper_Abstract
 {
 
     /**
+     * List values encapsulated in array into html list.
      *
      * @param array $values
      * @param string $field Field type

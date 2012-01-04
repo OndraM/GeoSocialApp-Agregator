@@ -1,4 +1,7 @@
 <?php
+/**
+ * Google Places API adapter
+ */
 
 class GSAA_Model_LBS_GooglePlaces extends GSAA_Model_LBS_Abstract
 {
