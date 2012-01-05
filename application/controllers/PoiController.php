@@ -1,6 +1,8 @@
 <?php
 /**
  * Controller for requesting POIs and sets of POIs
+ *
+ * @author  Ondřej Machulda <ondrej.machulda@gmail.com>
  */
 
 class PoiController extends Zend_Controller_Action

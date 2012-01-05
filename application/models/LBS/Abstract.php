@@ -1,6 +1,8 @@
 <?php
 /**
  * Abstract adapter of location based service API
+ *
+ * @author  Ondřej Machulda <ondrej.machulda@gmail.com>
  */
 
 abstract class GSAA_Model_LBS_Abstract

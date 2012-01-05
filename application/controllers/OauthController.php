@@ -1,6 +1,8 @@
 <?php
 /**
  * Controller for OAuth interaction
+ *
+ * @author  Ondřej Machulda <ondrej.machulda@gmail.com>
  */
 
 class OauthController extends Zend_Controller_Action

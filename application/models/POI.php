@@ -1,6 +1,8 @@
 <?php
 /**
  * Model representating single POI
+ *
+ * @author  Ondřej Machulda <ondrej.machulda@gmail.com>
  */
 
 class GSAA_Model_POI

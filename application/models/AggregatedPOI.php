@@ -1,6 +1,8 @@
 <?php
 /**
  * Model representating aggregated POI
+ *
+ * @author  Ondřej Machulda <ondrej.machulda@gmail.com>
  */
 
 class GSAA_Model_AggregatedPOI

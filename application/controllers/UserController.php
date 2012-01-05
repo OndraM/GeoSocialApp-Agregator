@@ -1,6 +1,8 @@
 <?php
 /**
  * Controller for actions of authorized user
+ *
+ * @author  Ondřej Machulda <ondrej.machulda@gmail.com>
  */
 
 class UserController extends Zend_Controller_Action

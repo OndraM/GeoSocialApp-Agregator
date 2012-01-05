@@ -1,6 +1,8 @@
 <?php
 /**
  * Foursquare API adapter
+ *
+ * @author  Ondřej Machulda <ondrej.machulda@gmail.com>
  */
 
 class GSAA_Model_LBS_Foursquare extends GSAA_Model_LBS_Abstract

@@ -1,6 +1,8 @@
 <?php
 /**
  * Wrapper class to provide unified access to all LBS model classes at once
+ *
+ * @author  Ondřej Machulda <ondrej.machulda@gmail.com>
  */
 
 class GSAA_Model_LBS_Wrapper
